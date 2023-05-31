@@ -7,3 +7,11 @@
   * [Property Verification using KEVM](kevm-foundry-integration-example/property-verification-using-kevm.md)
   * [K Control Flow Graph (KCFG)](kevm-foundry-integration-example/k-control-flow-graph-kcfg.md)
 * [Resources](resources.md)
+
+## Links
+
+* [💬 Discord](https://discord.gg/CurfmXNtbN)
+
+***
+
+* [⚙ Github](https://github.com/runtimeverification/gitbook-kontrol)
