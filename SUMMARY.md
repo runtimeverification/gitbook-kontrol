@@ -8,10 +8,7 @@
   * [K Control Flow Graph (KCFG)](kevm-foundry-integration-example/k-control-flow-graph-kcfg.md)
 * [Resources](resources.md)
 
-## Links
+## 🔗 Links
 
-* [💬 Discord](https://discord.gg/CurfmXNtbN)
-
-***
-
-* [⚙ Github](https://github.com/runtimeverification/gitbook-kontrol)
+* [Join out Discord!](https://discord.gg/CurfmXNtbN)
+* [Gitbook Repo](https://github.com/runtimeverification/gitbook-kontrol)
