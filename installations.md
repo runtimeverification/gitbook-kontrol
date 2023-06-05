@@ -18,7 +18,7 @@ For other installation methods, go to the [Foundry Documentation](https://book.g
 
 ### Installing KEVM <a href="#h.c2tiycvv94xz" id="h.c2tiycvv94xz"></a>
 
-The simplest way to install **KEVM** is with the `kup`[ tool](https://github.com/runtimeverification/kup). To install **`kup`** execute the following command:
+The simplest way to install **KEVM** is with the `kup`[ tool](https://github.com/runtimeverification/kup). To install `kup` execute the following command:
 
 ```
 bash <(curl https://kframework.org/install)
