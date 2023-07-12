@@ -7,7 +7,7 @@ description: Investigating a failed test and understanding the KCFG output
 We need to investigate and identify the reason for the failed symbolic test. To do this, we can use the following command:
 
 ```
-kevm foundry-view-kcfg CounterTest.testSetNumber
+kevm foundry-view-kcfg testSetNumber
 ```
 
 This command launches an interactive visualizer that generates a **KCFG** (**K Control Flow Graph**). You can click on individual nodes in the **KCFG** to inspect them.
@@ -20,7 +20,7 @@ The **KCFG** view might seem crowded. Let's break it into individual sections. E
 
 <figure><img src="../.gitbook/assets/Screenshot 2023-05-12 at 09.59.18.png" alt="" width="375"><figcaption><p>Left section of the KCFG Visualizer</p></figcaption></figure>
 
-The section on the left represents the **KCFG** of the execution in a minimal way, where nodes are linked together. Each node displays a summary of the state of the execution at that point. You can select a node by clicking on it, and the entire state will be displayed on the right. Once a node is selected, you can hide it from the **KCFG** using the hotkey `h`.&#x20;
+The section on the left represents the **KCFG** of the execution in a minimal way, where nodes are linked together. Each node displays a summary of the state of the execution at that point. You can select a node by clicking on it, and the entire state will be displayed on the right. Once a node is selected, you can hide it from the **KCFG** using the hotkey `h`.
 
 You can display all hidden nodes using the hotkey `H`. We’ll discuss that shortly. For now, let’s understand how to read a node. Notice the node highlighted in yellow. The first row `(615 steps)` represents the number of steps the prover has executed since the previous node.
 
@@ -35,13 +35,13 @@ Nodes can also be:
 * `expanded` - marking that the node has been visited and processed
 * `target` - used to mark the destination term that needs to be reached
 * `frontier` - a node that has been discovered but not yet executed
-* `stuck` - a node from which the prover was not able to progress and got stuck (most commonly because it doesn’t know what to do and it needs a  simplification lemma)
+* `stuck` - a node from which the prover was not able to progress and got stuck (most commonly because it doesn’t know what to do and it needs a simplification lemma)
 
 Following the node `id`, there is a summary of the node:
 
-* `k: JUMPI 122 bool2Word …`  - represents the contents of the `<k>` cell and the point of execution at which the prover is in that node ([more information here](https://github.com/runtimeverification/evm-semantics/blob/master/include/kframework/evm.md#configuration)).
+* `k: JUMPI 122 bool2Word …` - represents the contents of the `<k>` cell and the point of execution at which the prover is in that node ([more information here](https://github.com/runtimeverification/evm-semantics/blob/master/include/kframework/evm.md#configuration)).
 * `pc: 114` - represents the current value of the EVM program counter
-* `callDepth: 1`  - represents the current call stack depth ([more information here](https://docs.soliditylang.org/en/v0.8.17/security-considerations.html#call-stack-depth)).
+* `callDepth: 1` - represents the current call stack depth ([more information here](https://docs.soliditylang.org/en/v0.8.17/security-considerations.html#call-stack-depth)).
 * `statusCode: STATUSCODE:StatusCode` - shows the current status code. Here, `STATUSCODE` is the name of the symbolic variable, and `:StatusCode` shows the sort of the variable ([more information here](https://github.com/runtimeverification/evm-semantics/blob/master/include/kframework/network.md#evm-status-codes)).
 * `src: test/src/Counter.t.sol:7:21` - nodes can point to the Solidity source file, line, and column to which they belong.
 
@@ -63,7 +63,7 @@ The `constraint` keyword highlights the path the prover continues the execution.
 
 ## Right section of KCFG
 
-You will see the status section at the top of the right section.&#x20;
+You will see the status section at the top of the right section.
 
 <figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption><p>Status Section</p></figcaption></figure>
 
@@ -79,7 +79,7 @@ This section displays the entire state of the Ethereum virtual machine in the cu
 
 ### The constraint view
 
-This section shows all the constraints that apply to the symbolic variables in the execution. In the unminimized term view, you can see that the cell `<caller>` contains the symbolic variable `CALLER_ID:Int`.&#x20;
+This section shows all the constraints that apply to the symbolic variables in the execution. In the unminimized term view, you can see that the cell `<caller>` contains the symbolic variable `CALLER_ID:Int`.
 
 <figure><img src="../.gitbook/assets/Screenshot 2023-05-12 at 10.40.48.png" alt=""><figcaption><p>The constraint view</p></figcaption></figure>
 
