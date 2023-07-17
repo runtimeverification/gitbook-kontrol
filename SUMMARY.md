@@ -1,12 +1,20 @@
 # Table of contents
 
+## Overview
+
 * [KEVM, Foundry and the KEVM Foundry Integration](README.md)
-  * [The significance](kevm-foundry-and-the-kevm-foundry-integration/the-significance.md)
-  * [Installations](readme/installations.md)
-* [KEVM Foundry Integration Example](kevm-foundry-integration-example/README.md)
-  * [Property Verification using KEVM](kevm-foundry-integration-example/property-verification-using-kevm.md)
-  * [K Control Flow Graph (KCFG)](kevm-foundry-integration-example/k-control-flow-graph-kcfg.md)
-* [Resources](resources.md)
+  * [The significance](overview/readme/the-significance.md)
+  * [Installations](overview/readme/installations.md)
+
+## Guides
+
+* [KEVM Foundry Integration Example](guides/kevm-foundry-integration-example/README.md)
+  * [Property Verification using KEVM](guides/kevm-foundry-integration-example/property-verification-using-kevm.md)
+  * [K Control Flow Graph (KCFG)](guides/kevm-foundry-integration-example/k-control-flow-graph-kcfg.md)
+
+## Learn More
+
+* [Resources](learn-more/resources.md)
 
 ## 🔗 Links
 

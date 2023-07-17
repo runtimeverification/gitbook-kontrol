@@ -12,13 +12,13 @@ kevm foundry-view-kcfg testSetNumber
 
 This command launches an interactive visualizer that generates a **KCFG** (**K Control Flow Graph**). You can click on individual nodes in the **KCFG** to inspect them.
 
-<figure><img src="../.gitbook/assets/image (4).png" alt="KCFG Visualizer"><figcaption><p>KCFG Visualizer</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (4).png" alt="KCFG Visualizer"><figcaption><p>KCFG Visualizer</p></figcaption></figure>
 
 The **KCFG** view might seem crowded. Let's break it into individual sections. Each section can be hidden using the hotkeys displayed at the bottom of the UX. Let's start with the left side.
 
 ## Left section of KCFG
 
-<figure><img src="../.gitbook/assets/Screenshot 2023-05-12 at 09.59.18.png" alt="" width="375"><figcaption><p>Left section of the KCFG Visualizer</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Screenshot 2023-05-12 at 09.59.18.png" alt="" width="375"><figcaption><p>Left section of the KCFG Visualizer</p></figcaption></figure>
 
 The section on the left represents the **KCFG** of the execution in a minimal way, where nodes are linked together. Each node displays a summary of the state of the execution at that point. You can select a node by clicking on it, and the entire state will be displayed on the right. Once a node is selected, you can hide it from the **KCFG** using the hotkey `h`.
 
@@ -49,45 +49,45 @@ A branching always follows a split node. In **KCFG**s, branches are represented 
 
 Below the highlighted section, you will see the following:
 
-<figure><img src="../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
 
 The `constraint` keyword highlights the path the prover continues the execution. Nodes will be linked on this path as the exploration proceeds until either:
 
 * The execution of the branch is completed, and the leaf unifies with the target node.
 
-<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption><p>Leaf unification with the target node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (6).png" alt=""><figcaption><p>Leaf unification with the target node</p></figcaption></figure>
 
 * The execution of the branch gets stuck, in which case the node will be marked as `stuck`.
 
-<figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption><p>Stuck node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (9).png" alt=""><figcaption><p>Stuck node</p></figcaption></figure>
 
 ## Right section of KCFG
 
 You will see the status section at the top of the right section.
 
-<figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption><p>Status Section</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption><p>Status Section</p></figcaption></figure>
 
 This section displays the selected node and any enabled or disabled options. You can show or hide views using the hotkeys displayed at the bottom of the screen. To exit the **KCFG,** you can use `Ctrl + C`.
 
-<figure><img src="../.gitbook/assets/image (14).png" alt=""><figcaption><p>Hotkeys</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (14).png" alt=""><figcaption><p>Hotkeys</p></figcaption></figure>
 
 ### **The term view**
 
 This section displays the entire state of the Ethereum virtual machine in the current node as a **K** configuration, with each property depicted in a cell. For example, the program counter will be displayed as `<pc> 114 </pc>`, and the current hard fork will be displayed as `<schedule> LONDON </schedule>` ([more about the configuration can be found here](https://jellopaper.org/evm/#configuration)). Using the hotkey `M`, you can minimize the term by hiding some cells in the configuration.
 
-<figure><img src="../.gitbook/assets/image (15).png" alt=""><figcaption><p>The term view</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (15).png" alt=""><figcaption><p>The term view</p></figcaption></figure>
 
 ### The constraint view
 
 This section shows all the constraints that apply to the symbolic variables in the execution. In the unminimized term view, you can see that the cell `<caller>` contains the symbolic variable `CALLER_ID:Int`.
 
-<figure><img src="../.gitbook/assets/Screenshot 2023-05-12 at 10.40.48.png" alt=""><figcaption><p>The constraint view</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Screenshot 2023-05-12 at 10.40.48.png" alt=""><figcaption><p>The constraint view</p></figcaption></figure>
 
 The constraint view indicates that `CALLER_ID` is an integer value greater than 0 and lower than `pow160` (that is $$2^{160}$$). These two constraints allow the prover to conclude that `CALLER_ID` could be any value within the Ethereum address range (between 0 and $$2^{160}$$). Similar constraints apply to `ORIGIN_ID` and `VV0_n_114b9705`. The last constraint states that the `VV1_inLuck_114b9705` symbolic variable can be either 1 or 0 since the `inLuck` variable is defined as `Bool` in the `setNumber` function.
 
 When selecting the first node after the branching (`9d708a..b05364`), a new constraint is added, indicating that VV0\_n\_114b9705 is not equal on this branch to `12648430`.
 
-<figure><img src="../.gitbook/assets/Screenshot 2023-05-12 at 10.46.08.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Screenshot 2023-05-12 at 10.46.08.png" alt=""><figcaption></figcaption></figure>
 
 The constraint view can be enabled or disabled using the hotkey `c`.
 
@@ -95,7 +95,7 @@ The constraint view can be enabled or disabled using the hotkey `c`.
 
 This section displays the Solidity source code, highlighting the currently executing lines. If data is not available, a message will be displayed.
 
-<figure><img src="../.gitbook/assets/image (16).png" alt=""><figcaption><p>The custom view</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (16).png" alt=""><figcaption><p>The custom view</p></figcaption></figure>
 
 The custom view can be enabled of disabled using the hotkey `V`.
 
@@ -103,4 +103,4 @@ The custom view can be enabled of disabled using the hotkey `V`.
 
 Now, let’s find out why the proof is failing. After looking at all the nodes, we can see that there is a node marked as `stuck` with `id` `3e9ff7..6eba6e`. At the top of the term view, highlighted in yellow, we can see the `#halt` production in the `<k>` cell, indicating that the test execution has finished. Additionally, highlighted in red, the status code as `EVMC_REVERT`, meaning that the transaction has been reverted. At this point, we can look in the constraint view and identify that our function arguments, highlighted in orange, are exactly the ones required to trigger the revert in `setFunction`.
 
-<figure><img src="../.gitbook/assets/Screenshot 2023-05-12 at 10.50.33.png" alt=""><figcaption><p>Examining the stuck node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Screenshot 2023-05-12 at 10.50.33.png" alt=""><figcaption><p>Examining the stuck node</p></figcaption></figure>
