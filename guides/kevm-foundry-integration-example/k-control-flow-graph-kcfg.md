@@ -7,7 +7,7 @@ description: Investigating a failed test and understanding the KCFG output
 We need to investigate and identify the reason for the failed symbolic test. To do this, we can use the following command:
 
 ```
-kevm foundry-view-kcfg testSetNumber
+kevm foundry-view-kcfg CounterTest.testSetNumber
 ```
 
 This command launches an interactive visualizer that generates a **KCFG** (**K Control Flow Graph**). You can click on individual nodes in the **KCFG** to inspect them.
