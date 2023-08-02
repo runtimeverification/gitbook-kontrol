@@ -7,14 +7,14 @@ description: How to run property tests with Kontrol
 ## Create a new Foundry project
 
 ```
-forge init --no-git kevmexample
+forge init --no-git kontrolexample
 ```
 
 This command creates a new Foundry project that can be used as an example. The project's structure is presented in detail in the [Foundry book](https://book.getfoundry.sh/projects/project-layout). We can only fuzz parametric tests for now because the project is not configured to support symbolic execution yet. We will cover this topic later in [property-verification-using-kevm.md](property-verification-using-kevm.md "mention"). After creating the project, you can start editing the code.
 
 ## Add new code
 
-Open the `Counter.sol` file located at `kevmexample/src/Counter.sol`. The generated contract `Counter` has a public value named `number` that can be incremented using the method `increment()` , or can be set to a specific value using `setNumber(uint256)` .
+Open the `Counter.sol` file located at `kontrolexample/src/Counter.sol`. The generated contract `Counter` has a public value named `number` that can be incremented using the method `increment()` , or can be set to a specific value using `setNumber(uint256)` .
 
 Let's modify the code to include a special case in which `setNumber` would not update the `number` value. First, add a line `error CoffeeBreak()`. Then, in the `setNumber()` function, add an argument `inLuck` as a `bool`. Lastly, add an `if` statement to define when a coffee break is allowed. We'll say that we are going to have a coffee break if `newNumber` is `0xC0FFEE` and `inLuck` is `true`. In that case the function reverts and the number is not updated.
 
@@ -44,7 +44,7 @@ contract Counter {
 
 Let's look at what we have. The `setNumber` method will update our only storage variable with the passed value, _except_ when `newNumber` is `0xC0FFEE` **and** the `bool` variable is `true`.
 
-Now let’s write a test for the contract in `kevmexample/test/Counter.t.sol`
+Now let’s write a test for the contract in `kontrolexample/test/Counter.t.sol`
 
 ```solidity
 // SPDX-License-Identifier: UNLICENSED
