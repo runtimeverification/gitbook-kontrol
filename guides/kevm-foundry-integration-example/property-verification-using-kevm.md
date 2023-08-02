@@ -1,4 +1,4 @@
-# Property Verification using KEVM
+# Property Verification using Kontrol
 
 First, we need to modify our test to support symbolic execution. To do this we must import a new Solidity library with cheat codes required for symbolic execution. To do so, create a new file `src/KEVMCheats.sol` and copy over the contents of [this contract](https://github.com/runtimeverification/foundry-demo/blob/master/src/utils/KEVMCheats.sol). \
 \
