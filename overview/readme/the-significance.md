@@ -8,4 +8,4 @@ While fuzzing is a powerful testing technique, and a considerable step up from t
 
 In addition to this, symbolic execution can automatically derive and check postconditions, providing stronger guarantees on the correctness of the program. These complementary approaches can be used to identify a wider range of bugs and vulnerabilities, leading to more reliable software.
 
-By installing **KEVM**, you unlock the capability to perform property verification! This is a big step up in assurance from property testing, but is more computationally expensive, and often requires manual intervention.
+By installing **Kontrol**, you unlock the capability to perform property verification! This is a big step up in assurance from property testing, but is more computationally expensive, and often requires manual intervention.
