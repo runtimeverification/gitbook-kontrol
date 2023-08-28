@@ -59,7 +59,7 @@ Once you have `kompiled` the definition, you can run tests symbolically:
 kevm foundry-prove --test CounterTest.testSetNumber
 ```
 
-The `--test testSetNumber` flag is used to specify that only a single proof should be executed. This is useful when there are multiple tests in a test file. The proof should fail after running for 15 minutes.
+The `--test CounterTest.testSetNumber` flag is used to specify that only a single proof should be executed. This is useful when there are multiple tests in a test file. The proof should fail after running for 15 minutes.
 
 Note: The time it takes to run can vary depending on the machine. You can add --verbose to see what is happening if it appears to be stalling.
 
