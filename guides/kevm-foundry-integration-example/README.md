@@ -16,7 +16,7 @@ This command creates a new Foundry project that can be used as an example. The p
 
 Open the `Counter.sol` file located at `kontrolexample/src/Counter.sol`. The generated contract `Counter` has a public value named `number` that can be incremented using the method `increment()` , or can be set to a specific value using `setNumber(uint256)` .
 
-Let's modify the code to include a special case in which `setNumber` would not update the `number` value. First, add a line `error CoffeeBreak()`. Then, in the `setNumber()` function, add an argument `inLuck` as a `bool`. Lastly, add an `if` statement to define when a coffee break is allowed. We'll say that we are going to have a coffee break if `newNumber` is `0xC0FFEE` and `inLuck` is `true`. In that case the function reverts and the number is not updated.
+Let's modify the code to include a special case in which `setNumber` would not update the `number` value and will error instead. First before the Counter contract declaration, declare an error by adding `error CoffeeBreak()`. Then, in the `setNumber()` function, add an argument `inLuck` as a `bool`. Lastly, add an `if` statement to define when a coffee break is allowed. We'll say that we are going to have a coffee break if `newNumber` is `0xC0FFEE` and `inLuck` is `true`. In that case the function reverts and the number is not updated.
 
 With those changes, `Counter.sol` should look something like this:
 
