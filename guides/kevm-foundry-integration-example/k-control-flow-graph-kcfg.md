@@ -14,7 +14,7 @@ This command launches an interactive visualizer that generates a **KCFG** (**K C
 
 <figure><img src="../../.gitbook/assets/image (4).png" alt="KCFG Visualizer"><figcaption><p>KCFG Visualizer</p></figcaption></figure>
 
-The **KCFG** view might seem crowded. Let's break it into individual sections. Each section can be hidden using the hotkeys displayed at the bottom of the UX. Let's start with the left side.
+The **KCFG** view might seem crowded. Let's break it into individual sections. Each section can be hidden using the hotkeys displayed at the bottom of the UI. Let's start with the left side.
 
 ## Left section of KCFG
 
