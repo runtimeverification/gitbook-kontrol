@@ -24,18 +24,18 @@ The section on the left represents the **KCFG** of the execution in a minimal wa
 
 You can display all hidden nodes using the hotkey `H`. We’ll discuss that shortly. For now, let’s understand how to read a node. Notice the node highlighted in yellow. The first row `(615 steps)` represents the number of steps the prover has executed since the previous node.
 
-The `7 (split)` indicates the node `id`, `7`, and the node type `(split)`. The main node types are:
+The `8 (split)` indicates the node `id`, `8`, and the node type `(split)`. The main node types are:
 
-* `init` - the initial node, or the root
-* `leaf` - a node that has no children
-* `split` - a node that branches
+* `init` - The initial node, or the root
+* `leaf` - A node that has no children or successors
+* `split` - A node that branches
 
 Nodes can also be:
 
-* `expanded` - marking that the node has been visited and processed
-* `target` - used to mark the destination term that needs to be reached
-* `frontier` - a node that has been discovered but not yet executed
-* `stuck` - a node from which the prover was not able to progress and got stuck (most commonly because it doesn’t know what to do and it needs a simplification lemma)
+* `expanded` - A node that the node has been visited and processed
+* `target` - A node representing the final state the prover aims to achieve
+* `terminal` - A node that finished the execution of a `terminal rule`
+* `frontier` - A node that has been discovered but not yet executed
 
 Following the node `id`, there is a summary of the node:
 
@@ -43,7 +43,7 @@ Following the node `id`, there is a summary of the node:
 * `pc: 143` - represents the current value of the EVM program counter
 * `callDepth: 1` - represents the current call stack depth ([more information here](https://docs.soliditylang.org/en/v0.8.17/security-considerations.html#call-stack-depth)).
 * `statusCode: STATUSCODE:StatusCode` - shows the current status code. Here, `STATUSCODE` is the name of the symbolic variable, and `:StatusCode` shows the sort of the variable ([more information here](https://github.com/runtimeverification/evm-semantics/blob/master/include/kframework/network.md#evm-status-codes)).
-* `src: lib/forge-std/src/StdInvariant.sol:68:71` - nodes can point to the Solidity source file, line, and column to which they belong.
+* `src: lib/forge-std/src/StdInvariant.sol:79:82` - nodes can point to the Solidity source file, line, and column to which they belong.
 
 A branching always follows a split node. In **KCFG**s, branches are represented using nesting. In the highlighted node, the `k` field holds the value `k: JUMPI 151 bool2Word ( ( notBool VV0_x_114b9705:Int ==Int 12648430 ) )`. This indicates that the prover has identified a branching point. Here, `JUMPI` is an EVM opcode. `151` represents a jump destination, and `bool2Word ( notBool ( VV0_n_114b9705:Int ==Int 12648430 ) )` represents an equality check between the symbolic variable `VV0_n_114b9705` of sort `Int` and value `12648430` (the decimal value of `0xC0FFEE` from our `setNumber` function). The prover does not know if the `VV0` variable equals `12648430`, so it will branch and explore each possibility.
 
@@ -55,11 +55,11 @@ The `constraint` keyword highlights the path the prover continues the execution.
 
 * The execution of the branch is completed, and the leaf unifies with the target node.
 
-<figure><img src="../../.gitbook/assets/Node42.png" alt=""><figcaption><p>Leaf unification with the target node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Node43.png" alt=""><figcaption><p>Leaf unification with the target node</p></figcaption></figure>
 
-* The execution of the branch gets stuck, in which case the node will be marked as `stuck`.
+* The execution of the branch halts.
 
-<figure><img src="../../.gitbook/assets/image (9).png" alt=""><figcaption><p>Stuck node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/halt.png" alt=""><figcaption><p>Execution Halted</p></figcaption></figure>
 
 ## Right section of KCFG
 
@@ -73,7 +73,7 @@ This section displays the selected node and any enabled or disabled options. You
 
 ### **The term view**
 
-This section displays the entire state of the Ethereum virtual machine in the current node as a **K** configuration, with each property depicted in a cell. For example, the program counter will be displayed as `<pc> 143 </pc>`, and the current hard fork will be displayed as `<schedule> LONDON </schedule>` ([more about the configuration can be found here](https://jellopaper.org/evm/#configuration)). Using the hotkey `M`, you can minimize the term by hiding some cells in the configuration.
+This section displays the entire state of the Ethereum virtual machine in the current node as a **K** configuration, with each property depicted in a cell. For example, the current hard fork will be displayed as `<schedule> SHANGHAI </schedule>` ([more about the configuration can be found here](https://jellopaper.org/evm/#configuration)). Using the hotkey `M`, you can minimize the term by hiding some cells in the configuration.
 
 <figure><img src="../../.gitbook/assets/Termview.png" alt=""><figcaption><p>The term view</p></figcaption></figure>
 
@@ -101,6 +101,6 @@ The custom view can be enabled of disabled using the hotkey `V`.
 
 ## Back to investigating the failed proof
 
-Now, let’s find out why the proof is failing. After looking at all the nodes, we can see that there is a node marked as `stuck` with `id` `3e9ff7..6eba6e`. At the top of the term view, highlighted in yellow, we can see the `#halt` production in the `<k>` cell, indicating that the test execution has finished. Additionally, highlighted in red, the status code as `EVMC_REVERT`, meaning that the transaction has been reverted. At this point, we can look in the constraint view and identify that our function arguments, highlighted in orange, are exactly the ones required to trigger the revert in `setFunction`.
+Now, let’s find out why the proof is failing. At the top of the term view, highlighted in yellow, we can see the `#halt` production in the `<k>` cell, indicating that the test execution has finished. Additionally, highlighted in red, the status code as `EVMC_REVERT`, meaning that the transaction has been reverted. At this point, we can look in the constraint view and identify that our function arguments, highlighted in orange, are exactly the ones required to trigger the revert in `setFunction`.
 
-<figure><img src="../../.gitbook/assets/Screenshot 2023-05-12 at 10.50.33.png" alt=""><figcaption><p>Examining the stuck node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/haltrevert.png" alt=""><figcaption><p>Examining the last node</p></figcaption></figure>
