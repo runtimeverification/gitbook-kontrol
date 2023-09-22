@@ -85,7 +85,7 @@ This section shows all the constraints that apply to the symbolic variables in t
 
 The constraint view indicates that `CALLER_ID` is an integer value greater than 0 and lower than `pow160` (that is $$2^{160}$$). These two constraints allow the prover to conclude that `CALLER_ID` could be any value within the Ethereum address range (between 0 and $$2^{160}$$). Similar constraints apply to `ORIGIN_ID` and `VV0_n_114b9705`. The last constraint states that the `VV1_inLuck_114b9705` symbolic variable can be either 1 or 0 since the `inLuck` variable is defined as `Bool` in the `setNumber` function.
 
-When selecting the first node after the branching (`8`), a new constraint is added, indicating that VV0\_n\_114b9705 is not equal on this branch to `12648430`.
+When selecting the first node after the branching (`8`), a new constraint is added, indicating that `VV0_n_114b9705` is not equal on this branch to `12648430`.
 
 <figure><img src="../../.gitbook/assets/node8constraintview.png" alt=""><figcaption></figcaption></figure>
 
