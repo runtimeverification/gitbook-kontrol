@@ -2,7 +2,7 @@
 
 ## Overview
 
-* [KEVM, Foundry and Kontrol](README.md)
+* [Kontrol](README.md)
   * [The significance](overview/readme/the-significance.md)
   * [Installations](overview/readme/installations.md)
 
