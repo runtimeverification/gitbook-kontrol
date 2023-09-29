@@ -12,24 +12,24 @@ To install Foundry execute the following command:
 curl -L https://foundry.paradigm.xyz | bash
 ```
 
-After installation open a new terminal session or reload your PATH and run foundryup.
+After installation open a new terminal session or reload your `PATH` and run foundryup.
 
 For other installation methods, go to the [Foundry Documentation](https://book.getfoundry.sh/getting-started/installation).
 
 ### Installing KEVM <a href="#h.c2tiycvv94xz" id="h.c2tiycvv94xz"></a>
 
-The simplest way to install **KEVM** is with the `kup`[ tool](https://github.com/runtimeverification/kup). To install `kup` execute the following command:
+The simplest way to install **Kontrol** is with the `kup`[ tool](https://github.com/runtimeverification/kup). To install `kup` execute the following command:
 
 ```
 bash <(curl https://kframework.org/install)
 ```
 
-After installing `kup`, install **KEVM** using `kup` with the following command:
+After installing `kup`, install **Kontrol** using `kup` with the following command:
 
 Note: The first installation of `kup` will take sometime.
 
 ```
-kup install kevm
+kup install kontrol
 ```
 
-For detailed instructions on building **KEVM** from source, go to the [KEVM repository](https://github.com/runtimeverification/evm-semantics).
+For detailed instructions on building **Kontrol** from source, go to the [**Kontrol** repository](https://github.com/runtimeverification/kontrol).
