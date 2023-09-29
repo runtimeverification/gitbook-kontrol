@@ -15,7 +15,6 @@
 ## Learn More
 
 * [Resources](learn-more/resources.md)
-* [Page](learn-more/page.md)
 
 ## 🔗 Links
 
