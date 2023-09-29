@@ -16,7 +16,7 @@ After installation open a new terminal session or reload your `PATH` and run fou
 
 For other installation methods, go to the [Foundry Documentation](https://book.getfoundry.sh/getting-started/installation).
 
-### Installing KEVM <a href="#h.c2tiycvv94xz" id="h.c2tiycvv94xz"></a>
+### Installing Kontrol <a href="#h.c2tiycvv94xz" id="h.c2tiycvv94xz"></a>
 
 The simplest way to install **Kontrol** is with the `kup`[ tool](https://github.com/runtimeverification/kup). To install `kup` execute the following command:
 
