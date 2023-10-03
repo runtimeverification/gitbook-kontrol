@@ -7,7 +7,7 @@ description: How to run property tests with Kontrol
 ## Create a new Foundry project
 
 ```
-forge init --no-git kontrolexample
+forge init kontrolexample
 ```
 
 This command creates a new Foundry project that can be used as an example. The project's structure is presented in detail in the [Foundry book](https://book.getfoundry.sh/projects/project-layout). We can only fuzz parametric tests for now because the project is not configured to support symbolic execution yet. We will cover this topic later in [property-verification-using-kevm.md](property-verification-using-kevm.md "mention"). After creating the project, you can start editing the code.
