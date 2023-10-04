@@ -12,10 +12,13 @@
   * [Property Verification using Kontrol](guides/kevm-foundry-integration-example/property-verification-using-kevm.md)
   * [K Control Flow Graph (KCFG)](guides/kevm-foundry-integration-example/k-control-flow-graph-kcfg.md)
 
+## Cheatsheets
+
+* [Kup Cheatsheet](cheatsheets/kup-cheatsheet.md)
+* [Kontrol Cheatsheet](cheatsheets/kontrol-cheatsheet.md)
+
 ## Learn More
 
-* [Kup Cheatsheet](learn-more/kup-cheatsheet.md)
-* [Kontrol Cheatsheet](learn-more/kontrol-cheatsheet.md)
 * [Resources](learn-more/resources.md)
 
 ## 🔗 Links
