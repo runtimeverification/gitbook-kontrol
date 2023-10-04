@@ -14,6 +14,8 @@
 
 ## Learn More
 
+* [Kup Cheatsheet](learn-more/kup-cheatsheet.md)
+* [Kontrol Cheatsheet](learn-more/kontrol-cheatsheet.md)
 * [Resources](learn-more/resources.md)
 
 ## 🔗 Links

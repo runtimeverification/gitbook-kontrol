@@ -69,7 +69,7 @@ You will see the status section at the top of the right section.
 
 This section displays the selected node and any enabled or disabled options. You can show or hide views using the hotkeys displayed at the bottom of the screen. To exit the **KCFG,** you can use `Ctrl + C`.
 
-<figure><img src="../../.gitbook/assets/Hotkeys.png" alt=""><figcaption><p>Hotkeys</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (14).png" alt=""><figcaption><p>Hotkeys</p></figcaption></figure>
 
 ### **The term view**
 
