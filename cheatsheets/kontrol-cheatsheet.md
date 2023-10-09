@@ -22,7 +22,7 @@ You can extensively customize the above commands to meet your specific verificat
 
 There are flags available for the `kontrol build` stage that allow you to change the set of lemmas used for reasoning and specify the desired behavior for rebuilding or re-executing symbolic tests.
 
-<table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--verbose</code></td><td>Verbose build trace</td></tr><tr><td><code>--require $lemmas</code></td><td>Include a file of <code>$lemmas</code> when forming the <strong>K</strong> definition</td></tr><tr><td><code>--module-import $module</code></td><td><p>A <code>$module</code> from the <code>$lemmas</code> file provided in the above flag. </p><p><strong>Note:</strong> <code>$module</code> must be of the form <code>TestContract:ModuleName</code></p></td></tr><tr><td><code>--rekompile</code></td><td>Will rebuild the <strong>K</strong> definition, even if it was previously built</td></tr><tr><td><code>--with-llvm-library</code></td><td>Produce artifacts for the <a href="https://github.com/runtimeverification/llvm-backend">llvm backend</a>, needed to run the symbolic execution <a href="https://github.com/runtimeverification/hs-backend-booster">booster backend</a></td></tr></tbody></table>
+<table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--verbose</code></td><td>Verbose build trace</td></tr><tr><td><code>--require $lemmas</code></td><td>Include a file of <code>$lemmas</code> when forming the <strong>K</strong> definition</td></tr><tr><td><code>--module-import $module</code></td><td><p>A <code>$module</code> from the <code>$lemmas</code> file provided in the above flag. </p><p><strong>Note:</strong> <code>$module</code> must be of the form <code>TestContract:ModuleName</code></p></td></tr><tr><td><code>--rekompile</code></td><td>Will rebuild the <strong>K</strong> definition, even if it was previously built</td></tr></tbody></table>
 
 ### Chaining Flag Example&#x20;
 
@@ -51,8 +51,7 @@ You will need to `rekompile` the **K** definition of the project again. You also
 ```bash
 kontrol build --require test/myproject-lemmas.k             \
               --module-import MyProperties:MYPROJECT-LEMMAS \
-               --rekompile                                  \
-               --with-llvm-library
+               --rekompile
 ```
 
 ***
@@ -63,7 +62,7 @@ kontrol build --require test/myproject-lemmas.k             \
 
 These flags specify what you `prove` and how you `prove`. The flags including the backend used for symbolic execution, the new lemmas to include for symbolic reasoning, resource distribute and other potential changes.
 
-<table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--test $testName</code></td><td>Specifies the name of the test function to symbolically execute. Multiple flags can be provided for parallel execution with different functions.</td></tr><tr><td><code>--reinit</code></td><td>Restarts symbolic execution instead of resuming from the last saved run.</td></tr><tr><td><code>--bmc-depth $n</code></td><td>Enables bounded model checking, unrolling all loops to a maximum depth of <code>$n</code> .</td></tr><tr><td><code>--use-booster</code></td><td><p>Uses the booster backend (faster) instead of the legacy backend. </p><p><strong>Note:</strong> This option requires <a href="https://app.gitbook.com/o/MwuC1PgHx91Qm96rVCnq/s/T2KVb4tqbNdAsPxsEyPQ/~/changes/73/learn-more/kontrol-cheatsheet#kontrol-build-flags">building</a> the project with the <code>--with-llvm-library</code> flag</p></td></tr><tr><td><code>--smt-timeout $ms</code></td><td>Sets the timeout in milliseconds for SMT queries.</td></tr><tr><td><code>--smt-retry-limit $n</code></td><td>Specifies the number of times to retry SMT queries with scaling timeouts.</td></tr><tr><td><code>--auto-abstract-gas</code></td><td>Abstract any gas-related computations, provided the cheatcode <code>infiniteGas</code> was enabled. This simplifies and speeds up symbolic execution.</td></tr><tr><td><code>--no-break-on-calls</code></td><td>Does not store a node for every EVM call made.</td></tr><tr><td><code>--workers $n</code></td><td>Sets the number of parallel processes run by the prover. It should be at most <code>(M - 8) / 8</code> in a machine with <code>M</code> GB of RAM.</td></tr><tr><td><code>--max-depth $n</code></td><td>Sets the maximum number of <strong>K</strong> steps before the state is saved in a new node in the <strong>KCFG</strong>.</td></tr><tr><td><code>--max-iterations $n</code></td><td>Sets the number of times to expand the next pending node in the <strong>KCFG</strong>.</td></tr><tr><td><code>--bug-report $name</code></td><td>Generates a bug report with the given name.</td></tr></tbody></table>
+<table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--test $testName</code></td><td>Specifies the name of the test function to symbolically execute. Multiple flags can be provided for parallel execution with different functions.</td></tr><tr><td><code>--reinit</code></td><td>Restarts symbolic execution instead of resuming from the last saved run.</td></tr><tr><td><code>--bmc-depth $n</code></td><td>Enables bounded model checking, unrolling all loops to a maximum depth of <code>$n</code> .</td></tr><tr><td><code>--use-booster</code></td><td>Uses the booster backend (faster) instead of the legacy backend.</td></tr><tr><td><code>--smt-timeout $ms</code></td><td>Sets the timeout in milliseconds for SMT queries.</td></tr><tr><td><code>--smt-retry-limit $n</code></td><td>Specifies the number of times to retry SMT queries with scaling timeouts.</td></tr><tr><td><code>--auto-abstract-gas</code></td><td>Abstract any gas-related computations, provided the cheatcode <code>infiniteGas</code> was enabled. This simplifies and speeds up symbolic execution.</td></tr><tr><td><code>--no-break-on-calls</code></td><td>Does not store a node for every EVM call made.</td></tr><tr><td><code>--workers $n</code></td><td>Sets the number of parallel processes run by the prover. It should be at most <code>(M - 8) / 8</code> in a machine with <code>M</code> GB of RAM.</td></tr><tr><td><code>--max-depth $n</code></td><td>Sets the maximum number of <strong>K</strong> steps before the state is saved in a new node in the <strong>KCFG</strong>.</td></tr><tr><td><code>--max-iterations $n</code></td><td>Sets the number of times to expand the next pending node in the <strong>KCFG</strong>.</td></tr><tr><td><code>--bug-report $name</code></td><td>Generates a bug report with the given name.</td></tr></tbody></table>
 
 ### Example
 
@@ -88,7 +87,7 @@ kontrol prove --test MyProperties.testMyProperty1 \
               --auto-abstract-gas                 \
               --no-break-on-calls                 \
               --workers 2                         \
-              --use-booster # `kontrol build` must be run with --with-llvm-library
+              --use-booster
 ```
 {% endcode %}
 
@@ -147,9 +146,6 @@ module=MyProperties:${base_module}
 rekompile=--rekompile
 #rekompile=
 
-llvm_library=--with-llvm-library
-# llvm_library=
-
 ###
 # kontrol prove options
 ###
@@ -175,7 +171,6 @@ auto_abstract=--auto-abstract-gas
 bug_report=--bug-report
 #bug_report=
 
-# If this option is enabled, --with-llvm-library must be too
 use_booster=--use-booster
 # use_booster=
 
