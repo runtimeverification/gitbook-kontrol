@@ -22,7 +22,7 @@ You can extensively customize the above commands to meet your specific verificat
 
 There are flags available for the `kontrol build` stage that allow you to change the set of lemmas used for reasoning and specify the desired behavior for rebuilding or re-executing symbolic tests.
 
-<table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--verbose</code></td><td>Verbose build trace</td></tr><tr><td><code>--require $lemmas</code></td><td>Include a file of <code>$lemmas</code> when forming the <strong>K</strong> definition</td></tr><tr><td><code>--module-import $module</code></td><td><p>A <code>$module</code> from the <code>$lemmas</code> file provided in the above flag. </p><p><strong>Note:</strong> <code>$module</code> must be of the form <code>TestContract:ModuleName</code></p></td></tr><tr><td><code>--regen</code></td><td>Generate, even if it already exists, the file <code>foundry.k</code>. This file contains the project's <strong>K</strong> definition</td></tr><tr><td><code>--rekompile</code></td><td>Will rebuild the <strong>K</strong> definition, even if it was previously built</td></tr><tr><td><code>--with-llvm-library</code></td><td>Produce artifacts for the <a href="https://github.com/runtimeverification/llvm-backend">llvm backend</a>, needed to run the symbolic execution <a href="https://github.com/runtimeverification/hs-backend-booster">booster backend</a></td></tr></tbody></table>
+<table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--verbose</code></td><td>Verbose build trace</td></tr><tr><td><code>--require $lemmas</code></td><td>Include a file of <code>$lemmas</code> when forming the <strong>K</strong> definition</td></tr><tr><td><code>--module-import $module</code></td><td><p>A <code>$module</code> from the <code>$lemmas</code> file provided in the above flag. </p><p><strong>Note:</strong> <code>$module</code> must be of the form <code>TestContract:ModuleName</code></p></td></tr><tr><td><code>--rekompile</code></td><td>Will rebuild the <strong>K</strong> definition, even if it was previously built</td></tr><tr><td><code>--with-llvm-library</code></td><td>Produce artifacts for the <a href="https://github.com/runtimeverification/llvm-backend">llvm backend</a>, needed to run the symbolic execution <a href="https://github.com/runtimeverification/hs-backend-booster">booster backend</a></td></tr></tbody></table>
 
 ### Chaining Flag Example&#x20;
 
@@ -46,13 +46,12 @@ Let's look at what a typical `kontrol build` example may look like. You will lik
 
 For this example we will assume that you have run `kontrol build` once already and it is not the first time you are symbolically executing the properties. You've also now, identified necessary lemmas and included them in `MYPROJECT-LEMMAS`.&#x20;
 
-You will need to `regen` and `rekompile` the **K** definition of the project again. You also want to use the fastest backend available (booster backend) to symbolically execute your properties. To do this your command will look like this:
+You will need to `rekompile` the **K** definition of the project again. You also want to use the fastest backend available (booster backend) to symbolically execute your properties. To do this your command will look like this:
 
 ```bash
 kontrol build --require test/myproject-lemmas.k             \
               --module-import MyProperties:MYPROJECT-LEMMAS \
                --rekompile                                  \
-               --regen                                      \
                --with-llvm-library
 ```
 
@@ -120,7 +119,6 @@ kontrol_build() {
             --require ${lemmas}       \
             --module-import ${module} \
             ${rekompile}              \
-            ${regen}                  \
             ${llvm_library}
 }
 
@@ -145,9 +143,6 @@ kontrol_prove() {
 lemmas=test/myproject-lemmas.k
 base_module=MYPROJECT-LEMMAS
 module=MyProperties:${base_module}
-
-regen=--regen
-#regen=
 
 rekompile=--rekompile
 #rekompile=

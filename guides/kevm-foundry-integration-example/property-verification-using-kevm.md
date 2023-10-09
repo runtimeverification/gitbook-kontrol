@@ -52,7 +52,7 @@ kontrol build
 
 **Note:** The process should take a minute and may emit some warnings, so don’t worry. Also, remember that during the development, you may need to rebuild the definition in various ways.
 
-If you change the Solidity code, you must re-run `kontrol build` command again with the `--regen` option.
+If you change the Solidity code, you must re-run `kontrol build` command.
 
 For more information about `kontrol build` and available options, run:
 
