@@ -1,6 +1,9 @@
 # Property Verification using Kontrol
 
-For this example, we don't need to modify our test to support symbolic execution. However, for more complex use cases, it is possible that some Kontrol cheatcodes are necessary. To use Kontrol's own cheatcodes we must import a new Solidity library required for symbolic execution. To do so, create a new file `src/KEVMCheats.sol` and copy over the contents of [this contract](https://github.com/runtimeverification/kontrol/blob/master/src/tests/integration/test-data/foundry/src/KEVMCheats.sol).
+For this example, we don't need to modify our test to support symbolic execution. However, for more complex use cases, it is possible that some Kontrol cheatcodes are necessary. To use Kontrol's own cheatcodes we must install a [new Solidity library](https://github.com/runtimeverification/kontrol-cheatcodes/) required for symbolic execution. You can install it with Foundry by doing
+```
+forge install runtimeverification/kontrol-cheatcodes
+```
 
 These cheatcodes allow us to generalize the storage of an Ethereum account by making it symbolic or to expect any type of calls, such as a [`delegatecall`](https://www.evm.codes/#f4). An important note on cheatcodes is that, by default, the `infiniteGas()` cheatcode is enabled. This cheatcode abstracts out gas usage by making it infinite, which can remove branches where the execution might fail because you ran out of gas. Enabling infinite gas also speeds up the verificaiton time considerably, since no reasoning about complex gas expressions is performed -which can also entail branching on gas computations.
 
@@ -18,9 +21,9 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "../src/Counter.sol";
-import "../src/KEVMCheats.sol";
+import "kontrol-cheatcodes/KontrolCheats.sol";
 
-contract CounterTest is Test, KEVMCheats {
+contract CounterTest is Test, KontrolCheats {
    Counter public counter;
 
    function setUp() public {
