@@ -6,8 +6,7 @@ These cheatcodes allow us to generalize the storage of an Ethereum account by ma
 
 Even if adding the `infiniteGas()` won't change the symbolic execution behavior on our tests, we'll add it to exemplify how other cheatcodes could be added. Note that you don't really have to modify your code if you're reproducing this tutorial.
 
-To add the `infiniteGas()` cheatcode, after creating the cheatcode file, the test contract `CounterTest` must derive from both `Test` and `KEVMCheats.sol`.\
-\
+To add the `infiniteGas()` cheatcode, after creating the cheatcode file, the test contract `CounterTest` must derive from both `Test` and `KEVMCheats.sol`.
 
 **Note:** Adding custom cheatcodes will prevent us from running the tests with `forge test`, as `forge` will not recognize these cheatcodes.
 
