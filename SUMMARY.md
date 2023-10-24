@@ -8,9 +8,9 @@
 
 ## Guides
 
-* [Kontrol Example](guides/kevm-foundry-integration-example/README.md)
-  * [Property Verification using Kontrol](guides/kevm-foundry-integration-example/property-verification-using-kevm.md)
-  * [K Control Flow Graph (KCFG)](guides/kevm-foundry-integration-example/k-control-flow-graph-kcfg.md)
+* [Kontrol Example](guides/kontrol-example/README.md)
+  * [Property Verification using Kontrol](guides/kontrol-example/property-verification-using-kontrol.md)
+  * [K Control Flow Graph (KCFG)](guides/kontrol-example/k-control-flow-graph-kcfg.md)
 
 ## Cheatsheets
 

@@ -6,7 +6,7 @@ description: Cheatsheet with (almost) all of Kontrol options and gotchas
 
 This cheatsheet provides a comprehensive list of options for conducting **Kontrol** verification of smart contracts, along with additional information about the **K** ecosystem.
 
-## `kontrol` commands&#x20;
+## `kontrol` commands
 
 These commands encompass all the functionality involved in the verification process, from building your project into a full-fledged **K** definition to examining the verification output of a symbolic run in detail.
 
@@ -16,35 +16,35 @@ You can extensively customize the above commands to meet your specific verificat
 
 ***
 
-## `kontrol build` &#x20;
+## `kontrol build`
 
 ### Flags
 
 There are flags available for the `kontrol build` stage that allow you to change the set of lemmas used for reasoning and specify the desired behavior for rebuilding or re-executing symbolic tests.
 
-<table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--verbose</code></td><td>Verbose build trace</td></tr><tr><td><code>--require $lemmas</code></td><td>Include a file of <code>$lemmas</code> when forming the <strong>K</strong> definition</td></tr><tr><td><code>--module-import $module</code></td><td><p>A <code>$module</code> from the <code>$lemmas</code> file provided in the above flag. </p><p><strong>Note:</strong> <code>$module</code> must be of the form <code>TestContract:ModuleName</code></p></td></tr><tr><td><code>--rekompile</code></td><td>Will rebuild the <strong>K</strong> definition, even if it was previously built</td></tr></tbody></table>
+<table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--verbose</code></td><td>Verbose build trace</td></tr><tr><td><code>--require $lemmas</code></td><td>Include a file of <code>$lemmas</code> when forming the <strong>K</strong> definition</td></tr><tr><td><code>--module-import $module</code></td><td><p>A <code>$module</code> from the <code>$lemmas</code> file provided in the above flag.</p><p><strong>Note:</strong> <code>$module</code> must be of the form <code>TestContract:ModuleName</code></p></td></tr><tr><td><code>--rekompile</code></td><td>Will rebuild the <strong>K</strong> definition, even if it was previously built</td></tr></tbody></table>
 
-### Chaining Flag Example&#x20;
+### Chaining Flag Example
 
 Let's look at what a typical `kontrol build` example may look like. You will likely have the following contents:
 
-| Content             | File Name            | File Path                  |
-| ------------------- | -------------------- | -------------------------- |
-| Custom Lemma        | `myproject-lemmas.k` | `test/myproject-lemmas.k`  |
-| Module              | `MYPROJECT-LEMMAS`   | `test/myproject-lemmas.k`  |
-| Symbolic properties | `MyProperties`       |                            |
+| Content             | File Name            | File Path                 |
+| ------------------- | -------------------- | ------------------------- |
+| Custom Lemma        | `myproject-lemmas.k` | `test/myproject-lemmas.k` |
+| Module              | `MYPROJECT-LEMMAS`   | `test/myproject-lemmas.k` |
+| Symbolic properties | `MyProperties`       |                           |
 
 * A _custom lemmas_
   * Lemmas file name: `myproject-lemmas.k`
   * This will be saved at following path: `test/myproject-lemmas.k`
-* A _module_ you want **Kontrol** to include in its reasoning.&#x20;
+* A _module_ you want **Kontrol** to include in its reasoning.
   * Module name: `MYPROJECT-LEMMAS`
-  * This will be saved at following path: `test/myproject-lemmas.k`&#x20;
+  * This will be saved at following path: `test/myproject-lemmas.k`
 * Symbolic properties to execute.
-  * Contract file name: `MyProperties`&#x20;
+  * Contract file name: `MyProperties`
   * This will be saved at following path:
 
-For this example we will assume that you have run `kontrol build` once already and it is not the first time you are symbolically executing the properties. You've also now, identified necessary lemmas and included them in `MYPROJECT-LEMMAS`.&#x20;
+For this example we will assume that you have run `kontrol build` once already and it is not the first time you are symbolically executing the properties. You've also now, identified necessary lemmas and included them in `MYPROJECT-LEMMAS`.
 
 You will need to `rekompile` the **K** definition of the project again. You also want to use the fastest backend available (booster backend) to symbolically execute your properties. To do this your command will look like this:
 
@@ -56,7 +56,7 @@ kontrol build --require test/myproject-lemmas.k             \
 
 ***
 
-## `kontrol prove`&#x20;
+## `kontrol prove`
 
 ### Flags
 
@@ -69,7 +69,7 @@ These flags specify what you `prove` and how you `prove`. The flags including th
 Let's look at what a typical `kontrol prove` example may look like. You will likely have the following contents:
 
 * Two symbolic properties to execute in parallel named `testMyProperty1` and `testMyProperty2`, both in a contract named `MyProperties`.
-* There are loops present in the code, and before providing invariants for those we want to  use the simpler approach of bounded model checking, unrolling the loops only up to 10 iterations
+* There are loops present in the code, and before providing invariants for those we want to use the simpler approach of bounded model checking, unrolling the loops only up to 10 iterations
 * We want to allow the SMT solver enough time to reason
 * We can achieve maximum speed of symbolic execution with the following tweaks
   * Don't allocate any resources to gas computations, since these are costly and can cause numerous branching
@@ -103,7 +103,7 @@ Here is a template to have better control over `kontrol`. To save the output of 
 time bash test/run-kontrol.sh 2>&1 | tee log.out
 ```
 
-To interpret the result of running this script, please refer to [k-control-flow-graph-kcfg.md](../guides/kevm-foundry-integration-example/k-control-flow-graph-kcfg.md "mention").
+To interpret the result of running this script, please refer to [k-control-flow-graph-kcfg.md](../guides/kontrol-example/k-control-flow-graph-kcfg.md "mention").
 
 ### Script
 
