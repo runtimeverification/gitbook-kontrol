@@ -16,6 +16,10 @@ This command launches an interactive visualizer that generates a **KCFG** (**K C
 
 The **KCFG** view might seem crowded. Let's break it into individual sections. Each section can be hidden using the hotkeys displayed at the bottom of the UI. Let's start with the left side.
 
+{% hint style="warning" %}
+The screenshots provided may not exactly match your local KCFG. It is normal for the node numbers to be different from the ones shown here. This section aims to provide context for understanding the KCFG output.
+{% endhint %}
+
 ## Left section of KCFG
 
 <figure><img src="../../.gitbook/assets/LeftofKCFG.png" alt="" width="375"><figcaption><p>Left section of the KCFG Visualizer</p></figcaption></figure>
