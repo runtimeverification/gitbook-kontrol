@@ -14,7 +14,7 @@ bash <(curl https://kframework.org/install)
 
 ### `kup` commands
 
-<table data-full-width="false"><thead><tr><th>Command</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>kup list</code></td><td>List all available packages and their status </td><td><code>kup list</code></td></tr><tr><td><code>kup install $package</code></td><td>Install or update a <code>$package</code></td><td><code>kup install kontrol</code></td></tr><tr><td><code>kup $option --help</code></td><td>Functionality description</td><td><code>kup list --help</code></td></tr></tbody></table>
+<table data-full-width="false"><thead><tr><th>Command</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>kup list</code></td><td>List all available packages and their status </td><td><code>kup list</code></td></tr><tr><td><code>kup install $package</code></td><td>Install or update a <code>$package</code></td><td><code>kup install kontrol</code></td></tr><tr><td><code>kup $option --help</code></td><td>Output the description of <code>$option</code></td><td><code>kup list --help</code></td></tr></tbody></table>
 
 **Installation time:** The initial installation of certain packages (e.g., [**kontrol**](https://github.com/runtimeverification/kontrol)) may take longer as it needs to fetch all the libraries and compile sources. This process typically takes around **30 mins** to **1 hour**.
 
