@@ -24,4 +24,5 @@
 ## 🔗 Links
 
 * [Join our Discord!](https://discord.gg/CurfmXNtbN)
+* [Kontrol Repo](https://github.com/runtimeverification/kontrol)
 * [Gitbook Repo](https://github.com/runtimeverification/gitbook-kontrol)
