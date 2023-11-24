@@ -134,9 +134,9 @@ The time it takes to run can vary depending on the machine. If it appears to be 
 To run the tests use the following:
 
 ```
-kontrol prove --test CounterTest.testSetNumber
+kontrol prove --match-test CounterTest.testSetNumber
 ```
 
-The `--test CounterTest.testSetNumber` flag is used to specify that only a single proof should be executed. This is useful when there are multiple tests in a test file.
+The `--match-test CounterTest.testSetNumber` flag is used to specify that only a single proof should be executed. This is useful when there are multiple tests in a test file.
 
 Next, we will cover how to investigate **why** the test failed.
