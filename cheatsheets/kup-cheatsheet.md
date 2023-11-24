@@ -41,3 +41,19 @@ kup install kontrol --version ./$path_to_local_kevm --override k-framework/haske
 {% endcode %}
 
 As you can see, release tags, local checkouts and branches can be used to build a fine tuned version of any of our tools, `kontrol` being the example here. To know the exact naming of the dependencies that a package has one can use `kup list $package --inputs`.
+
+## Troubleshooting
+
+### Making changes to nix.conf (manually or through `kup`) has no effect.
+
+Nix configuration files can be stored in many different locations.
+A full treatment can be found in the [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file).
+Check if you have additional Nix config files, for example in `$HOME/.config/nix`.
+For example, if `$HOME/.config/nix` specifies a `trusted-users` option, this will override whichever `trusted-users` were set in `/etc/nix/nix.conf`.
+Changing the config variable from `trusted-users` to `extra-trusted-users` means it will only be appended, not overritten.
+You can also explicitly set which files Nix should use as config files using the `NIX_USER_CONF_FILES` environment variable.
+
+```
+export NIX_USER_CONF_FILES = "/etc/nix/nix.conf"
+kup doctor
+```
