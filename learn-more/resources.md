@@ -6,11 +6,20 @@ description: If you want to learn more or get involved
 
 Join the Community on [Discord](https://discord.gg/CurfmXNtbN)! If you have questions, feedback, or problems we would love to hear from you and offer support.
 
+### Videos
+
+* [In Solidity Specification, Testing, and Verification](https://www.youtube.com/live/staXNgpBjEI?feature=shared)
+* [Tackling Rounding Errors with Precision Analysis](https://youtu.be/nUfcsblYQH0)
+* [Formal Methods for the Working DeFi Dev](https://www.youtube.com/watch?v=ETlNhV9jYJw)
+* [Security: Auditing and Formal Methods](https://www.youtube.com/watch?v=W\_Rs3-Q8pAs)
+* [Towards Adoption of Symbolic Execution for DeFi Security](https://www.youtube.com/watch?v=Kjs0ZiZ7m9k)
 * [**K, KEVM, Kontrol** presentation video](https://www.youtube.com/watch?v=9PLnQStkiUo)
-* To learn more about Foundry check out the [Foundry Book](https://book.getfoundry.sh/)
-* Runtime Verification Blog posts on Foundry
+
+### Blogs and Other Resources
+
 * [Using Foundry to Explore Upgradeable Contracts (Part 1)](https://runtimeverification.com/blog/using-foundry-to-explore-upgradeable-contracts-part-1)
 * [Foundry: Gen 2 of Ethereum Tooling](https://runtimeverification.com/blog/foundry-gen-2-of-ethereum-tooling)
+* To learn more about Foundry check out the [Foundry Book](https://book.getfoundry.sh/)
 * **KEVM** and **Kontrol** are powered by the [**K** Framework](https://kframework.org/), if you are interested in learning more check out the [0 to **K** Tutorial](https://runtimeverification.com/blog/from-0-to-k-tutorial)
 * We also have formal verification on Algorand powered by **K**! Check out [**KAVM**](https://runtimeverification.com/blog/runtime-verification-brings-formal-verification-to-algorand)!
 
