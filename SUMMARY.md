@@ -17,6 +17,10 @@
 * [Kup Cheatsheet](cheatsheets/kup-cheatsheet.md)
 * [Kontrol Cheatsheet](cheatsheets/kontrol-cheatsheet.md)
 
+## Tips
+
+* [Tips for using Kontrol](tips/tips-for-using-kontrol.md)
+
 ## Learn More
 
 * [Resources](learn-more/resources.md)
