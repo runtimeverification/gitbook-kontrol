@@ -4,7 +4,7 @@
 
 Open the `Counter.sol` file located at `kontrolexample/src/Counter.sol`. The generated contract `Counter` has a public value named `number` that can be incremented using the method `increment()` , or can be set to a specific value using `setNumber(uint256)` .
 
-Let's modify the code to include a special case in which `setNumber` would not update the `number` value and will throw an error instead.&#x20;
+Let's modify the code to include a special case in which `setNumber` would not update the `number` value and will throw an error instead.
 
 First, before the Counter contract declaration, declare an error by adding `error CoffeeBreak()`. Then, in the `setNumber()` function, add an argument `inLuck` as a `bool`. Lastly, add an `if` statement to define when a coffee break is allowed. We'll specify that a coffee break is permitted if `newNumber` is `0xC0FFEE` and `inLuck` is `true`. In that case, the function reverts and the number is not updated.
 
@@ -119,7 +119,7 @@ The process should take a minute and may emit some warnings, so don’t worry. A
 
 If you change the Solidity code, you must re-run the `kontrol build` command.
 
-For more information about `kontrol build` and available options, run:
+For more information about `kontrol build` you can refer to [#kontrol-build](../../cheatsheets/kontrol-cheatsheet.md#kontrol-build "mention") or run:
 
 ```
 kontrol build --help
@@ -137,6 +137,6 @@ To run the tests use the following:
 kontrol prove --match-test CounterTest.testSetNumber
 ```
 
-The `--match-test CounterTest.testSetNumber` flag is used to specify that only a single proof should be executed. This is useful when there are multiple tests in a test file.
+The `--match-test CounterTest.testSetNumber` flag is used to specify that only a single proof should be executed. This is useful when there are multiple tests in a test file. You can find more information on **Kontrol** commands on the [kontrol-cheatsheet.md](../../cheatsheets/kontrol-cheatsheet.md "mention").
 
 Next, we will cover how to investigate **why** the test failed.
