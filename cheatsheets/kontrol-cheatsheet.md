@@ -10,41 +10,33 @@ This cheatsheet provides a comprehensive list of options for conducting **Kontro
 
 These commands encompass all the functionality involved in the verification process, from building your project into a full-fledged **K** definition to examining the verification output of a symbolic run in detail.
 
-<table data-full-width="false"><thead><tr><th width="172.33333333333331">Command</th><th width="331">Description</th><th>Example</th></tr></thead><tbody><tr><td><code>build</code></td><td>Make <strong>K</strong> definitions from a Foundry project</td><td><code>kontrol build</code></td></tr><tr><td><code>prove</code></td><td>Symbolically execute the provided tests</td><td><code>kontrol prove --test TestContract.testName</code></td></tr><tr><td><code>list</code></td><td>List all proof files with their status</td><td><code>kontrol list</code></td></tr><tr><td><code>show</code></td><td>Statically print a proof</td><td><code>kontrol show ContractTest.testName</code></td></tr><tr><td><code>view-kcfg</code></td><td>Show a proof in the <strong>KCFG</strong> visualizer</td><td><code>kontrol view-kcfg ContractTest.testName</code></td></tr></tbody></table>
+<table data-full-width="false"><thead><tr><th width="172.33333333333331">Command</th><th width="331">Description</th><th>Example</th></tr></thead><tbody><tr><td><code>build</code></td><td>Make <strong>K</strong> definitions from a Foundry project</td><td><code>kontrol build</code></td></tr><tr><td><code>prove</code></td><td>Symbolically execute provided tests</td><td><code>kontrol prove --test TestContract.testName</code></td></tr><tr><td><code>list</code></td><td>List all proof files with their status</td><td><code>kontrol list</code></td></tr><tr><td><code>show</code></td><td>Statically print a proof</td><td><code>kontrol show ContractTest.testName</code></td></tr><tr><td><code>view-kcfg</code></td><td>Show a proof in the <strong>KCFG</strong> visualizer</td><td><code>kontrol view-kcfg ContractTest.testName</code></td></tr></tbody></table>
 
 You can extensively customize the above commands to meet your specific verification requirements using the following flags.
 
 ## `kontrol build`
 
-### Flags
+Make **K** definitions from a Foundry project with `build`.
 
-There are flags available for the `kontrol build` stage that allow you to change the set of lemmas used for reasoning and specify the desired behavior for rebuilding or re-executing symbolic tests.
+#### `build` Flags
+
+There are flags available for the `build` stage that allow you to change the set of lemmas used for reasoning and specify the desired behavior for rebuilding or re-executing symbolic tests.
 
 <table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--verbose</code></td><td>Verbose build trace</td></tr><tr><td><code>--require $lemmas</code></td><td>Include a file of <code>$lemmas</code> when forming the <strong>K</strong> definition</td></tr><tr><td><code>--module-import $module</code></td><td><p>A <code>$module</code> from the <code>$lemmas</code> file provided in the above flag.</p><p><strong>Note:</strong> <code>$module</code> must be of the form <code>TestContract:ModuleName</code></p></td></tr><tr><td><code>--rekompile</code></td><td>Will rebuild the <strong>K</strong> definition, even if it was previously built</td></tr></tbody></table>
 
-### Chaining Flag Example
+#### Example of Chaining `build` Flags
 
 Let's look at what a typical `kontrol build` example may look like. You will likely have the following contents:
 
-| Content             | File Name            | File Path                 |
-| ------------------- | -------------------- | ------------------------- |
-| Custom Lemma        | `myproject-lemmas.k` | `test/myproject-lemmas.k` |
-| Module              | `MYPROJECT-LEMMAS`   | `test/myproject-lemmas.k` |
-| Symbolic properties | `MyProperties`       |                           |
+| Content                                                   | File Name            | File Path                 |
+| --------------------------------------------------------- | -------------------- | ------------------------- |
+| Custom Lemma                                              | `myproject-lemmas.k` | `test/myproject-lemmas.k` |
+| A module you want **Kontrol** to include in its reasoning | `MYPROJECT-LEMMAS`   | `test/myproject-lemmas.k` |
+| Symbolic properties                                       | `MyProperties`       |                           |
 
-* A _custom lemmas_
-  * Lemmas file name: `myproject-lemmas.k`
-  * This will be saved at following path: `test/myproject-lemmas.k`
-* A _module_ you want **Kontrol** to include in its reasoning.
-  * Module name: `MYPROJECT-LEMMAS`
-  * This will be saved at following path: `test/myproject-lemmas.k`
-* Symbolic properties to execute.
-  * Contract file name: `MyProperties`
-  * This will be saved at following path:
+For this example, we will assume that you have already run `kontrol build` once and this is not your first time symbolically executing the properties. You have also identified the necessary lemmas and included them in `MYPROJECT-LEMMAS`.
 
-For this example we will assume that you have run `kontrol build` once already and it is not the first time you are symbolically executing the properties. You've also now, identified necessary lemmas and included them in `MYPROJECT-LEMMAS`.
-
-You will need to `rekompile` the **K** definition of the project again. You also want to use the fastest backend available (booster backend) to symbolically execute your properties. To do this your command will look like this:
+To symbolically execute your properties using the fastest available backend (booster backend), you will need to `rekompile` the **K** definition of the project. To do this your command will look like this:
 
 ```bash
 kontrol build --require test/myproject-lemmas.k             \
@@ -56,20 +48,25 @@ kontrol build --require test/myproject-lemmas.k             \
 
 ## `kontrol prove`
 
-### Flags
+Symbolically execute provided tests with `prove`.
 
-These flags specify what you `prove` and how you `prove`. The flags including the backend used for symbolic execution, the new lemmas to include for symbolic reasoning, resource distribute and other potential changes.
+#### Flags
+
+These flags specify what you `prove` and how you `prove` it. The flags include: the backend used for symbolic execution, the new lemmas to include for symbolic reasoning, resource distribute and other potential changes.
 
 <table data-full-width="false"><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>--test $testName</code></td><td>Specifies the name of the test function to symbolically execute. Multiple flags can be provided for parallel execution with different functions.</td></tr><tr><td><code>--reinit</code></td><td>Restarts symbolic execution instead of resuming from the last saved run.</td></tr><tr><td><code>--bmc-depth $n</code></td><td>Enables bounded model checking, unrolling all loops to a maximum depth of <code>$n</code> .</td></tr><tr><td><code>--use-booster</code></td><td>Uses the booster backend (faster) instead of the legacy backend.</td></tr><tr><td><code>--smt-timeout $ms</code></td><td>Sets the timeout in milliseconds for SMT queries.</td></tr><tr><td><code>--smt-retry-limit $n</code></td><td>Specifies the number of times to retry SMT queries with scaling timeouts.</td></tr><tr><td><code>--auto-abstract-gas</code></td><td>Abstract any gas-related computations, provided the cheatcode <code>infiniteGas</code> was enabled. This simplifies and speeds up symbolic execution.</td></tr><tr><td><code>--no-break-on-calls</code></td><td>Does not store a node for every EVM call made.</td></tr><tr><td><code>--workers $n</code></td><td>Sets the number of parallel processes run by the prover. It should be at most <code>(M - 8) / 8</code> in a machine with <code>M</code> GB of RAM.</td></tr><tr><td><code>--max-depth $n</code></td><td>Sets the maximum number of <strong>K</strong> steps before the state is saved in a new node in the <strong>KCFG</strong>.</td></tr><tr><td><code>--max-iterations $n</code></td><td>Sets the number of times to expand the next pending node in the <strong>KCFG</strong>.</td></tr><tr><td><code>--bug-report $name</code></td><td>Generates a bug report with the given name.</td></tr></tbody></table>
 
-### Example
+#### Example of Chaining `prove` Flags
 
-Let's look at what a typical `kontrol prove` example may look like. You will likely have the following contents:
+Let's look at what a typical `kontrol prove` example may look like. For this example we will assume  the following scenario: &#x20;
 
-* Two symbolic properties to execute in parallel named `testMyProperty1` and `testMyProperty2`, both in a contract named `MyProperties`.
+* There are two symbolic properties to execute in parallel.&#x20;
+  * `testMyProperty1`&#x20;
+  * `testMyProperty2`
+  * Both are in a contract named `MyProperties`
 * There are loops present in the code, and before providing invariants for those we want to use the simpler approach of bounded model checking, unrolling the loops only up to 10 iterations
 * We want to allow the SMT solver enough time to reason
-* We can achieve maximum speed of symbolic execution with the following tweaks
+* We want to achieve maximum speed of symbolic execution. This is possible with the following tweaks:
   * Don't allocate any resources to gas computations, since these are costly and can cause numerous branching
   * Create as few nodes as possible, since this saves on writing time. In particular, don't produce any nodes when making EVM calls
   * Use the fastest symbolic execution backend available, the booster backend
@@ -93,9 +90,9 @@ kontrol prove --test MyProperties.testMyProperty1 \
 
 ## Recommended Workflow
 
-To make use of for all `kontrol` options, it is recommended you use a bash script that simplifies parameter tweaking and allows for a better verification experience. It is also recommended you save the output of running `kontrol` to a file for easier inspection and debugging.
+To make use of for all `kontrol` options, it is recommended you use a `bash` script that simplifies parameter tweaking and allows for a better verification experience. It is also recommended you save the output of running `kontrol` to a file for easier inspection and debugging.
 
-Here is a template to have better control over `kontrol`. To save the output of running a template `run-kontrol.sh` to `log.out` , from the root directory of a Foundry project, you can use the following command:
+Here is a template to have better control over `kontrol`. To save the output of running a template `run-kontrol.sh` to `log.out` , from the `root` directory of a Foundry project, you can use the following command:
 
 ```bash
 time bash test/run-kontrol.sh 2>&1 | tee log.out
