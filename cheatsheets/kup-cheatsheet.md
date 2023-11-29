@@ -2,9 +2,7 @@
 
 ## K Framework Installer
 
-All **K**-related tools are managed through the `kup` [package manager](https://github.com/runtimeverification/kup).
-
-The following commands are used to install the **K** framework and enable easy switching between different versions.
+All **K**-related tools are managed through the `kup` [package manager](https://github.com/runtimeverification/kup). Below you will find the command to install the **K** framework, commands available with `kup` and flags that allow easy switching between different versions.
 
 ### **Install `kup`**
 
@@ -46,12 +44,7 @@ As you can see, release tags, local checkouts and branches can be used to build 
 
 ### Making changes to nix.conf (manually or through `kup`) has no effect.
 
-Nix configuration files can be stored in many different locations.
-A full treatment can be found in the [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file).
-Check if you have additional Nix config files, for example in `$HOME/.config/nix`.
-For example, if `$HOME/.config/nix` specifies a `trusted-users` option, this will override whichever `trusted-users` were set in `/etc/nix/nix.conf`.
-Changing the config variable from `trusted-users` to `extra-trusted-users` means it will only be appended, not overritten.
-You can also explicitly set which files Nix should use as config files using the `NIX_USER_CONF_FILES` environment variable.
+[Nix](https://nixos.org/) configuration files can be stored in many different locations. A full treatment can be found in the [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file). Check if you have additional Nix config files, for example in `$HOME/.config/nix`. If `$HOME/.config/nix` specifies a `trusted-users` option, this will override whichever `trusted-users` were set in `/etc/nix/nix.conf`. Changing the config variable from `trusted-users` to `extra-trusted-users` means it will only be appended, not overwritten. You can also explicitly set which files Nix should use as config files using the `NIX_USER_CONF_FILES` environment variable.
 
 ```
 export NIX_USER_CONF_FILES = "/etc/nix/nix.conf"

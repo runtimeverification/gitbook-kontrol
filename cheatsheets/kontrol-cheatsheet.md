@@ -1,5 +1,5 @@
 ---
-description: Cheatsheet with (almost) all of Kontrol options and gotchas
+description: Cheatsheet with (almost) all Kontrol options and gotchas
 ---
 
 # Kontrol Cheatsheet
@@ -13,8 +13,6 @@ These commands encompass all the functionality involved in the verification proc
 <table data-full-width="false"><thead><tr><th width="172.33333333333331">Command</th><th width="331">Description</th><th>Example</th></tr></thead><tbody><tr><td><code>build</code></td><td>Make <strong>K</strong> definitions from a Foundry project</td><td><code>kontrol build</code></td></tr><tr><td><code>prove</code></td><td>Symbolically execute the provided tests</td><td><code>kontrol prove --test TestContract.testName</code></td></tr><tr><td><code>list</code></td><td>List all proof files with their status</td><td><code>kontrol list</code></td></tr><tr><td><code>show</code></td><td>Statically print a proof</td><td><code>kontrol show ContractTest.testName</code></td></tr><tr><td><code>view-kcfg</code></td><td>Show a proof in the <strong>KCFG</strong> visualizer</td><td><code>kontrol view-kcfg ContractTest.testName</code></td></tr></tbody></table>
 
 You can extensively customize the above commands to meet your specific verification requirements using the following flags.
-
-***
 
 ## `kontrol build`
 

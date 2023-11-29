@@ -17,7 +17,7 @@ This command launches an interactive visualizer that generates a **KCFG** (**K C
 The **KCFG** view might seem crowded. Let's break it into individual sections. Each section can be hidden using the hotkeys displayed at the bottom of the UI. Let's start with the left side.
 
 {% hint style="warning" %}
-The screenshots provided may not exactly match your local KCFG. It is normal for the node numbers to be different from the ones shown here. This section aims to provide context for understanding the KCFG output.
+The screenshots provided may not match your local KCFG exactly. It is normal for the node numbers to be different from the ones shown here. This section aims to provide context for understanding the KCFG output.
 {% endhint %}
 
 ## Left section of KCFG
@@ -26,7 +26,7 @@ The screenshots provided may not exactly match your local KCFG. It is normal for
 
 The section on the left represents the **KCFG** of the execution in a minimal way, where nodes are linked together. Each node displays a summary of the state of the execution at that point. You can select a node by clicking on it, and the entire state will be displayed on the right. Once a node is selected, you can hide it from the **KCFG** using the hotkey `H`.
 
-You can display all hidden nodes using the hotkey `H`. We’ll discuss that shortly. For now, let’s understand how to read a node. Notice the node highlighted in yellow. The first row `(615 steps)` represents the number of steps the prover has executed since the previous node.
+You can display all hidden nodes using the hotkey `H`. We’ll discuss that shortly. For now, let’s understand how to read a node. Notice the node highlighted in <mark style="color:yellow;">yellow</mark>. The first row `(615 steps)` represents the number of steps the prover has executed since the previous node.
 
 The `8 (split)` indicates the node `id`, `8`, and the node type `(split)`. The main node types are:
 
@@ -43,13 +43,13 @@ Nodes can also be:
 
 Following the node `id`, there is a summary of the node:
 
-* `k: JUMPI 151 bool2Word …` - represents the contents of the `<k>` cell and the point of execution at which the prover is in that node ([more information here](https://github.com/runtimeverification/evm-semantics/blob/master/include/kframework/evm.md#configuration)).
+* `k: JUMPI 151 bool2Word …` - represents the contents of the `<k>` cell and the point of execution at which the prover is in that node.
 * `pc: 143` - represents the current value of the EVM program counter
 * `callDepth: 1` - represents the current call stack depth ([more information here](https://docs.soliditylang.org/en/v0.8.17/security-considerations.html#call-stack-depth)).
-* `statusCode: STATUSCODE:StatusCode` - shows the current status code. Here, `STATUSCODE` is the name of the symbolic variable, and `:StatusCode` shows the sort of the variable ([more information here](https://github.com/runtimeverification/evm-semantics/blob/master/include/kframework/network.md#evm-status-codes)).
+* `statusCode: STATUSCODE:StatusCode` - shows the current status code. Here, `STATUSCODE` is the name of the symbolic variable, and `:StatusCode` shows the sort of the variable.
 * `src: lib/forge-std/src/StdInvariant.sol:79:82` - nodes can point to the Solidity source file, line, and column to which they belong.
 
-A branching always follows a split node. In **KCFG**s, branches are represented using nesting. In the highlighted node, the `k` field holds the value `k: JUMPI 151 bool2Word ( ( notBool VV0_x_114b9705:Int ==Int 12648430 ) )`. This indicates that the prover has identified a branching point. Here, `JUMPI` is an EVM opcode. `151` represents a jump destination, and `bool2Word ( notBool ( VV0_n_114b9705:Int ==Int 12648430 ) )` represents an equality check between the symbolic variable `VV0_n_114b9705` of sort `Int` and value `12648430` (the decimal value of `0xC0FFEE` from our `setNumber` function). The prover does not know if the `VV0` variable equals `12648430`, so it will branch and explore each possibility.
+A branching always follows a split node. In **KCFG'**s, branches are represented using nesting. In the highlighted node, the `k` field holds the value `k: JUMPI 151 bool2Word ( ( notBool VV0_x_114b9705:Int ==Int 12648430 ) )`. This indicates that the prover has identified a branching point. Here, `JUMPI` is an EVM opcode. `151` represents a jump destination, and `bool2Word ( notBool ( VV0_n_114b9705:Int ==Int 12648430 ) )` represents an equality check between the symbolic variable `VV0_n_114b9705` of sort `Int` and value `12648430` (the decimal value of `0xC0FFEE` from our `setNumber` function). The prover does not know if the `VV0` variable equals `12648430`, so it will branch and explore each possibility.
 
 Below the highlighted section, you will see the following:
 
@@ -57,7 +57,7 @@ Below the highlighted section, you will see the following:
 
 The `constraint` keyword highlights the path the prover continues the execution. Nodes will be linked on this path as the exploration proceeds until either:
 
-* The execution of the branch is completed, and the leaf unifies with the target node.
+* The execution of the branch is completed, and the `leaf` unifies with the target node.
 
 <figure><img src="../../.gitbook/assets/Node43.png" alt=""><figcaption><p>Leaf unification with the target node</p></figcaption></figure>
 
@@ -87,11 +87,9 @@ This section shows all the constraints that apply to the symbolic variables in t
 
 <figure><img src="../../.gitbook/assets/Screenshot 2023-05-12 at 10.40.48.png" alt=""><figcaption><p>The constraint view</p></figcaption></figure>
 
-The constraint view indicates that `CALLER_ID` is an integer value greater than 0 and lower than `pow160` (that is $$2^{160}$$). These two constraints allow the prover to conclude that `CALLER_ID` could be any value within the Ethereum address range (between 0 and $$2^{160}$$). Similar constraints apply to `ORIGIN_ID` and `VV0_n_114b9705`. The last constraint states that the `VV1_inLuck_114b9705` symbolic variable can be either 1 or 0 since the `inLuck` variable is defined as `Bool` in the `setNumber` function.
+The constraint view indicates that `CALLER_ID` is an integer value greater than `0` and lower than `pow160` (that is $$2^{160}$$). These two constraints allow the prover to conclude that `CALLER_ID` could be any value within the Ethereum address range (between 0 and $$2^{160}$$). Similar constraints apply to `ORIGIN_ID` and `VV0_n_114b9705`. The last constraint states that the `VV1_inLuck_114b9705` symbolic variable can be either 1 or 0 since the `inLuck` variable is defined as `Bool` in the `setNumber` function.
 
 When selecting the first node after the branching (`8`), a new constraint is added, indicating that `VV0_n_114b9705` is not equal on this branch to `12648430`.
-
-<figure><img src="../../.gitbook/assets/node8constraintview.png" alt=""><figcaption></figcaption></figure>
 
 The constraint view can be enabled or disabled using the hotkey `c`.
 
@@ -101,10 +99,10 @@ This section displays the Solidity source code, highlighting the currently execu
 
 <figure><img src="../../.gitbook/assets/customview.png" alt=""><figcaption><p>The custom view</p></figcaption></figure>
 
-The custom view can be enabled of disabled using the hotkey `V`.
+The custom view can be enabled or disabled using the hotkey `V`.
 
-## Back to investigating the failed proof
+## Investigating the failed proof
 
-Now, let’s find out why the proof is failing. At the top of the term view, highlighted in yellow, we can see the `#halt` production in the `<k>` cell, indicating that the test execution has finished. Additionally, highlighted in red, the status code as `EVMC_REVERT`, meaning that the transaction has been reverted. At this point, we can look in the constraint view and identify that our function arguments, highlighted in orange, are exactly the ones required to trigger the revert in `setFunction`.
+Now, let’s find out why the proof is failing. At the top of the term view, highlighted in <mark style="color:yellow;">yellow</mark>, we can see the `#halt` production in the `<k>` cell, indicating that the test execution has finished. Additionally, highlighted in <mark style="color:red;">red</mark>, the status code as `EVMC_REVERT`, meaning that the transaction has been reverted. At this point, we can look in the constraint view and identify that our function arguments, highlighted in <mark style="color:orange;">orange</mark>, are exactly the ones required to trigger the revert in `setFunction`.
 
 <figure><img src="../../.gitbook/assets/haltrevert.png" alt=""><figcaption><p>Examining the last node</p></figcaption></figure>
