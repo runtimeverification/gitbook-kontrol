@@ -11,9 +11,9 @@ The following is a suggested process to follow when running a proof with **Kontr
 1. Run the proof with `no-break-on-calls`, `--max-depth 10000` and `--max-iterations 5` or `10`
 2. Inspect the `kcfg` for branching.
 3. If there is branching, check if the branching condition is `true` or `false`:
-   * Try to figure out the simplifications to discharge it. To do this efficiently, one needs to be familiar existing simplifications.
+   * Try to figure out the simplifications to discharge it. To do this efficiently, one needs to be familiar with existing simplifications.
    * Add the simplifications and create a claim in the form `runLemma => doneLemma` that demonstrably simplifies the branching condition.
-   * Remove the branching node from the `kcfg` using `foundry-remove-node`
+   * Remove the branching node from the `kcfg` using `kontrol remove-node`
    * Repeat from step 1.
 4. Repeat from step 1.
 
@@ -23,13 +23,15 @@ When writing a claim using the `runLemma-doneLemma` pattern to check if an expre
 
 ### Decoding KEVM expressions
 
+The following tips might be useful when inspecting branching conditions or nodes in the `kcfg`. If you don't know where an expression comes from, this might help figuring out what they mean and what part of the Solidity code they correspond to:
+
 * Solidity uses bitwise expressions, such as `maxUInt160 &Int X`, to extract a variable with a specific number of bits from a larger word. The number of bits can often provide a clue about the type of the variable. For example, `maxUInt160` typically represents an address, while `maxUInt8` represents a `boolean` value.
 * When using the `symbolicStorage` cheatcode, you may encounter expressions like `#lookup(?STORAGE0:Map, 6)`. This expression accesses storage slot 6 of the symbolic storage represented by the `STORAGE0` variable. If you want to determine which storage variable this expression corresponds to, you can follow these steps:&#x20;
   * First, ascertain the contract that `STORAGE0` corresponds to.
     * The first call of `symbolicStorage` creates the symbolic variable `STORAGE`, followed by `STORAGE0`, `STORAGE1`, `STORAGE2`, `STORAGE3`, and so on. Therefore, you can use the order in which `symbolicStorage` was called in each contract to map each variable to its contract.
     * Another option is to check the `<accounts>` cell in the `KEVM` configuration. In each `<account>`, the `<acctId>` cell contains the address of the contract, and the `<storage>` cell contains the storage. If you know the address of each contract, you can map it to the storage variable.
   * Next, determine which variable corresponds to storage slot 6.
-    * The easiest way to do this is by calling `forge inspect ContractName` storage, where `ContractName` represents the contract identified in the previous step. This command will output a `JSON` result, with the storage field containing a list of all storage slots in the contract. The label of each slot corresponds to the name of the storage variable.
+    * The easiest way to do this is by calling `forge inspect ContractName storage`, where `ContractName` represents the contract identified in the previous step. This command will output a `JSON` result, with the `storage` field containing a list of all storage slots in the contract. The label of each slot corresponds to the name of the storage variable.
   * Some storage slots contain more than one variable at different offsets. If your expression is, for example, `#lookup ( ?STORAGE0:Map , 6 ) >>Int 8`, this means it is offsetting the storage slot by 8 bits, or 1 byte. In the previous step, you should look for the variable at that storage slot with offset 1.
 
 ***
@@ -39,7 +41,7 @@ When writing a claim using the `runLemma-doneLemma` pattern to check if an expre
 If you need to understand why the memory looks a certain way at a certain point during execution, you can use the [Forge debugger](https://book.getfoundry.sh/forge/debugger).&#x20;
 
 {% hint style="info" %}
-If you decided to use Forge debugger. You may need to create a version of the test with concrete values instead of symbolic ones.
+To use the Forge debugger, you may need to create a version of the test with concrete values instead of symbolic ones.
 {% endhint %}
 
 The debugger can be used to set breakpoints and step through the EVM code to observe how the memory changes. This can be particularly useful to understand details about the [Solidity memory layout](https://docs.soliditylang.org/en/latest/internals/layout\_in\_memory.html) that may not be well-documented.
@@ -48,10 +50,10 @@ The debugger can be used to set breakpoints and step through the EVM code to obs
 
 ### Other Proving and Debugging Tips
 
-* If `kontrol foundry-prove` hangs during an execute step (no response for hours) **or** it crashes because `kore-rpc` returned an empty response, it may be caused by the configuration becoming too large.&#x20;
-  * To troubleshoot this issue, inspect the node that was being extended using `foundry-show` or `foundry-view-kcfg`. Check if there are any abnormally large expressions in any of the cells and consider writing lemmas to simplify them.
-* If you are using the `infiniteGas` cheatcode and the expression in the `<gas>` or `<callGas>` cell is growing out of control without being simplified, you can call `kontrol foundry-prove` with the `--auto-abstract-gas` option. This will automatically abstract the gas expression into a symbolic variable. Only do this if you are **not** concerned with measuring gas consumption, as you will lose that information. If possible, write lemmas to simplify the gas expression instead.
-* Some instructions in `KEVM` may cause branching based on whether a symbolic address already exists in the `<accounts>` cell or if it is a new address. This situation occurs when the `prank` cheatcode is called with a symbolic address. You can refer to [this issue](https://github.com/runtimeverification/evm-semantics/issues/1752#issuecomment-1601611907) in `foundry-show` for an example.
+* If `kontrol prove` hangs during an execute step (no response for hours) **or** it crashes because `kore-rpc` returned an empty response, it may be caused by the configuration becoming too large.&#x20;
+  * To troubleshoot this issue, inspect the node that was being extended using `kontrol show` or `kontrol view-kcfg`. Check if there are any abnormally large expressions in any of the cells and consider writing lemmas to simplify them.
+* If you are using the `infiniteGas` cheatcode and the expression in the `<gas>` or `<callGas>` cell is growing out of control without being simplified, you can call `kontrol prove` with the `--auto-abstract-gas` option. This will automatically abstract the gas expression into a symbolic variable. Only do this if you are **not** concerned with measuring gas consumption, as you will lose that information. If possible, write lemmas to simplify the gas expression instead.
+* Some instructions in Kontrol may cause branching based on whether a symbolic address already exists in the `<accounts>` cell or if it is a new address. This situation occurs when the `prank` cheatcode is called with a symbolic address, for example. You can refer to [this issue](https://github.com/runtimeverification/evm-semantics/issues/1752#issuecomment-1601611907) for an example of how it appears when using `kontrol show`.
   * To resolve this issue, the usual solution is to add one `vm.assume(symbolicAddress != ...)` for each of the preexisting addresses. These addresses should correspond to:
     * the test contract address
     * the cheatcodes contract address
