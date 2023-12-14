@@ -10,7 +10,7 @@ description: How to run property tests with Kontrol
 forge init kontrolexample
 ```
 
-This command creates a new Foundry project that serves as an example. The project's structure is explained in detail in the [Foundry book](https://book.getfoundry.sh/projects/project-layout). Currently, we can only perform fuzzing on parametric tests because the project is not configured to support symbolic execution. We will discuss this topic later in [property-verification-using-kontrol.md](property-verification-using-kontrol.md "mention"). With the project created, we will install **Kontrol** cheatcodes and then begin editing the code.
+This command creates a new Foundry project that serves as an example. The project's structure is explained in detail in the [Foundry book](https://book.getfoundry.sh/projects/project-layout). Currently, we can only perform fuzzing on parametric tests because the project is not configured to support symbolic execution. We will discuss this topic later in [property-verification-using-kevm.md](property-verification-using-kevm.md "mention"). With the project created, we will install **Kontrol** cheatcodes and then begin editing the code.
 
 ### Install Kontrol cheatcodes
 

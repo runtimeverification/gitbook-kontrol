@@ -98,7 +98,7 @@ Here is a template to have better control over `kontrol`. To save the output of 
 time bash test/run-kontrol.sh 2>&1 | tee log.out
 ```
 
-To interpret the result of running this script, please refer to [k-control-flow-graph-kcfg.md](../guides/kontrol-example/k-control-flow-graph-kcfg.md "mention").
+To interpret the result of running this script, please refer to [k-control-flow-graph-kcfg.md](../guides/kevm-foundry-integration-example/k-control-flow-graph-kcfg.md "mention").
 
 ### Script
 
