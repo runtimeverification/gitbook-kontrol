@@ -4,7 +4,7 @@ description: How to debug your KCFG and find KEVM reasoning gaps
 
 # KEVM Lemmas
 
-In this sections, we will verify [Solady's](https://github.com/Vectorized/solady) `mulWad` and `mulWadUp` functions, demonstrating how to identify and write good lemmas. To be consistent while executing these examples, we will update and fix **Kontrol** to `version 0.1.12`. To install it quickly run the following:
+In this section, we will verify [Solady's](https://github.com/Vectorized/solady) `mulWad` and `mulWadUp` functions, demonstrating how to identify and write good lemmas. To be consistent while executing these examples, we will update and fix **Kontrol** to `version 0.1.12`. To install it quickly run the following:
 
 ```
 kup install kontrol --version v0.1.12
