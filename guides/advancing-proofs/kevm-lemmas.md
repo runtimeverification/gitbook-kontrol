@@ -4,13 +4,21 @@ description: How to debug your KCFG and find KEVM reasoning gaps
 
 # KEVM Lemmas
 
-In this and the following sections, we'll verify Solady's `mulWad` and `mulWadUp` showcasing how to identify and write good lemmas. To keep the execution of these examples consistent through time, we'll be fixing **Kontrol** to version 0.1.12. To quickly install it, run `kup install kontrol --version v0.1.12`.
+In this sections, we will verify [Solady's](https://github.com/Vectorized/solady) `mulWad` and `mulWadUp` functions, demonstrating how to identify and write good lemmas. To be consistent while executing these examples, we will update and fix **Kontrol** to `version 0.1.12`. To install it quickly run the following:
 
-The reasoning engine powering **Kontrol** is the **K** framework and the **K** definition of the EVM semantics, **KEVM**. Filling reasoning gaps or hinting at simplification strategies at the **KEVM** level is sometimes necessary. One can gain a good understanding of the definitions and rules involved in the expressions that are not being simplified as desired by exploring the **KEVM** repository.
+```
+kup install kontrol --version v0.1.12
+```
+
+The reasoning engine behind **Kontrol** is the **K** framework and the **K** definition of the EVM semantics, **KEVM**. Sometimes it is necessary to address reasoning gaps or suggest simplification strategies at the **KEVM** level. To gain a better understanding of the definitions and rules involved in expressions that are not being simplified as desired, you can explore the [**KEVM** repository](https://github.com/runtimeverification/evm-semantics).
 
 ## Verifying Solady's `mulWad`
 
-Note that `WAD = 10**18`. For this example, we'll verify Solady's [`mulWad`](https://github.com/Vectorized/solady/blob/16c0dda5838fbb1350a0735dffa564b0b0a11e7e/src/utils/FixedPointMathLib.sol#L54)function, defined as
+{% hint style="info" %}
+Note: `WAD = 10**18`
+{% endhint %}
+
+For this example, we'll verify Solady's [`mulWad`](https://github.com/Vectorized/solady/blob/16c0dda5838fbb1350a0735dffa564b0b0a11e7e/src/utils/FixedPointMathLib.sol#L54)function, defined as:
 
 ```solidity
 function mulWad(uint256 x, uint256 y) internal pure returns (uint256 z) {
@@ -24,7 +32,7 @@ function mulWad(uint256 x, uint256 y) internal pure returns (uint256 z) {
 }
 ```
 
-Our goal is to show that this is equivalent to `(x * y) / WAD` for any two integers `x` and `y`. To this end, we define the following property test
+Our goal is to demonstrate that this is equivalent to `(x * y) / WAD` for any two integers `x` and `y`. To achieve this, we define the following property test:
 
 ```solidity
 function testMulWad(uint256 x, uint256 y) public {
@@ -39,9 +47,9 @@ function testMulWad(uint256 x, uint256 y) public {
 }
 ```
 
-This property test asserts that if the product `x*y` doesn't overflow, or if `y` is zero, the result of `mulWad(x, y)` should be equal to `(x*y)/WAD`. Otherwise, `mulWad` should revert.
+This property test asserts that if the product `x*y` does not result in an overflow, _or_ if `y` is zero, then output of `mulWad(x, y)` should be equal to `(x*y)/WAD`. However, if an overflow occurs, the function `mulWad` should revert.
 
-After symbolically executing this test, the following message appears, indicating to us that Kontrol could not prove that the property holds for every possible input
+After symbolically executing this test, the generated message indicates that **Kontrol** was unable to prove that the property holds for all possible inputs. This output will look like the following:
 
 {% code fullWidth="true" %}
 ```
@@ -73,15 +81,15 @@ Failing nodes:
 ```
 {% endcode %}
 
-Our next step is to inspect the **kcfg** (`kontrol view-kcfg`) to understand which path condition is leading to node 23.
+Our next step is to inspect the **KCFG** (`kontrol view-kcfg`) to understand which path condition is leading to node 23. To learn more about the **KCFG:** [k-control-flow-graph-kcfg.md](../kevm-foundry-integration-example/k-control-flow-graph-kcfg.md "mention")
 
 ## Identifying branching conditions
 
-If we inspect the branching condition leading to the failing node, we can see that it corresponds to the `if` statement of the `mulWad` function
+When we inspect the branching condition that leads to the failing node, we can see that it corresponds to the `if` statement of the `mulWad` function.
 
 <figure><img src="../../.gitbook/assets/Screenshot from 2023-10-19 16-08-42.png" alt=""><figcaption><p>Branching condition leading to failing node</p></figcaption></figure>
 
-Let's unparse the branching condition. The condition is
+Let's unparse the branching condition. The condition is:
 
 {% code overflow="wrap" fullWidth="true" %}
 ```
@@ -89,7 +97,7 @@ chop ( ( VV1_y_114b9705:Int *Int bool2Word ( ( maxUInt256 /Int VV1_y_114b9705:In
 ```
 {% endcode %}
 
-Taking into account that `chop(x)` is  `(x)mod[2**256]`, we can write the expression in a more palatable way
+Taking into account that `chop(x)` is  `(x)mod[2**256]`, we can write the expression in a more palatable way:
 
 {% code overflow="wrap" %}
 ```
@@ -99,11 +107,11 @@ Taking into account that `chop(x)` is  `(x)mod[2**256]`, we can write the expres
 
 There are three main things to know about this condition.&#x20;
 
-* The operands `*Int`, `<Int`, `modInt`, `/Int`, and `==Int` are K functions doing the obvious thing, with the suffix `Int` indicating the type of their arguments
+* The operands `*Int`, `<Int`, `modInt`, `/Int`, and `==Int` are **K** functions doing the obvious thing, with the suffix `Int` indicating the type of their arguments
 * The function `bool2Word` takes a boolean value and converts it into an EVM word. Particularly, it converts `true` to `1` and `false` to `0`. You can find the definition [here](https://github.com/runtimeverification/evm-semantics/blob/master/kevm-pyk/src/kevm\_pyk/kproj/evm-semantics/evm-types.md#boolean-conversions).
 * The modulo operation appears because, inside assembly blocks, the Solidity compiler doesn't insert overflow checks
 
-Thus, the condition is equivalent to `y == 0 || types(uint256).max / y  >= x`. Now, since this is the condition to branch on the first `if` of the `mulWad` function, Kontrol will explore the two different branches, one asserting that `(y *Int bool2Word((maxUInt256 /Int y) <Int x)) modInt 2**256 ==Int 0` holds, and another one asserting that the opposite holds (via the `notBool` operator).
+Thus, the condition is equivalent to `y == 0 || types(uint256).max / y  >= x`. Now, since this is the condition to branch on the first `if` of the `mulWad` function, **Kontrol** will explore the two different branches, one asserting that `(y *Int bool2Word((maxUInt256 /Int y) <Int x)) modInt 2**256 ==Int 0` holds, and another one asserting that the opposite holds (via the `notBool` operator).
 
 The branch starting on node 21 explores the path of negating `(y *Int bool2Word((maxUInt256 /Int y) <Int x)) modInt 2**256 ==Int 0`. That is, entering the `if` statement, which is why we see that node 23 has `statusCode: EVMC_REVERT`.
 
@@ -131,7 +139,7 @@ Given these constraints, we can see how 1 and 2 imply that condition 3 is false.
 
 ## Bridging the (reasoning) gap
 
-Kontrol is able to infer `maxUInt256 / y < x = false` from conditions 1 and 2, and a quick `git grep -rin 'rule bool2Word'` in the [evm-semantics](https://github.com/runtimeverification/evm-semantics/tree/master/kevm-pyk/src/kevm\_pyk/kproj/evm-semantics) definition tells us that these are the defined rewrite rules for `bool2Word`:
+**Kontrol** is able to infer `maxUInt256 / y < x = false` from conditions 1 and 2, and a quick `git grep -rin 'rule bool2Word'` in the [evm-semantics](https://github.com/runtimeverification/evm-semantics/tree/master/kevm-pyk/src/kevm\_pyk/kproj/evm-semantics) definition tells us that these are the defined rewrite rules for `bool2Word`:
 
 {% code fullWidth="true" %}
 ```
@@ -162,7 +170,7 @@ Now **Kontrol** will attempt to simplify `X` to `true` or `false` in order to ap
 
 ## Finishing an existing proof
 
-We've identified the missing reasoning link, great! To include our brand new lemmas in the **KEVM** definition (i.e., make them available for **Kontrol** to reason with) we need to rekompile the project, that is, building it again with the `--rekompile` flag (`kontrol build --rekompile --require ${path_to_lemmas} --module-import ${module}`). After this, re-running the proof with the `--reinit` flag will attempt (and succeed) to prove our property from scratch. But what if we don't want to spend more computational resources than necessary to finish the proof from where we left it? That is, what if don't want to explore those branches that we have already explored and know are not problematic? Enter kcfg manipulation.
+We've identified the missing reasoning link, great! To include our brand new lemmas in the **KEVM** definition (i.e., make them available for **Kontrol** to reason with) we need to rekompile the project, that is, building it again with the `--rekompile` flag (`kontrol build --rekompile --require ${path_to_lemmas} --module-import ${module}`). After this, re-running the proof with the `--reinit` flag will attempt (and succeed) to prove our property from scratch. But what if we don't want to spend more computational resources than necessary to finish the proof from where we left it? That is, what if don't want to explore those branches that we have already explored and know are not problematic? Enter **KCFG** manipulation.
 
 ### Node pruning
 
