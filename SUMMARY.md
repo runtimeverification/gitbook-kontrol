@@ -23,6 +23,12 @@
 
 * [Tips for using Kontrol](tips/tips-for-using-kontrol.md)
 
+## Glossary
+
+* [Kontrol Arguments](glossary/kontrol-arguments.md)
+* [Kontrol Build Options](glossary/kontrol-build-options.md)
+* [Kontrol Prove Flags](glossary/kontrol-prove-flags.md)
+
 ## Learn More
 
 * [Resources](learn-more/resources.md)
