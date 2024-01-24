@@ -108,6 +108,10 @@ kontrol prove --match-test CounterTest.testSetNumber
 
 The `--match-test CounterTest.testSetNumber` flag is used to specify that only proofs that match the name `CounterTest.testSetNumber` will execute`. In this case, there is a single proof, but if, for example, you would have passed `CounterTest.test`, then Kontrol woul prove any function in `CounterTest` which is prefixed with `test`. You can find more information on **Kontrol** commands on the [kontrol-cheatsheet.md](../../cheatsheets/kontrol-cheatsheet.md "mention").
 
+{% hint style="info" %}
+By default, any gas computation is disabled. To activate, use the `--use-gas` flag for the `prove` command.
+{% endhint %}
+
 Now, you can see the status of all the proofs with:
 
 ```
