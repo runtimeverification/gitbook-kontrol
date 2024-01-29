@@ -5,7 +5,7 @@ description: How to identify and write lemmas to advance on your proofs
 # Advancing Proofs
 
 {% hint style="info" %}
-**Prerequisites:** Before proceeding with this section, it is recommended that you have already gone through the [kevm-foundry-integration-example](../kevm-foundry-integration-example/ "mention") and have a basic understanding of the [**K**](https://github.com/runtimeverification/k) framework and [**KEVM**](https://github.com/runtimeverification/evm-semantics). For more information, refer to [resources.md](../../learn-more/resources.md "mention") page.
+**Prerequisites:** Before proceeding with this section, it is recommended that you have already gone through the [kontrol-example](../kontrol-example/ "mention") and have a basic understanding of the [**K**](https://github.com/runtimeverification/k) framework and [**KEVM**](https://github.com/runtimeverification/evm-semantics). For more information, refer to [resources.md](../../learn-more/resources.md "mention") page.
 {% endhint %}
 
 ***

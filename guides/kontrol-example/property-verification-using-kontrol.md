@@ -86,7 +86,7 @@ kontrol build
 The process should take a minute and may emit some warnings, so don’t worry. Also, remember that during the development, you may need to rebuild the definition in various ways.
 {% endhint %}
 
-If you change the Solidity code, you must re-run the `kontrol build` command. For more information about `kontrol build` you can refer to [#kontrol-build](../../cheatsheets/kontrol-cheatsheet.md#kontrol-build "mention") or run:
+If you change the Solidity code, you must re-run the `kontrol build` command. For more information about `kontrol build`, you can refer to [#kontrol-build](../../cheatsheets/kontrol-cheatsheet.md#kontrol-build "mention"),  [kontrol-build-options.md](../../glossary/kontrol-build-options.md "mention"), or run:
 
 ```
 kontrol build --help
@@ -116,7 +116,9 @@ Now, you can see the status of all the proofs by running the following command:
 kontrol list
 ```
 
-In the output, you will see two proofs: one for the `setUp` function and one for the function you just proved!
+In the output, you will see two proofs: one for the `setUp` function and one for the function you just proved! You will see something similar to the screenshot below.
+
+<figure><img src="../../.gitbook/assets/Screenshot 2024-01-25 at 3.11.15 PM.png" alt=""><figcaption></figcaption></figure>
 
 Now, let's make the proof more general using cheatcodes. Since the `Counter` contract is deployed in the `setUp` function, its storage will be empty when the `testSetNumber` function executes. We can use the `kevm.symbolicStorage(address)` cheatcode to make the storage of an address symbolic. This allows us to abstract the storage and consider that it could have any value instead of the ones assigned during initialization.
 
@@ -151,6 +153,8 @@ contract CounterTest is Test, KontrolCheats {
 }
 ```
 
-To rerun the proof with these changes, you need to run `build` and `prove` again. The output of the proof should remain the same. However, the difference can be observed by using the **Kontrol KCFG** visualizer. This tool allows you to analyze the state of the virtual machine at different points (nodes) during the symbolic execution. The main difference should be that the deployed `Counter` test now had symbolic storage instead of an empty Map.
+To rerun the proof with these changes, you need to run `build` and `prove` again.  (You will run the same commands as before). The output of the proof should remain the same.&#x20;
+
+The difference can be observed by using the **Kontrol KCFG** visualizer. This tool allows you to analyze the state of the virtual machine at different points (nodes) during the symbolic execution. The main difference should be that the deployed `Counter` test now has symbolic storage instead of an empty Map.
 
 Next, we will cover how to read the **KCFG** visualizer and investigate **why** the test failed.

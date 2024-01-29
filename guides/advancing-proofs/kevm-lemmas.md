@@ -81,7 +81,7 @@ Failing nodes:
 ```
 {% endcode %}
 
-Our next step is to inspect the **KCFG** (`kontrol view-kcfg`) to understand which path condition is leading to node 23. To learn more about the **KCFG:** [k-control-flow-graph-kcfg.md](../kevm-foundry-integration-example/k-control-flow-graph-kcfg.md "mention")
+Our next step is to inspect the **KCFG** (`kontrol view-kcfg`) to understand which path condition is leading to node 23. To learn more about the **KCFG:** [k-control-flow-graph-kcfg.md](../kontrol-example/k-control-flow-graph-kcfg.md "mention")
 
 ## Identifying branching conditions
 
