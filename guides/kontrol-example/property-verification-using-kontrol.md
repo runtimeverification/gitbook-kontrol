@@ -116,7 +116,7 @@ Now, you can see the status of all the proofs by running the following command:
 kontrol list
 ```
 
-In the output, you will see two proofs: one for the `setUp` function and one for the function you just proved! You will see something similar to the screenshot below.
+In the output, you will see two proofs: one for the `setUp` function and one for `testSetNumber`, the function you just proved! You will see something similar to the screenshot below.
 
 <figure><img src="../../.gitbook/assets/Screenshot 2024-01-25 at 3.11.15 PM.png" alt=""><figcaption></figcaption></figure>
 
