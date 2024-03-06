@@ -14,13 +14,13 @@ This command creates a new Foundry project that serves as an example. The projec
 
 ### Install Kontrol cheatcodes
 
-To use **Kontrol** cheatcodes, we need to install a [new Solidity library](https://github.com/runtimeverification/kontrol-cheatcodes/) required for symbolic execution. First, navigate into the project directory. Then you can install it with Foundry by running the following command:
+To use **Kontrol** cheatcodes, we need to install a [new Solidity library](https://github.com/runtimeverification/kontrol-cheatcodes/) required for symbolic execution. First, **navigate** into the project directory. Then you can install it with Foundry by running the following command:
 
 ```
 forge install runtimeverification/kontrol-cheatcodes
 ```
 
-These cheatcodes enable us to generalize the storage of an Ethereum account by making it symbolic or by allowing any type of call, such as a [`delegatecall`](https://www.evm.codes/#f4).&#x20;
+These cheatcodes enable us to generalize the storage of an Ethereum account by making it symbolic or by allowing any type of call, such as a [`delegatecall`](https://www.evm.codes/#f4).
 
 {% hint style="info" %}
 Adding custom cheatcodes will prevent us from running the tests with `forge test`, as `forge` will not recognize these cheatcodes.

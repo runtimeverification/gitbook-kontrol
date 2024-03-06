@@ -7,8 +7,20 @@ description: Investigating a failed test and understanding the KCFG output
 We need to investigate and identify the reason for the failed symbolic test. To do this, we can use the following command:
 
 ```
-kontrol view-kcfg CounterTest.testSetNumber
+kontrol view-kcfg 'CounterTest.testSetNumber(uint256,bool)' --version 1
 ```
+
+{% hint style="info" %}
+Note:  the tag `--version 1` indicates that you want to view the **KCFG** for version 1 of the proof `CounterTest.testSetNumber(uint256,bool)`
+
+If you would like to view the first proof you will run:
+
+```
+kontrol view-kcfg 'CounterTest.testSetNumber(uint256,bool)' --version 0
+```
+
+For more information check out the page on [proof-management.md](proof-management.md "mention").
+{% endhint %}
 
 This command launches an interactive visualizer that generates a **KCFG** (**K Control Flow Graph**). You can click on individual nodes in the **KCFG** to inspect them.
 

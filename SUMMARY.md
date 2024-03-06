@@ -11,6 +11,7 @@
 * [Kontrol Example](guides/kontrol-example/README.md)
   * [Property Verification using Kontrol](guides/kontrol-example/property-verification-using-kontrol.md)
   * [K Control Flow Graph (KCFG)](guides/kontrol-example/k-control-flow-graph-kcfg.md)
+  * [Proof Management](guides/kontrol-example/proof-management.md)
 * [Advancing Proofs](guides/advancing-proofs/README.md)
   * [KEVM Lemmas](guides/advancing-proofs/kevm-lemmas.md)
 
