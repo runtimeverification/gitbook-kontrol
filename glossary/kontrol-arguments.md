@@ -6,7 +6,7 @@
 | `compile`           | Generate combined JSON with solc compilation results.                       |
 | `solc-to-k`         | Output helper K definition for given JSON output from solc compiler.        |
 | `build`             | Kompile K definition corresponding to given output directory.               |
-| `load-state-diff`   | Generate a state diff summary from an account access directory              |
+| `load-state-diff`   | Generate a state diff summary from an account access dict                   |
 | `prove`             | Run Foundry Proof.                                                          |
 | `show`              | Print the CFG for a given proof.                                            |
 | `to-dot`            | Dump the given CFG for the test as DOT for visualization.                   |
