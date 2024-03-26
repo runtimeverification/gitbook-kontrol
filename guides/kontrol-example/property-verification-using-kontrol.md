@@ -36,12 +36,16 @@ Let's look at what we have. The `setNumber` method will update our only storage 
 
 Now let’s write a test for the contract in `kontrolexample/test/Counter.t.sol`
 
+{% hint style="warning" %}
+Recent versions of `forge` use `vm.assertEq` calls instead of a plain `assertEq`. These are currently not supported by Kontrol.
+{% endhint %}
+
 ```solidity
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol";
-import "../src/Counter.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {Counter} from "../src/Counter.sol";
 
 contract CounterTest is Test {
     Counter public counter;
@@ -53,15 +57,14 @@ contract CounterTest is Test {
 
     function testIncrement() public {
         counter.increment();
-        assertEq(counter.number(), 1);
+        assert(counter.number() == 1);
     }
 
     function testSetNumber(uint256 x, bool inLuck) public {
         counter.setNumber(x, inLuck);
-        assertEq(counter.number(), x);
+        assert(counter.number() == x);
     }
 }
-
 ```
 
 Run the following command to run this test:
@@ -130,9 +133,9 @@ To add the cheatcode, we need to include the `kontrol-cheatcode` library and inh
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol";
-import "../src/Counter.sol";
-import "kontrol-cheatcodes/KontrolCheats.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {Counter} from "../src/Counter.sol";
+import {KontrolCheats} from "kontrol-cheatcodes/KontrolCheats.sol";
 
 contract CounterTest is Test, KontrolCheats {
     Counter public counter;
@@ -144,13 +147,13 @@ contract CounterTest is Test, KontrolCheats {
 
     function testIncrement() public {
         counter.increment();
-        assertEq(counter.number(), 1);
+        assert(counter.number() == 1);
     }
 
     function testSetNumber(uint256 x, bool inLuck) public {
         kevm.symbolicStorage(address(counter));
         counter.setNumber(x, inLuck);
-        assertEq(counter.number(), x);
+        assert(counter.number() == x);
     }
 }
 ```
