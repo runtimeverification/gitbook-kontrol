@@ -48,9 +48,9 @@ Additionally, we need to update `Counter.t.sol`:
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol";
-import "../src/Counter.sol";
-import "kontrol-cheatcodes/KontrolCheats.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {Counter} from "../src/Counter.sol";
+import {KontrolCheats} from "kontrol-cheatcodes/KontrolCheats.sol";
 
 contract CounterTest is Test, KontrolCheats {
     Counter public counter;
@@ -61,13 +61,13 @@ contract CounterTest is Test, KontrolCheats {
 
     function testIncrement() public {
         counter.increment();
-        assertEq(counter.number(), 1);
+        assert(counter.number() == 1);
     }
 
     function testSetNumber(uint256 x, bytes32 inLuck) public {
         kevm.symbolicStorage(address(counter));
         counter.setNumber(x, bytes32(inLuck));
-        assertEq(counter.number(), x);
+        assert(counter.number() == x);
     }
 }
 ```
