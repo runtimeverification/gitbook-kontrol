@@ -80,4 +80,4 @@ kontrol build --require kontrol/myproject-lemmas.k --module-import MyProjectTest
 
 ### Finding Lemmas
 
-In the next sections, we will explore how to find  **KEVM** lemmas, which are used to address reasoning gaps at the EVM semantic level.
+In the next section, we will explore how to find  **KEVM** lemmas, which are used to address reasoning gaps at the EVM semantic level.
