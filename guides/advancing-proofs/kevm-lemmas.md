@@ -39,7 +39,7 @@ function testMulWad(uint256 x, uint256 y) public {
     if(y == 0 || x <= type(uint256).max / y) {
         uint256 zSpec = (x * y) / WAD;
         uint256 zImpl = FixedPointMathLib.mulWad(x, y);
-        assertEq(zImpl, zSpec);
+        assert(zImpl == zSpec);
     } else {
         vm.expectRevert();
         FixedPointMathLib.mulWad(x, y);
