@@ -12,7 +12,7 @@ description: How to identify and write lemmas to advance on your proofs
 
 ## Manual Intervention
 
-During the verification process using [**Kontrol**](https://github.com/runtimeverification/kontrol), there are situations where manual intervention is necessary to help the tool reason correctly and advance the symbolic execution. Two common situations involve `stuck` nodes and invalid execution paths.&#x20;
+During the verification process using [**Kontrol**](https://github.com/runtimeverification/kontrol), there are situations where manual intervention is necessary to help the tool reason correctly and advance the symbolic execution. Two common situations involve `stuck` nodes and invalid execution paths.
 
 * `stuck` **nodes:** These nodes have not reached the end of execution, have not been subsumed into the target node, _and_ **Kontrol** does not see any further execution steps.
 * **Invalid execution paths:** It is not always easy for **Kontrol** to deduce that a particular execution path is infeasible. If an invalid execution path is traversed, it means that **Kontrol** failed to identify a contradiction from the path condition.
@@ -23,13 +23,13 @@ When these situations arise, the way to progress past them is to identify the mi
 
 Lemmas can be seen as one-step reasoning processes that you want **Kontrol** to consider during symbolic execution of your properties.
 
-Similar to `rewrite` rules, lemmas have a left-hand side (LHS) and a right-hand side (RHS). When **Kontrol** identifies a symbolic match for the LHS in the **K** configuration of a proof, it applies the rule and rewrites the LHS to the RHS.&#x20;
+Similar to `rewrite` rules, lemmas have a left-hand side (LHS) and a right-hand side (RHS). When **Kontrol** identifies a symbolic match for the LHS in the **K** configuration of a proof, it applies the rule and rewrites the LHS to the RHS.
 
 ### Structure of a Lemma
 
 The general structure of a lemma is as follows:
 
-```
+```bash
 rule [name-of-lemma]: <k> LHS(X, Y) => RHS(X, Y) </k>
   requires condition1(X)
   andBool condition2(Y)
@@ -48,7 +48,7 @@ Multiple attributes can be separated by commas, for example: `[simplification, c
 
 To add lemmas to your project, create a file called: `myproject-lemmas.k`. This file is usually located in the `kontrol/` directory and should have the following structure:
 
-```
+```solidity
 requires "foundry.md"
 
 module MYPROJECT-LEMMAS
@@ -66,18 +66,18 @@ After creating this file, you need to inform **Kontrol** about the lemmas in the
 
 * `--require test/myproject-lemmas.k` : specifies from which file the module `MYPROJECT-LEMMAS` is imported.
 * `--module-import MyProjectTests:MYPROJECT-LEMMAS`: specifies the module to import. The module name is preceded by the string `MyProjectTests:` , which represents the contract name for the tests being symbolically executed.
-* `--rekompile` (optional): rebuild the project. It is necessary to include the `--rekompile` flag when adding new lemmas, otherwise **Kontrol** won't be aware of them.&#x20;
+* `--rekompile` (optional): rebuild the project. It is necessary to include the `--rekompile` flag when adding new lemmas, otherwise **Kontrol** won't be aware of them.
 
 You can find more information about `build` flags here: [#kontrol-build](../../cheatsheets/kontrol-cheatsheet.md#kontrol-build "mention")
 
 To `build` with the flags above, run the following command:
 
 {% code fullWidth="true" %}
-```
+```bash
 kontrol build --require kontrol/myproject-lemmas.k --module-import MyProjectTests:MYPROJECT-LEMMAS
 ```
 {% endcode %}
 
 ### Finding Lemmas
 
-In the next section, we will explore how to find  **KEVM** lemmas, which are used to address reasoning gaps at the EVM semantic level.
+In the next section, we will explore how to find **KEVM** lemmas, which are used to address reasoning gaps at the EVM semantic level.

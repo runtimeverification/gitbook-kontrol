@@ -6,7 +6,7 @@ description: How to run property tests with Kontrol
 
 ## Create a new Foundry project
 
-```
+```bash
 forge init kontrolexample
 ```
 
@@ -16,7 +16,7 @@ This command creates a new Foundry project that serves as an example. The projec
 
 To use **Kontrol** cheatcodes, we need to install a [new Solidity library](https://github.com/runtimeverification/kontrol-cheatcodes/) required for symbolic execution. First, **navigate** into the project directory. Then you can install it with Foundry by running the following command:
 
-```
+```bash
 forge install runtimeverification/kontrol-cheatcodes
 ```
 

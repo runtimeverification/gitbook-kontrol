@@ -4,7 +4,7 @@ In this section, we will take a closer look at **Kontrol**'s proof management an
 
 ## Viewing Proofs
 
-To view the proofs that have been executed, you can use the `kontrol list` command. This will display a list of executed proofs. If a proof has been executed multiple times, you will see a version number (`:#`) after the function name. It is important to note the version number when specifying which proof you want to select, especially when viewing the **K Control Flow Graph** (**KCFG**) for a specific proof.&#x20;
+To view the proofs that have been executed, you can use the `kontrol list` command. This will display a list of executed proofs. If a proof has been executed multiple times, you will see a version number (`:#`) after the function name. It is important to note the version number when specifying which proof you want to select, especially when viewing the **K Control Flow Graph** (**KCFG**) for a specific proof.
 
 The image below shows orange circles around the version numbers of the proofs obtained after running `kontrol list`.
 
@@ -72,15 +72,15 @@ contract CounterTest is Test, KontrolCheats {
 }
 ```
 
-Once these changes have been made, you will need to rebuild the proof by running:&#x20;
+Once these changes have been made, you will need to rebuild the proof by running:
 
-```
+```bash
 kontrol build --regen --rekompile
 ```
 
 Following that, you need to rerun `prove` with the following command:
 
-```
+```bash
 kontrol prove --match-test CounterTest.testSetNumber --reinit
 ```
 
@@ -94,20 +94,20 @@ You will also see the new proof if you use the `kontrol list` command. However, 
 
 ## View Proofs in KCFG
 
-Having multiple proofs will affect the command required to view the **KCFG**. If you have executed multiple proofs and attempt to run the following command:&#x20;
+Having multiple proofs will affect the command required to view the **KCFG**. If you have executed multiple proofs and attempt to run the following command:
 
-```
+```bash
 kontrol view-kcfg CounterTest.testSetNumber
 ```
 
-You will likely receive a response similar to the one below:&#x20;
+You will likely receive a response similar to the one below:
 
 <figure><img src="../../.gitbook/assets/Screenshot 2024-03-05 at 7.40.19 PM.png" alt=""><figcaption><p>3 Matching Proofs</p></figcaption></figure>
 
 This indicates that there are multiple proofs matching that name, and you will need to choose a version of the proof. To view a specific proof, you will need to run the following command:
 
-```
+```bash
 kontrol view-kcfg 'CounterTest.testSetNumber(uint256,bytes32)' --version 0
 ```
 
-The version number specifies which proof you intend to run. Additionally, you must ensure that the variables in the function match the values of the desired proof.&#x20;
+The version number specifies which proof you intend to run. Additionally, you must ensure that the variables in the function match the values of the desired proof.

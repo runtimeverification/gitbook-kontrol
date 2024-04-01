@@ -46,7 +46,7 @@ As you can see, release tags, local checkouts and branches can be used to build 
 
 [Nix](https://nixos.org/) configuration files can be stored in many different locations. A full treatment can be found in the [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file). Check if you have additional Nix config files, for example in `$HOME/.config/nix`. If `$HOME/.config/nix` specifies a `trusted-users` option, this will override whichever `trusted-users` were set in `/etc/nix/nix.conf`. Changing the config variable from `trusted-users` to `extra-trusted-users` means it will only be appended, not overwritten. You can also explicitly set which files Nix should use as config files using the `NIX_USER_CONF_FILES` environment variable.
 
-```
+```bash
 export NIX_USER_CONF_FILES = "/etc/nix/nix.conf"
 kup doctor
 ```

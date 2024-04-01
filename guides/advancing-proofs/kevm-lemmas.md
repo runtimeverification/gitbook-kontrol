@@ -6,7 +6,7 @@ description: How to debug your KCFG and find KEVM reasoning gaps
 
 In this section, we will verify [Solady's](https://github.com/Vectorized/solady) `mulWad` and `mulWadUp` functions, demonstrating how to identify and write good lemmas. To be consistent while executing these examples, we will update and fix **Kontrol** to `version 0.1.12`. To install it quickly run the following:
 
-```
+```bash
 kup install kontrol --version v0.1.12
 ```
 
@@ -52,7 +52,7 @@ This property test asserts that if the product `x*y` does not result in an overf
 After symbolically executing this test, the generated message indicates that **Kontrol** was unable to prove that the property holds for all possible inputs. This output will look like the following:
 
 {% code fullWidth="true" %}
-```
+```bash
 1 Failure nodes. (0 pending and 1 failing)
 
 Failing nodes:
@@ -92,26 +92,26 @@ When we inspect the branching condition that leads to the failing node, we can s
 Let's unparse the branching condition. The condition is:
 
 {% code overflow="wrap" fullWidth="true" %}
-```
+```bash
 chop ( ( VV1_y_114b9705:Int *Int bool2Word ( ( maxUInt256 /Int VV1_y_114b9705:Int) <Int VV0_x_114b9705:Int ) ) ) ==Int 0
 ```
 {% endcode %}
 
-Taking into account that `chop(x)` is  `(x)mod[2**256]`, we can write the expression in a more palatable way:
+Taking into account that `chop(x)` is `(x)mod[2**256]`, we can write the expression in a more palatable way:
 
 {% code overflow="wrap" %}
-```
+```bash
 (y *Int bool2Word((maxUInt256 /Int y) <Int x)) modInt 2**256 ==Int 0
 ```
 {% endcode %}
 
-There are three main things to know about this condition.&#x20;
+There are three main things to know about this condition.
 
 * The operands `*Int`, `<Int`, `modInt`, `/Int`, and `==Int` are **K** functions doing the obvious thing, with the suffix `Int` indicating the type of their arguments
 * The function `bool2Word` takes a boolean value and converts it into an EVM word. Particularly, it converts `true` to `1` and `false` to `0`. You can find the definition [here](https://github.com/runtimeverification/evm-semantics/blob/master/kevm-pyk/src/kevm\_pyk/kproj/evm-semantics/evm-types.md#boolean-conversions).
 * The modulo operation appears because, inside assembly blocks, the Solidity compiler doesn't insert overflow checks
 
-Thus, the condition is equivalent to `y == 0 || types(uint256).max / y  >= x`. Now, since this is the condition to branch on the first `if` of the `mulWad` function, **Kontrol** will explore the two different branches, one asserting that `(y *Int bool2Word((maxUInt256 /Int y) <Int x)) modInt 2**256 ==Int 0` holds, and another one asserting that the opposite holds (via the `notBool` operator).
+Thus, the condition is equivalent to `y == 0 || types(uint256).max / y >= x`. Now, since this is the condition to branch on the first `if` of the `mulWad` function, **Kontrol** will explore the two different branches, one asserting that `(y *Int bool2Word((maxUInt256 /Int y) <Int x)) modInt 2**256 ==Int 0` holds, and another one asserting that the opposite holds (via the `notBool` operator).
 
 The branch starting on node 21 explores the path of negating `(y *Int bool2Word((maxUInt256 /Int y) <Int x)) modInt 2**256 ==Int 0`. That is, entering the `if` statement, which is why we see that node 23 has `statusCode: EVMC_REVERT`.
 
@@ -120,8 +120,6 @@ The branch starting on node 21 explores the path of negating `(y *Int bool2Word(
 Having a node with a status code `EVMC_REVERT` can mean that either there's a bug and that revert should not be happening, or that the branch is unfeasible but **Kontrol** did not realize it. Let's look at the path conditions of node 21 to see if a contradiction can be derived.
 
 <figure><img src="../../.gitbook/assets/Screenshot from 2023-10-19 17-01-56.png" alt=""><figcaption><p>Path conditions (constraints) of node 21</p></figcaption></figure>
-
-
 
 If we look a the first condition and the ones at the end, we can spot something suspicious. Let's inspect the following conditions:
 
@@ -142,7 +140,7 @@ Given these constraints, we can see how 1 and 2 imply that condition 3 is false.
 **Kontrol** is able to infer `maxUInt256 / y < x = false` from conditions 1 and 2, and a quick `git grep -rin 'rule bool2Word'` in the [evm-semantics](https://github.com/runtimeverification/evm-semantics/tree/master/kevm-pyk/src/kevm\_pyk/kproj/evm-semantics) definition tells us that these are the defined rewrite rules for `bool2Word`:
 
 {% code fullWidth="true" %}
-```
+```bash
 evm-types.md:32:     rule bool2Word( true  ) => 1
 evm-types.md:33:     rule bool2Word( false ) => 0
 
@@ -161,7 +159,7 @@ Knowing the existing rules for any function is important since this means knowin
 
 Note that none of those rules is telling **Kontrol** (actually, **KEVM**) to attempt to simplify the boolean arguments of `bool2Word`. Because none of these rules really apply to condition 3, no simplification is made. This is why **Kontrol** derives no contradiction from condition 3 above, it's treating that expression as purely symbolic. To tell **Kontrol** to attempt to simplify the boolean arguments of the `bool2Word` function, we need to add the following rules to the file described in the last section
 
-```
+```bash
 rule bool2Word ( X ) => 1 requires X         [simplification]
 rule bool2Word ( X ) => 0 requires notBool X [simplification]
 ```
@@ -174,11 +172,11 @@ We've identified the missing reasoning link, great! To include our brand new lem
 
 ### Node pruning
 
-From the screenshots above we know that the branch starting at node 21 should be pruned by **Kontrol** itself. However, due to the lack of reasoning arguments, it was not able to do so. Now that we've endowed **Kontrol** with the necessary weaponry, all we have to do is remove the reverting node, node 23, and restart the proof _**without**_ the `--reinit` flag to let **Kontrol** resume the proof without the reverting node, and figure out that such an execution branch will never be traversed.&#x20;
+From the screenshots above we know that the branch starting at node 21 should be pruned by **Kontrol** itself. However, due to the lack of reasoning arguments, it was not able to do so. Now that we've endowed **Kontrol** with the necessary weaponry, all we have to do is remove the reverting node, node 23, and restart the proof _**without**_ the `--reinit` flag to let **Kontrol** resume the proof without the reverting node, and figure out that such an execution branch will never be traversed.
 
 To remove the reverting node we can run the following command
 
-```
+```bash
 kontrol remove-node FixedPointMathLibVerification.testMulWad 23
 ```
 
@@ -190,14 +188,14 @@ With the node pruned, our configuration will look like this
 
 #### Resuming execution
 
-After this, we can resume the proof without the `--reinit` flag&#x20;
+After this, we can resume the proof without the `--reinit` flag
 
-```
+```bash
 kontrol prove --test FixedPointMathLibVerification.testMulWad
 ```
 
 Indeed, after allowing **Kontrol** to reason again about the reverting branch, we're greeted with the following message
 
-```
+```bash
 PROOF PASSED: FixedPointMathLibVerification.testMulWad(uint256,uint256):0
 ```
