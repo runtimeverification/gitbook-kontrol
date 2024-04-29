@@ -31,6 +31,10 @@
 * [Kontrol Build Options](glossary/kontrol-build-options.md)
 * [Kontrol Prove Flags](glossary/kontrol-prove-flags.md)
 
+## Developer Docs
+
+* [Digest File](developer-docs/digest-file.md)
+
 ## Learn More
 
 * [Resources](learn-more/resources.md)
