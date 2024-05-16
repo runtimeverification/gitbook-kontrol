@@ -4,7 +4,7 @@ description: How to debug your KCFG and find KEVM reasoning gaps
 
 # KEVM Lemmas
 
-In this section, we will verify [Solady's](https://github.com/Vectorized/solady) `mulWad` and `mulWadUp` functions, demonstrating how to identify and write good lemmas.
+In this section, we will verify [Solady's](https://github.com/Vectorized/solady) `mulWad` function, demonstrating how to identify and write good lemmas.
 
 The reasoning engine behind **Kontrol** is the **K** framework, which is accessed through the **K** definition of the EVM semantics, **KEVM**. Sometimes it is necessary to address reasoning gaps or suggest simplification strategies at the **KEVM** level. To gain a better understanding of the definitions and rules involved in expressions that are not being simplified as desired, you can explore the [**KEVM** repository](https://github.com/runtimeverification/evm-semantics).
 
