@@ -4,11 +4,7 @@ description: How to debug your KCFG and find KEVM reasoning gaps
 
 # KEVM Lemmas
 
-In this section, we will verify [Solady's](https://github.com/Vectorized/solady) `mulWad` and `mulWadUp` functions, demonstrating how to identify and write good lemmas. To be consistent while executing these examples, we will update and fix **Kontrol** to `version 0.1.12`. To install it quickly run the following:
-
-```bash
-kup install kontrol --version v0.1.12
-```
+In this section, we will verify [Solady's](https://github.com/Vectorized/solady) `mulWad` and `mulWadUp` functions, demonstrating how to identify and write good lemmas.
 
 The reasoning engine behind **Kontrol** is the **K** framework, which is accessed through the **K** definition of the EVM semantics, **KEVM**. Sometimes it is necessary to address reasoning gaps or suggest simplification strategies at the **KEVM** level. To gain a better understanding of the definitions and rules involved in expressions that are not being simplified as desired, you can explore the [**KEVM** repository](https://github.com/runtimeverification/evm-semantics).
 
@@ -35,14 +31,20 @@ function mulWad(uint256 x, uint256 y) internal pure returns (uint256 z) {
 Our goal is to demonstrate that this is equivalent to `(x * y) / WAD` for any two integers `x` and `y`. To achieve this, we define the following property test:
 
 ```solidity
+// Public wrapper for `FixedPointMathLib.mulWad` to ensure that `vm.expectRevert` works well
+function mulWad(uint x, uint y) public pure returns (uint256) {
+    return FixedPointMathLib.mulWad(x, y);
+}
+
 function testMulWad(uint256 x, uint256 y) public {
-    if(y == 0 || x <= type(uint256).max / y) {
+    if (y == 0 || x <= type(uint256).max / y) {
         uint256 zSpec = (x * y) / WAD;
         uint256 zImpl = FixedPointMathLib.mulWad(x, y);
+
         assert(zImpl == zSpec);
     } else {
-        vm.expectRevert();
-        FixedPointMathLib.mulWad(x, y);
+        vm.expectRevert(FixedPointMathLib.MulWadFailed.selector);
+        this.mulWad(x, y);
     }
 }
 ```
