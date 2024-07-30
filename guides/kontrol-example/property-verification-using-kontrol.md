@@ -36,10 +36,6 @@ Let's look at what we have. The `setNumber` method will update our only storage 
 
 Now let’s write a test for the contract in `kontrolexample/test/Counter.t.sol`
 
-{% hint style="warning" %}
-Recent versions of `forge` and `forge-std` use `vm.assertEq` calls instead of a plain `assertEq`. These are not yet supported by Kontrol. You can install a version of `forge-std` that is compatible with Kontrol by running `forge install foundry-rs/forge-std@28217c3`.
-{% endhint %}
-
 ```solidity
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
