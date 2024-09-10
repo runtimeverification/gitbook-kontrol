@@ -1,5 +1,5 @@
 ---
-description: Brief description of each element
+description: Formally verify smart contracts using the tools you already know
 layout:
   title:
     visible: true

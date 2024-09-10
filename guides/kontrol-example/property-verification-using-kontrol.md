@@ -40,8 +40,8 @@ Now let’s write a test for the contract in `kontrolexample/test/Counter.t.sol`
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol";
-import "../src/Counter.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {Counter} from "../src/Counter.sol";
 
 contract CounterTest is Test {
     Counter public counter;
@@ -53,20 +53,19 @@ contract CounterTest is Test {
 
     function testIncrement() public {
         counter.increment();
-        assertEq(counter.number(), 1);
+        assert(counter.number() == 1);
     }
 
     function testSetNumber(uint256 x, bool inLuck) public {
         counter.setNumber(x, inLuck);
-        assertEq(counter.number(), x);
+        assert(counter.number() == x);
     }
 }
-
 ```
 
 Run the following command to run this test:
 
-```
+```bash
 forge test --match-test testSetNumber
 ```
 
@@ -86,9 +85,9 @@ kontrol build
 The process should take a minute and may emit some warnings, so don’t worry. Also, remember that during the development, you may need to rebuild the definition in various ways.
 {% endhint %}
 
-If you change the Solidity code, you must re-run the `kontrol build` command. For more information about `kontrol build`, you can refer to [#kontrol-build](../../cheatsheets/kontrol-cheatsheet.md#kontrol-build "mention"),  [kontrol-build-options.md](../../glossary/kontrol-build-options.md "mention"), or run:
+If you change the Solidity code, you must re-run the `kontrol build` command. For more information about `kontrol build`, you can refer to [#kontrol-build](../../cheatsheets/kontrol-cheatsheet.md#kontrol-build "mention"), [kontrol-build-options.md](../../glossary/kontrol-build-options.md "mention"), or run:
 
-```
+```bash
 kontrol build --help
 ```
 
@@ -100,7 +99,7 @@ The time it takes to run can vary depending on the machine. If it appears to be 
 
 To run the tests use the following:
 
-```
+```bash
 kontrol prove --match-test CounterTest.testSetNumber
 ```
 
@@ -112,7 +111,7 @@ By default, gas computation is disabled. To activate it, use the `--use-gas` fla
 
 Now, you can see the status of all the proofs by running the following command:
 
-```
+```bash
 kontrol list
 ```
 
@@ -130,9 +129,9 @@ To add the cheatcode, we need to include the `kontrol-cheatcode` library and inh
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol";
-import "../src/Counter.sol";
-import "kontrol-cheatcodes/KontrolCheats.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {Counter} from "../src/Counter.sol";
+import {KontrolCheats} from "kontrol-cheatcodes/KontrolCheats.sol";
 
 contract CounterTest is Test, KontrolCheats {
     Counter public counter;
@@ -144,26 +143,26 @@ contract CounterTest is Test, KontrolCheats {
 
     function testIncrement() public {
         counter.increment();
-        assertEq(counter.number(), 1);
+        assert(counter.number() == 1);
     }
 
     function testSetNumber(uint256 x, bool inLuck) public {
         kevm.symbolicStorage(address(counter));
         counter.setNumber(x, inLuck);
-        assertEq(counter.number(), x);
+        assert(counter.number() == x);
     }
 }
 ```
 
 To rerun the proof with these changes, you need to run the following:
 
-```
+```bash
 kontrol build --regen --rekompile
 ```
 
-This will regenerate and rekompile `foundry.k`. Next you will need to run `prove` again. This time with the `--reinit` flag.&#x20;
+This will regenerate and rekompile `foundry.k`. Next you will need to run `prove` again. This time with the `--reinit` flag.
 
-```
+```bash
 kontrol prove --match-test CounterTest.testSetNumber --reinit
 ```
 
@@ -171,7 +170,7 @@ This will create a new version of the proof. You can run `kontrol list` again an
 
 <figure><img src="../../.gitbook/assets/Screenshot 2024-03-05 at 7.21.14 PM.png" alt=""><figcaption><p>List of Proofs</p></figcaption></figure>
 
-Notice that the first proofs have `:0` and there are now proofs labeled `:1` this indicates the version of the proof.&#x20;
+Notice that the first proofs have `:0` and there are now proofs labeled `:1` this indicates the version of the proof.
 
 {% hint style="info" %}
 For more information on proofs check out [proof-management.md](proof-management.md "mention")

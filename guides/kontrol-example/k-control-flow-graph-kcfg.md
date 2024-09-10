@@ -6,7 +6,7 @@ description: Investigating a failed test and understanding the KCFG output
 
 We need to investigate and identify the reason for the failed symbolic test. To do this, we can use the following command:
 
-```
+```bash
 kontrol view-kcfg 'CounterTest.testSetNumber(uint256,bool)' --version 1
 ```
 
