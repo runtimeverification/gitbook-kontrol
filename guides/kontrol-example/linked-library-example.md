@@ -62,7 +62,7 @@ In addition, we can see that the internal rule, marked with `k:` at which the no
 This is an internal step that the evm-semantics applies during internal calls.
 At this point, our intuition tells us that the execution branches when the machine tries to send `0` funds from a symbolic address named CALLER_ID to the `728815563385977040452943777879061427756277306518` address.
 
-<iframe src="https://giphy.com/embed/s239QJIh56sRW" width="480" height="264" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/everyone-remake-rw-s239QJIh56sRW"></a></p>
+<figure><iframe src="https://giphy.com/embed/s239QJIh56sRW" width="480" height="264" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/everyone-remake-rw-s239QJIh56sRW"></a></p></figure>
 
 Why is there a symbolic `CALLER_ID`? after all the call is being made from the LinkedLibTest contract, so the address that calls the library should be the address of the contract?
 
