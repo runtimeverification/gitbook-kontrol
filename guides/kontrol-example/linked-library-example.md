@@ -62,14 +62,17 @@ In the bottom right corner, we see that the source map points to the `uint256 re
 
 In addition, we can see that the internal rule, marked with `k:` at which the node was `cut` is `#transferFunds CALLER_ID: Int 728815563385977040452943777879061427756277306518 0`.
 `#transferFunds` is an internal step that the evm-semantics applies during calls.
+The `#transferFunds` rule represents an internal step that the EVM semantics applies during a call, specifically handling the transfer of Ether between accounts.
+This branching occurs because the prover considers every possible scenario regarding the transfer, even when no funds are involved.
 At this point, our intuition tells us that the execution branches when the machine tries to send `0` funds from a symbolic address named `CALLER_ID` to the `728815563385977040452943777879061427756277306518` address.
 
-![Gif Description](https://media.giphy.com/media/s239QJIh56sRW/giphy.gif)
+![](https://media.giphy.com/media/s239QJIh56sRW/giphy.gif)
 
-Why is there a symbolic `CALLER_ID`? 
+Why is there a symbolic `CALLER_ID`?
 After all, the `LinkedLibTest` contract calls the `SimpleMath.square(uint256)` function, so the address used should be the contract's address.
 
-Let's rerun the proof with `kontrol prove --mt LinkedLibTest.testSquare --verbose --reinit --break-on-calls`. Here, `--reinit` would ensure that we are re-running the proof from the very beginning, and `--break-on-calls` will add a node to a KCFG every time a call instruction is encountered.
+Let's rerun the proof with `kontrol prove --mt LinkedLibTest.testSquare --verbose --reinit --break-on-calls`.
+Here, `--reinit` would ensure that we are re-running the proof from the very beginning, and `--break-on-calls` will add a node to a KCFG every time a call instruction is encountered.
 We already know the proof is failing, so let's stop the process as soon as the 3-way branch is detected.
 
 Notice that in the proof's live status, the version has increased to 1.
@@ -83,9 +86,12 @@ The use of `DELEGATECALL` is also confirmed by the official documentation, which
 
 > ... code is reused using the DELEGATECALL (CALLCODE until Homestead) feature of the EVM. This means that if library functions are called, their code is executed in the context of the calling contract, ...
 
-'CALLER_ID' is the address used to call the `LinkedLibTest.testSquare` test function in the test contract.
-This explains why the symbolic `CALLER_ID` is used to call the linked library function.
-The branching takes place because the prover considers every case for which the `CALLER_ID` could be one of the addresses present in the network state.
+The symbolic `CALLER_ID` represents the address used by Kontrol to initiate the proof and to invoke the `LinkedLibTest.testSquare` function in the test contract.
+Since the library function is accessed using `DELEGATECALL`, the same symbolic caller is used.
+Internally,
+The branching occurs because the prover evaluates all possible scenarios where:
+ 1. `CALLER_ID` matches one of the addresses present in the network state.
+ 2. `CALLER_ID` it is distinct from any of the existing accounts.
 
 So, what can we do?
 
@@ -142,24 +148,26 @@ We can see that it is a conjunction of two negated conditions:
     1. `#Not ( { VV0_n_114b9705:Int #Equals chop ( VV0_n_114b9705:Int *Int VV0_n_114b9705:Int ) /Word VV0_n_114b9705:Int } )`
     2. `#Not ( { VV0_n_114b9705:Int #Equals 0 } )`
 
-The second one is pretty straightforward, asserting that the symbolic argument `VV0_n_114b9705` (a K representation of `uint256 n`) is non-zero.
-For the first one, we can simplify the variable name to obtain `#Not( n #Equals chop (n *Int n /Word n))`.
-Let's break it apart:
-- `chop()` is an internal function that ensures that its argument is less than `2^256`.
-Think about it as a (`_%_`) mod operation.
-- In the K language, operators also take the sort on which they are applied.
-  `*Int` represents the product of two unbounded integers.
+The second condition is straightforward; it asserts that the symbolic argument `VV0_n_114b9705` (a K representation of `uint256 n`) is non-zero.
 
-The equation above is equivalent to `( n != (n * n / n) mod type(uint256).max)` which looks more like an overflow check.
-And that's what it actually represents: a compiler-inserted check for the operation inside the `square` function.
-In other words, the proof will run into an overflow and revert whenever `n` is not 0 and is not equal to `((n * n / n) mod (type(uint256).max) + 1)`.
+The first condition can be simplified by renaming the variable, resulting in `#Not( n #Equals chop (n *Int n /Word n))`.
+To break this down further:
+- `chop()` is an internal function that ensures its argument is less than `2^256`.
+Essentially, it functions like a modulus operation (`%`).
+- In the K language, operators also include the sort on which they operate.
+For example, `*Int` represents the product of two unbounded integers, and `/Word` represents the division of two 32 bytes EVM words.
 
-The model also demonstrates `VV0_n_114b9705 = pow128` as a counter-example--the value that  `n` should take for the failure to occur.
+The equation above is equivalent to `n != (n * n / n) mod pow128` which looks more like an overflow check.
+And that's what it actually is: a compiler-inserted overflow check for the operation inside the `square` function.
+In other words, the proof will run into an overflow and revert if `n` is neither `0` nor equal `to ((n * n / n) % pow128)`.
+
+The model also demonstrates `VV0_n_114b9705 = pow128` as a counter-example--the value that `n` should take for the failure to occur.
 In Solidity, to avoid overflow when squaring a number, the result must stay within the `uint256` range, which has a maximum value of `2^256 - 1`.
 The largest number you can safely square is `n=2^128 - 1` which is the maximum value for a `uint128` (i.e., `type(uint128).max`).
-This comes from the fact that `n^2` must be less than `2^256`. Taking the square root of `2^256` gives `2^128`, meaning any number `>= 2^128` would overflow.
+This is because `n^2` must be less than `2^256`.
+The square root of `2^256` is `2^128`, meaning any number greater than or equal to `2^128` would cause an overflow.
 
-Now, we can avoid this branch by adding a new precondition using
+Now, we can avoid this branch by adding a new precondition using:
 
 ```sol
 vm.assume(n <= type(uint128).max);
