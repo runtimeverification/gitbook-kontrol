@@ -138,7 +138,7 @@ The output shows that the status code is EVMC_REVERT.
 
 Let's focus on the path condition for a bit.
 We can see that it is a conjunction of two negated conditions:
-    1 `.#Not ( { VV0_n_114b9705:Int #Equals chop ( VV0_n_114b9705:Int *Int VV0_n_114b9705:Int ) /Word VV0_n_114b9705:Int } )`
+    1. `#Not ( { VV0_n_114b9705:Int #Equals chop ( VV0_n_114b9705:Int *Int VV0_n_114b9705:Int ) /Word VV0_n_114b9705:Int } )`
     2. `#Not ( { VV0_n_114b9705:Int #Equals 0 } )`
 
 The second one is pretty straightforward, asserting that the symbolic argument `VV0_n_114b9705`, is non-zero.
