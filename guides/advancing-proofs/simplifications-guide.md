@@ -1,5 +1,8 @@
 # A Comprehensive Guide to Writing Simplifications for Kontrol
 
+
+
+
 ## What are simplifications?
 
 Symbolic execution in K in general and in Kontrol in particular is performed on a symbolic state consisting of: a **configuration**, which is a collection of cells; and a **path condition**, which is a set of Boolean constraints on the symbolic variables present in the configuration.
@@ -25,6 +28,8 @@ would not be a sound simplification, whereas
 rule A:Int +Int 0 => A [simplification]
 ```
 on the other hand, would.
+
+
 
 ### Simplifications by example
 
@@ -98,7 +103,157 @@ to which `div-group-conc` would then apply, but not `div-group-conc-b`.
 
 Second, note that this simplification has the `preserves-definedness` attribute. This attribute should be used when either the LHS or the RHS contains a **partial function**, but we are certain that both the LHS and RHS are defined for all use cases. In this case, the partial function is `/Int` and both the LHS and the RHS are guaranteed to be defined given the `notBool C ==Int 0` requirement.
 
-## Creating advanced simplifications: automating storage slot updates
+
+
+
+## More advanced simplifications: Handling the tension between byte arrays and integers
+
+In EVM, data can be stored in two ways---as 32-byte (or 256-bit) integers (for example, in the word stack or in storage) or as byte arrays (for example, in the memory)---and the language semantics often needs to switch between these views and manipulate the associated data. The KEVM functions relevant for this part of the symbolic reasoning of Kontrol are:
+
+- `#asWord(B:Bytes) : Bytes -> Int`, which denotes the unsigned integer represented by the lowest 32 bytes (or 256 bits) of byte array `B`. This function is total.
+- `#buf(WIDTH:Int, VALUE:Int) : Int -> Int -> Bytes`, which denotes a byte array (or buffer) `WIDTH` bytes long, the contents of which, when interpreted as an *unsigned integer*, equal `VALUE`. For example, `#buf(1, 9)` represents a single byte with contents `00010001`. For `#buf` to be well-defined, the following conditions need to be met:
+  1. `0 <=Int WIDTH`, unsurprisingly stating that buffers cannot have negative length;
+  2. `0 <=Int VALUE <Int 2 ^Int (8 *Int WIDTH)`, meaning that the value held in the buffer must fit into the buffer.
+- `lengthBytes(B:Bytes): Bytes -> Int` denotes the length of the byte array `B`. This function is total and it is guaranteed to be non-negative.
+- `+Bytes : Bytes -> Bytes -> Bytes` denotes byte array concatenation. This function is total and is the key function in the representation of symbolic byte arrays. It is right-associative, is always normalized to this form, and also all consecutive concrete byte arrays in a concatenation are joined into a larger concrete byte array using the simplification
+```k
+rule [bytes-concat-left-assoc-conc]:
+  B1:Bytes +Bytes (B2:Bytes +Bytes B3:Bytes) =>
+    (B1 +Bytes B2) +Bytes B3
+    [simplification(40), concrete(B1, B2), symbolic(B3)]
+```
+- `#range(B:Bytes, START:Int, WIDTH:Int)` denotes a slice of the byte array starting from (0-indexed) byte `START` and `WIDTH` bytes long, with zero-padding if the slice goes beyond the length of the byte array. This function is total, returning the the empty byte array when `START <Int 0` or `WIDTH <Int 0`.
+- `B:Bytes [ START:Int := B':Bytes ]` denotes an update of the byte array `B` from (0-indexed) byte `START` with byte array `B'`. This function is total, returning the the empty byte array when `START <Int 0`.
+
+
+Let us now take a look at a number of simplifications that capture how these functions operate and interact with each other in the context of symbolic reasoning, starting from `#asWord` and `#buf`.
+
+1. Leading zeros in a byte array do not affect its integer representation:
+```k
+rule [asWord-trim-leading-zeros]:
+  #asWord ( BZ +Bytes B ) => #asWord ( B )
+  requires #asInteger ( BZ ) ==Int 0
+  [simplification(40), concrete(BZ), preserves-definedness]
+```
+
+2. Only the last 32 bytes of a byte array count towards its integer representation:
+```k
+rule [asWord-trim-overflowing]:
+  #asWord ( B ) => #asWord ( #range(B, lengthBytes(B) -Int 32, 32) )
+  requires 32 <Int lengthBytes(B)
+  [simplification(40), preserves-definedness]
+```
+
+3. Slicing a byte array from the right does not affect its integer representation if all of the higher bytes are zeros, version 1:
+```k
+rule [asWord-range]:
+  #asWord ( #range ( B:Bytes, S, W ) ) => #asWord ( B )
+  requires 0 <=Int S andBool 0 <=Int W
+   andBool lengthBytes(B) <=Int 32
+   andBool lengthBytes(B) ==Int S +Int W
+   andBool #asWord ( B ) <Int 2 ^Int ( 8 *Int W )
+  [simplification, concrete(S, W), preserves-definedness]
+```
+
+4. `#asWord` is the left-inverse of `#buf` for 32-byte unsigned integers:
+```k
+rule [asWord-buf-inversion]:
+  #asWord ( #buf ( W:Int, X:Int ) ) => X
+  requires 0 <=Int W andBool 0 <=Int X
+   andBool X <Int minInt ( 2 ^Int (8 *Int W), pow256 )
+  [simplification, concrete(W), preserves-definedness]
+```
+
+5. `#buf` is the left-inverse of `#asWord` up to mismatches in byte array length:
+```k
+rule [buf-asWord-invert-lr-len-leq]:
+  #buf (W:Int , #asWord(B:Bytes)) => #buf(W -Int lengthBytes(B), 0) +Bytes B
+  requires lengthBytes(B) <=Int W andBool W <=Int 32
+  [simplification, concrete(W)]
+
+rule [buf-asWord-invert-lr-len-gt]:
+  #buf (W:Int , #asWord(B:Bytes)) => #range(B, lengthBytes(B) -Int W, W)
+  requires 0 <=Int W andBool W <Int lengthBytes(B)
+    andBool lengthBytes(B) <=Int 32
+    andBool #asWord(B) <Int 2 ^Int (8 *Int W)
+  [simplification, concrete(W), preserves-definedness]
+```
+
+6. When the slice is limited to the first `+Bytes`-junct:
+```k
+rule [range-included-in-cHead]:
+  #range(B1:Bytes +Bytes _:Bytes, S:Int, W:Int) => #range(B1, S, W)
+  requires S +Int W <=Int lengthBytes(B1)
+  [simplification]
+```
+
+7. When the slice is limited to the second `+Bytes`-junct:
+```k
+rule [range-outside-cHead]:
+  #range(B1:Bytes +Bytes B2:Bytes, S:Int, W:Int) =>
+    #range(B2, S -Int lengthBytes(B1), W)
+  requires lengthBytes(B1) <=Int S
+  [simplification]
+```
+
+8. When the slice includes the entire first `+Bytes`-junct:
+```k
+rule [range-includes-cHead]:
+  #range(B1:Bytes +Bytes B2:Bytes, 0, W:Int) =>
+    B1 +Bytes #range(B2, 0, W -Int lengthBytes(B1))
+  requires lengthBytes(B1) <=Int W
+  [simplification]
+```
+
+9. When the slice starts within the first `+Bytes`-junct:
+```k
+rule [range-inside-cHead-concat]:
+  #range(B1:Bytes +Bytes B2:Bytes, S:Int, W:Int) =>
+    #range(#range(B1, S, lengthBytes(B1) -Int S) +Bytes B2, 0, W)
+  requires 0 <Int S andBool S <=Int lengthBytes(B1)
+  [simplification]
+```
+
+10. Expressing a slice of a slice into a single slice:
+```k
+rule [range-of-range]:
+  #range(#range(B:Bytes, S1:Int, W1:Int), S2:Int, W2:Int) =>
+    #range(B, S1 +Int S2, minInt(W2, W1 -Int S2)) +Bytes
+      #buf(maxInt(0, W2 -Int (W1 -Int S2)), 0)
+  requires 0 <=Int S1 andBool 0 <=Int W1
+   andBool 0 <=Int S2 andBool 0 <=Int W2
+  [simplification]
+```
+
+11. Slicing a byte array from the right does not affect its integer representation if all of the higher bytes are zeros, version 2:
+```k
+rule [range-buf-value]:
+  #range (#buf(W1:Int, X:Int), S2:Int, W2:Int) => #buf(W2, X)
+  requires 0 <=Int X andBool X <Int 2 ^Int (8 *Int W2)
+   andBool 0 <=Int S2 andBool 0 <=Int W2 andBool W1 ==Int S2 +Int W2
+  [simplification, concrete(W1, S2, W2), preserves-definedness]
+```
+
+12. When a byte array update is limited to the first `+Bytes`-junct:
+```k
+rule [memUpdate-concat-in-left]:
+  (B1 +Bytes B2) [ S := B ] => (B1 [ S := B ]) +Bytes B2
+  requires 0 <=Int S
+   andBool S +Int lengthBytes(B) <Int lengthBytes(B1)
+   [simplification(40)]
+```
+
+13. One byte array update subsumes another if it, intuitively speaking, starts earlier and ends later:
+```k
+rule [memUpdate-subsume]:
+  B:Bytes [ S1:Int := B1:Bytes ] [ S2:Int := B2:Bytes ] => B [ S2 := B2 ]
+  requires 0 <=Int S2 andBool S2 <=Int S1
+   andBool S1 +Int lengthBytes(B1) <=Int S2 +Int lengthBytes(B2)
+  [simplification]
+```
+
+
+## Expert simplifications: Automating storage slot updates
 
 In EVM, contract fields are stored in *[storage slots](https://docs.soliditylang.org/en/v0.8.24/internals/layout_in_storage.html)*, each of which holds 32 bytes, and  each of which may contain multiple fields, depending on their size. A general slot update is of the form
 ```k
@@ -124,11 +279,13 @@ For example, if we were updating a given 8-byte `uint64` field stored in a given
 |xxxxxxxxxxxxxxxxyyyyyyyyxxxxxxxx| : (SHIFT *Int VALUE) |Int (MASK &Int #asWord( SLOT:Bytes ))
 ```
 
-Let us now understand how to automate this reasoning in Kontrol, recalling the general form:
+Kontrol is able to automate this reasoning *without resorting to SMT bit-level reasoning* through its simplifications. Let us now understand how this is done, recalling the general form:
 ```k
 (SHIFT *Int VALUE) |Int (MASK &Int #asWord(SLOT))
 ```
 and noting that `MASK` and `SHIFT` are always concrete, as they are generated by the Solidity compiler and are part of the contract bytecode. Therefore, our simplifications have to account for the cases in which at least one of `VALUE` and `SLOT` is symbolic.
+
+
 
 ### Identifying slot masks
 
@@ -232,6 +389,8 @@ maxUInt256 ==Int
 ```
 where, since having `( 2 ^Int ( #getMaskShiftBits(X) +Int #getMaskWidthBits(X) ) -Int 1 )` will set all of the bits corresponding to `SHIFT` and `WIDTH` to one, the only way for the bitwise-or to equal `maxUInt256` is if all the remaining bits, which correspond to `REST`, are also ones.
 
+
+
 ### Identifying value shifts
 
 In addition to identifying masks, we also need to identify when `SHIFT` (as per the general slot update) is a valid shift, and this is when it is a byte-aligned power of two:
@@ -246,13 +405,14 @@ rule #isByteShift(X) => X ==Int 2 ^Int log2Int(X)
 rule #isByteShift(_) => false [owise]
 ```
 
+
+
 ### Executing slot updates
+
 Now we are in the position to write slot update simplifications. Before doing so, we recall their general form once more:
 ```
 (SHIFT *Int VALUE) |Int (MASK &Int #asWord(SLOT))
 ```
-
-#### Symbolic `SLOT`
 
 First, we consider the case in which `SLOT` is symbolic, where we have to write a simplification that captures the effect of the mask, zeroing the appropriate part of the slot:
 ```k
@@ -280,19 +440,12 @@ This, in general, results in a term of the form
           #buf(#getMaskWidthBytes(MASK), 0) +Bytes  [P2]
           BI+1 +Bytes ... +Bytes BN )               [P3]
 ```
-where `+Bytes` denotes byte array concatenation, is right-associative, and is always normalized. Such a term, which we denote by `MASKED_SLOT`, can be divided into three parts:
+Such a term, which we denote by `MASKED_SLOT`, can be divided into three parts:
 1. [P1]: the part of the slot before the part to be updated (possibly empty): `B1 +Bytes ... +Bytes BI`;
 2. [P2]: the part of the slot to be updated, now zeroed: `#buf(#getMaskWidthBytes(MASK), 0)`; and
 3. [P3]: the rest of the slot (possibly empty): `BI+1 +Bytes ... +Bytes BN`.
 
-This form, however, could end up being structured in less appealing ways if, for example, `BI` or `BI+1` are concrete. In that case, this built-in simplification
-```k
-rule [bytes-concat-left-assoc-conc]:
-  B1:Bytes +Bytes (B2:Bytes +Bytes B3:Bytes) =>
-    (B1 +Bytes B2) +Bytes B3
-    [simplification(40), concrete(B1, B2), symbolic(B3)]
-```
-will bring them together into a single concrete byte array, obfuscating the zeroed part. In the worst case, when both [P1] and [P3] are concrete, the masking will result in just a concrete number.
+This form, however, could end up being structured in less appealing ways if, for example, `BI` or `BI+1` are concrete. In that case, the `bytes-concat-left-assoc-conc` simplification from the previous part will fire and bring them together into a single concrete byte array, obfuscating the zeroed part. In the worst case, when both [P1] and [P3] are concrete, the masking will result in just a concrete number.
 
 Continuing, we are now dealing with a term of the form
 ```k
@@ -320,14 +473,7 @@ rule [bor-update-to-right]:
 ```
 In particular, the bitwise-or should propagate to the left if `A` (which here corresponds to `SHIFT *Int VALUE`) has no bits set in its last `LEN` bytes (where `LEN` denotes the length of `B2`), and to the right if `A` fits into `LEN` bytes.
 
-Ideally, these simplifications would be sufficient for the general form of slot updates. However, as part of required `#asWord` and `#buf` reasoning, we also have the simplification
-```k
-rule [asWord-trim-leading-zeros]:
-  #asWord ( BZ +Bytes B ) => #asWord ( B )
-  requires #asInteger ( BZ ) ==Int 0
-  [simplification(40), concrete(BZ), preserves-definedness]
-```
-that removes an arbitrary number of leading zeros from a byte array concatenation when under an `#asWord`. This means, in particular, that the zeros that are created by the masking could get absorbed into the next `+Bytes`-junct in the case when [P3] does not contain `+Bytes`. For example, if we had a slot with three pieces of information, `X`, `Y`, and `Z` as follows:
+Ideally, these simplifications would be sufficient for the general form of slot updates. However, recall that we also have in action the built-in simplifications  for `#asWord` and `#buf` reasoning from the previous part. So, for example, if we had a slot with three pieces of information, `X`, `Y`, and `Z` as follows:
 ```k
 [E1]: #asWord(#buf(10, X) +Bytes #buf(10, Y) +Bytes #buf(12, Z))
 ```
@@ -343,15 +489,7 @@ but then `asWord-trim-leading-zeros` would fire, creating
 ```k
 [E3]: #asWord(#buf(10, X) +Bytes #buf(22, ((2 ^Int 96) *Int W) |Int #asWord (#buf(12, Z))))
 ```
-after which the following built-in simplification would fire
-```k
-rule [asWord-buf-inversion]:
-  #asWord ( #buf ( WB:Int, X:Int ) ) => X
-  requires 0 <=Int WB
-   andBool 0 <=Int X andBool X <Int minInt ( 2 ^Int (8 *Int WB), pow256 )
-   [simplification, concrete(WB), preserves-definedness]
-```
-resulting in
+after which `asWord-buf-inversion` would fire, resulting in
 ```k
 [E4]: #asWord(#buf(10, X) +Bytes #buf(22, ((2 ^Int 96) *Int W) |Int Z))
 ```
@@ -404,27 +542,11 @@ which isolates the part of the longer buffer that fits into the shorter one, ass
 ```k
 [E6]: #asWord(#buf(10, X) +Bytes #range(#buf(20, W) +Bytes #buf(12, Z), 10, 22))
 ```
-which then, through the following built-in simplification
-```k
-rule [range-inside-cHead-concat]:
-  #range(B1:Bytes +Bytes B2:Bytes, S:Int, W:Int) =>
-    #range(#range(B1, S, lengthBytes(B1) -Int S) +Bytes B2, 0, W)
-  requires 0 <Int S andBool S <=Int lengthBytes(B1)
-  [simplification]
-```
-becomes
+which then, through the `range-inside-cHead-concat` simplification, becomes
 ```k
 [E7]: #asWord(#buf(10, X) +Bytes #range(#range(#buf( 20, W ), 10, 10) +Bytes #buf(12, Z), 0, 22))
 ```
-then, through the following built-in simplification
-```k
-rule [range-buf-value]:
-  #range (#buf(W1:Int, X:Int), S2:Int, W2:Int) => #buf(W2, X)
-  requires 0 <=Int X andBool X <Int 2 ^Int (8 *Int W2)
-   andBool 0 <=Int S2 andBool 0 <=Int W2 andBool W1 ==Int S2 +Int W2
-  [simplification, concrete(W1, S2, W2), preserves-definedness]
-```
-simplifes to
+then, using `range-buf-value`, simplifes to
 ```k
 [E8]: #asWord(#buf(10, X) +Bytes #range(#buf(10, W) +Bytes #buf(12, Z), 0, 22))
 ```
