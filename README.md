@@ -31,4 +31,4 @@ Struggling to kontrol your smart contracts behave as intended, even after thorou
 - **Trustworthy**: Kontrol has a trustworthy mathematical foundation for specifying and verifying smart contracts. It is built on the open-source, validated, and intuitive formal semantics of Ethereum Bytecode, [KEVM](https://github.com/runtimeverification/evm-semantics). Thus, Kontrol how your smart contracts execute on the virtual machine exactly as you formally verified them.
 - **Scalable**: Kontrol automatically performs theorem proving on your specifications against your contracts through composable symbolic execution. It allows you to manipulate the proof process and provide simplification rules to achieve any proof goal. This ensures you can verify your contracts at any scale.
 
-
+Even better, we provide a delivery platform for you to perform CI-Integrated, Cloud-based Formal Verification on your contracts without the need to set up your own infrastructure.
