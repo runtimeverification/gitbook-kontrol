@@ -5,7 +5,9 @@
 
 ## What are simplifications?
 
-Symbolic execution in K in general and in Kontrol in particular is performed on a symbolic state consisting of: a **configuration**, which is a collection of cells; and a **path condition**, which is a set of Boolean constraints on the symbolic variables present in the configuration.
+Symbolic execution in K in general and in Kontrol in particular is performed on a symbolic state consisting of:
+1. a **configuration**, which is a collection of cells; and
+2. a **path condition**, which is a set of Boolean constraints on the symbolic variables present in the configuration.
 
 The purpose of simplifications, as their name suggests, is to simplify the job of the symbolic execution engine. They describe ways of getting the configuration and/or the path condition into a preferred format or state mathematical theorems that are either too complicated for the SMT solver to reason about both automatically and tractably or too simple for us to even want to call the SMT solver. Simplifications are K rewrite rules that have the `[simplification]` attribute, and their general form is:
 
@@ -111,7 +113,7 @@ Second, note that this simplification has the `preserves-definedness` attribute.
 In EVM, data can be stored in two ways---as 32-byte (or 256-bit) integers (for example, in the word stack or in storage) or as byte arrays (for example, in the memory)---and the language semantics often needs to switch between these views and manipulate the associated data. The KEVM functions relevant for this part of the symbolic reasoning of Kontrol are:
 
 - `#asWord(B:Bytes) : Bytes -> Int`, which denotes the unsigned integer represented by the lowest 32 bytes (or 256 bits) of byte array `B`. This function is total.
-- `#buf(WIDTH:Int, VALUE:Int) : Int -> Int -> Bytes`, which denotes a byte array (or buffer) `WIDTH` bytes long, the contents of which, when interpreted as an *unsigned integer*, equal `VALUE`. For example, `#buf(1, 9)` represents a single byte with contents `00010001`. For `#buf` to be well-defined, the following conditions need to be met:
+- `#buf(WIDTH:Int, VALUE:Int) : Int -> Int -> Bytes`, which denotes a byte array (or buffer) `WIDTH` bytes long, the contents of which, when interpreted as an *unsigned integer*, equal `VALUE`. For example, `#buf(1, 9)` represents a single byte with contents `00001001`. For `#buf` to be well-defined, the following conditions need to be met:
   1. `0 <=Int WIDTH`, unsurprisingly stating that buffers cannot have negative length;
   2. `0 <=Int VALUE <Int 2 ^Int (8 *Int WIDTH)`, meaning that the value held in the buffer must fit into the buffer.
 - `lengthBytes(B:Bytes): Bytes -> Int` denotes the length of the byte array `B`. This function is total and it is guaranteed to be non-negative.
