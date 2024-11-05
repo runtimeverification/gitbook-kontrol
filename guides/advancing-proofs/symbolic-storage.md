@@ -38,7 +38,7 @@ The Solidity compiler is able to provide complete information on the storage lay
 
 ## Running example: `DualGovernance`
 
-As our running example, we take the `DualGovernance` contract from our recent Lido engagement, taken from a relevant commit at the time of writing this guide, and focusing only on the part relevant for symbolic storage:
+As our running example, we take the `DualGovernance` contract from our recent Lido engagement, taken from a relevant commit [of the codebase](https://github.com/lidofinance/dual-governance) at the time of writing this guide, and focusing only on the part relevant for symbolic storage:
 
 ```solidity
 // ---
