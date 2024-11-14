@@ -21,7 +21,7 @@ layout:
 
 # Kontrol
 
-Struggling to kontrol your smart contracts behave as intended, even after thorough unit testing, fuzzing, and other validation procedures? Frustrated with finding bugs in your code but unable to prove their absence?
+[**Kontrol**](https://github.com/runtimeverification/kontrol) is a powerful formal verification tool for EVM smart contracts that makes complex verification easy. Kontrol supports Foundry tests as specifications, which is especially useful for those who are not verification engineers. Additionally, developers can leverage existing Foundry test suites to do formal verification and increase the level of confidence.
 
 [**Kontrol**](https://github.com/runtimeverification/kontrol) is designed for you!
 
