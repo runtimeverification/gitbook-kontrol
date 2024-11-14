@@ -13,13 +13,13 @@ layout:
     visible: true
 ---
 
+# Kontrol
+
 <div data-full-width="true">
 
 <figure><img src=".gitbook/assets/kontrol logo yellow.png" alt=""><figcaption></figcaption></figure>
 
 </div>
-
-# Kontrol
 
 [**Kontrol**](https://github.com/runtimeverification/kontrol) is a powerful formal verification tool for EVM smart contracts that makes complex verification easy. Kontrol supports Foundry tests as specifications, which is especially useful for those who are not verification engineers. Additionally, developers can leverage existing Foundry test suites to do formal verification and increase the level of confidence.
 
