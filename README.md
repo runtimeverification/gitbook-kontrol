@@ -22,7 +22,6 @@ layout:
 # Kontrol
 
 [**Kontrol**](https://github.com/runtimeverification/kontrol) is a powerful formal verification tool for EVM smart contracts that makes complex verification easy. Kontrol supports Foundry tests as specifications, which is especially useful for those who are not verification engineers. Additionally, developers can leverage existing Foundry test suites to do formal verification and increase the level of confidence.
-[**Kontrol**](https://github.com/runtimeverification/kontrol) is designed for you!
 
 
 - **Open Source**: Kontrol is open source under the [BSD-3 Clause License](https://github.com/runtimeverification/kontrol/blob/master/LICENSE). This gives you full Kontrol to use, modify, and redistribute it according to your needs.
