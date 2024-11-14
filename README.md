@@ -1,5 +1,5 @@
 ---
-description: Take Kontrol of your smart contracts with Simple Formal Verification
+description: Kontrol your smart contracts with easy-to-use formal verification
 layout:
   title:
     visible: true
