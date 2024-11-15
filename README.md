@@ -13,7 +13,6 @@ layout:
     visible: true
 ---
 
-# Kontrol
 
 <div data-full-width="true">
 
