@@ -13,8 +13,6 @@ layout:
     visible: true
 ---
 
-# Kontrol
-
 <div data-full-width="true">
 
 <figure><img src=".gitbook/assets/kontrol logo yellow.png" alt=""><figcaption></figcaption></figure>
