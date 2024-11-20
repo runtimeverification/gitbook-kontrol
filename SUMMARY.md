@@ -16,8 +16,9 @@
 * [Node Refutation](guides/node-refutation.md)
 * [Advancing Proofs](guides/advancing-proofs/README.md)
   * [KEVM Lemmas](guides/advancing-proofs/kevm-lemmas.md)
-  * [Symbolic Storage](guides/advancing-proofs/symbolic-storage.md)
+  * [Writing Simplifications](guides/advancing-proofs/simplifications-guide.md)
   * [Rule Application](guides/advancing-proofs/rule-application.md)
+  * [Symbolic Storage](guides/advancing-proofs/symbolic-storage.md)
 
 ## Cheatsheets
 
