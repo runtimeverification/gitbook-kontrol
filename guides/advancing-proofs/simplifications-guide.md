@@ -16,7 +16,10 @@ The purpose of simplifications, as their name suggests, is to simplify the job o
 rule LHS => RHS requires C1 andBool ... andBool CN [simplification]
 ```
 
-meaning that all occurrences of the term `LHS` in the current symbolic state should be replaced with the term `RHS` when the Boolean constraints `C1`, ..., `CN` are entailed by the current path condition `PC`, that is, when $\mathtt{PC} \implies \mathtt{C1} \wedge \ldots \wedge \mathtt{CN}$.
+meaning that all occurrences of the term `LHS` in the current symbolic state should be replaced with the term `RHS` when the Boolean constraints `C1`, ..., `CN` are entailed by the current path condition `PC`, that is, when
+$$
+\mathtt{PC} \implies \mathtt{C1} \wedge \ldots \wedge \mathtt{CN}
+$$
 
 Importantly, a simplification is **sound** if and only if
 $$
