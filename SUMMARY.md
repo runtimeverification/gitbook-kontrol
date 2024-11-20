@@ -17,6 +17,7 @@
 * [Advancing Proofs](guides/advancing-proofs/README.md)
   * [KEVM Lemmas](guides/advancing-proofs/kevm-lemmas.md)
   * [Symbolic Storage](guides/advancing-proofs/symbolic-storage.md)
+  * [Rule Application](guides/advancing-proofs/rule-application.md)
 
 ## Cheatsheets
 
