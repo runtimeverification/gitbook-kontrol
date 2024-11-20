@@ -1,4 +1,8 @@
-# Using structured symbolic storage in Kontrol tests
+---
+description: Using structured symbolic storage in Kontrol tests
+---
+
+# Symbolic Storage
 
 ## Preliminaries
 

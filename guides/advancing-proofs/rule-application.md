@@ -1,4 +1,8 @@
-# A detailed look at rules and rule application in K
+---
+description: A detailed look at rules and rule application in K
+---
+
+# Rule Application
 
 In general, any semantics written in K works on a symbolic state of the form `(C, PC)`, where:
 1. `C` is the **configuration**, which we can think of as a collection of cells; and
