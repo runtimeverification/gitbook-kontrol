@@ -1,6 +1,6 @@
 # Configuration Options for Kontrol TOML file
 
-The following is a kontrol.toml file with all configuration options set.
+The following is a kontrol.toml file with all configuration options set. Don't use this file directly, but rather use the `kontrol init` command to generate a default one.
 
 ```toml
 [build.default]
@@ -161,4 +161,66 @@ debug = false # Debug output.
 enum-constraints = false # Add constraints for enum function arguments and storage slots.
 # config-file = # Path to Pyk config file.
 config-profile = 'default' # Config profile to be used.
+```
+
+## Use case from real world project
+
+The following is a kontrol.toml file from a real world project, including options that were found to be useful in practice.
+
+```toml
+[build.default]
+foundry-project-root       = '.'
+regen                      = true
+rekompile                  = true
+verbose                    = false
+debug                      = false
+require                    = 'cork-lemmas.k'
+module-import              = 'TestBase:CORK-LEMMAS'
+auxiliary-lemmas           = true
+o2                         = true
+
+[prove.default]
+schedule                   = 'CANCUN'
+foundry-project-root       = '.'
+verbose                    = false
+debug                      = false
+max-depth                  = 100000
+max-iterations             = 10000
+reinit                     = false
+cse                        = false
+workers                    = 1
+max-frontier-parallel      = 6
+maintenance-rate           = 128
+assume-defined             = true
+no-log-rewrites            = true
+no-stack-checks            = true
+kore-rpc-command           = 'kore-rpc-booster --no-post-exec-simplify --equation-max-recursion 100 --equation-max-iterations 1000'
+failure-information        = true
+counterexample-information = true
+minimize-proofs            = false
+fail-fast                  = true
+smt-timeout                = 16000
+smt-retry-limit            = 0
+break-every-step           = false
+break-on-jumpi             = false
+break-on-calls             = false
+break-on-storage           = false
+break-on-basic-blocks      = false
+break-on-cheatcodes        = false
+run-constructor            = false
+# Would be needed with symbolic `block.timestamp`:
+symbolic-immutables        = false
+
+[prove.symbolic-immutables]
+symbolic-immutables        = true
+
+[show.default]
+foundry-project-root       = '.'
+verbose                    = false
+debug                      = false
+use-hex-encoding           = false
+
+[view-kcfg.default]
+foundry-project-root       = '.'
+use-hex-encoding           = false
 ```
