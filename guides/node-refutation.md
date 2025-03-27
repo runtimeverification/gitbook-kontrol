@@ -405,7 +405,7 @@ This means that execution will not continue from them when we resume the proof.
 Let's now resume the proof:
 
 ```bash
-> kontrol prove PrankTest.testSymbolicStartPrank --verbose
+> kontrol prove --match-test PrankTest.testSymbolicStartPrank --verbose
 ...
 PROOF FAILED: test%PrankTest.testSymbolicStartPrank(address):0
 time: 3m 11s
