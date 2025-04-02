@@ -26,6 +26,7 @@
 
 ## Tips
 * [Tips for using Kontrol](tips/tips-for-using-kontrol.md)
+* [Debugging Failing Proofs](tips/debugging-failing-proofs.md)
 
 ## Glossary
 * [Kontrol Arguments](glossary/kontrol-arguments.md)
