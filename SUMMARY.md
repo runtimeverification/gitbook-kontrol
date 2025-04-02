@@ -12,6 +12,7 @@
     * [K Control Flow Graph (KCFG)](guides/kontrol-example/k-control-flow-graph-kcfg.md)
     * [Proof Management](guides/kontrol-example/proof-management.md)
     * [Debugging a Proof](guides/kontrol-example/linked-library-example.md)
+* [Cheatcodes](guides/cheatcodes.md)
 * [Node Refutation](guides/node-refutation.md)
 * [Advancing Proofs](guides/advancing-proofs/README.md)
     * [KEVM Lemmas](guides/advancing-proofs/kevm-lemmas.md)
