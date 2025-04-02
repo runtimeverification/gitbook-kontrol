@@ -6,6 +6,7 @@
     * [Installations](overview/readme/installations.md)
 
 ## Guides
+* [Proofcast Episode: Getting Started](guides/proofcast-episode.md)
 * [Kontrol Example](guides/kontrol-example/README.md)
     * [Property Verification using Kontrol](guides/kontrol-example/property-verification-using-kontrol.md)
     * [K Control Flow Graph (KCFG)](guides/kontrol-example/k-control-flow-graph-kcfg.md)
