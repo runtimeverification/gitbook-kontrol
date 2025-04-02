@@ -38,6 +38,7 @@
 
 ## Learn More
 * [Resources](learn-more/resources.md)
+* [Example Projects](learn-more/example-projects.md)
 
 ## 🔗 Links
 * [Join our Discord!](https://discord.gg/CurfmXNtbN)
