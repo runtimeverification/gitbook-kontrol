@@ -121,7 +121,7 @@ In the output, you will see two proofs: one for the `setUp` function and one for
 
 ## Using a Kontrol Cheatcode
 
-Now, let's make the proof more general using cheatcodes. Since the `Counter` contract is deployed in the `setUp` function, its storage will be empty when the `testSetNumber` function executes. We can use the `kevm.symbolicStorage(address)` cheatcode to make the storage of an address symbolic. This allows us to abstract the storage and assume that any storage variable in the contract can have any possible value, not just the ones assigned during initialization.
+Now, let's make the proof more general using cheatcodes. Since the `Counter` contract is deployed in the `setUp` function, its storage will be empty when the `testSetNumber` function executes. We can use the `vm.setArbitraryStorage(address)` cheatcode to make the storage of an address symbolic. This allows us to abstract the storage and assume that any storage variable in the contract can have any possible value, not just the ones assigned during initialization.
 
 To add the cheatcode, we need to include the `kontrol-cheatcode` library and inherit the contract. Your `Counter.t.sol` should look like this:
 
@@ -147,7 +147,7 @@ contract CounterTest is Test, KontrolCheats {
     }
 
     function testSetNumber(uint256 x, bool inLuck) public {
-        kevm.symbolicStorage(address(counter));
+        vm.setArbitraryStorage(address(counter));
         counter.setNumber(x, inLuck);
         assert(counter.number() == x);
     }
