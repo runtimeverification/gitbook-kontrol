@@ -57,6 +57,19 @@ kup install kontrol
 The first installation of `kup` will take sometime. Check out the [kup-cheatsheet.md](../../cheatsheets/kup-cheatsheet.md "mention") for some additional information!
 {% endhint %}
 
+#### Docker Installation
+
+Kontrol is also available as a Docker image, which can be used to run Kontrol without installing it on your host system. This is particularly useful for CI/CD pipelines or when you want to avoid local installation.
+
+To use the Kontrol Docker image:
+
+```bash
+# Pull the latest version
+docker pull runtimeverificationinc/kontrol
+```
+
+The Docker image includes all necessary dependencies and is automatically updated with each Kontrol release. You can find all available versions on [Docker Hub](https://hub.docker.com/r/runtimeverificationinc/kontrol).
+
 #### CI Installation
 
 For GitHub Actions workflows, you can use the official [install-kontrol](https://github.com/runtimeverification/install-kontrol) action. Here's an example workflow:
@@ -79,10 +92,6 @@ jobs:
         run: kontrol prove
 ```
 
-This action handles the installation of all required dependencies and sets up Kontrol in your CI environment. Note that this workflow:
-- Sets up Node.js (required for Kontrol)
-- Installs Foundry (required dependency)
-- Installs Kontrol
-- Runs the verification
+This action handles the installation of all required dependencies and sets up Kontrol in your CI environment.
 
 For detailed instructions on building **Kontrol** from source, go to the [**Kontrol** repository](https://github.com/runtimeverification/kontrol).
