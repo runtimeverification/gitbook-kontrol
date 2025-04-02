@@ -14,6 +14,7 @@
     * [Debugging a Proof](guides/kontrol-example/linked-library-example.md)
 * [Cheatcodes](guides/cheatcodes.md)
 * [Node Refutation](guides/node-refutation.md)
+* [Bytecode Verification](guides/bytecode-verification.md)
 * [Advancing Proofs](guides/advancing-proofs/README.md)
     * [KEVM Lemmas](guides/advancing-proofs/kevm-lemmas.md)
     * [Writing Simplifications](guides/advancing-proofs/simplifications-guide.md)
