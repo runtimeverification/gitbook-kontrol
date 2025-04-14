@@ -12,9 +12,13 @@
   * [Property Verification using Kontrol](guides/kontrol-example/property-verification-using-kontrol.md)
   * [K Control Flow Graph (KCFG)](guides/kontrol-example/k-control-flow-graph-kcfg.md)
   * [Proof Management](guides/kontrol-example/proof-management.md)
+  * [Debugging a Proof](guides/kontrol-example/linked-library-example.md)
 * [Node Refutation](guides/node-refutation.md)
 * [Advancing Proofs](guides/advancing-proofs/README.md)
   * [KEVM Lemmas](guides/advancing-proofs/kevm-lemmas.md)
+  * [Writing Simplifications](guides/advancing-proofs/simplifications-guide.md)
+  * [Rule Application](guides/advancing-proofs/rule-application.md)
+  * [Symbolic Storage](guides/advancing-proofs/symbolic-storage.md)
 
 ## Cheatsheets
 
