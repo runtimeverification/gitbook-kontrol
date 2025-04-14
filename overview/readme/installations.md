@@ -4,6 +4,24 @@ description: Everything you need to install
 
 # Installations
 
+### Prerequisites Installing Nix
+
+To install [nix](https://nixos.org) you can use:
+
+#### Linux 
+
+[Install Nix using the Determinate Systems Installer](https://github.com/DeterminateSystems/nix-installer#usage) with the default planner and options:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
+
+#### macOS
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install macos --extra-conf "trusted-users = $(whoami)"
+```
+
 ### Installing Foundry <a href="#h.nx9ig3q6eqt5" id="h.nx9ig3q6eqt5"></a>
 
 To install Foundry execute the following command:
@@ -29,6 +47,7 @@ After installing `kup`, open a new terminal session or reload your PATH and inst
 ```
 kup install kontrol
 ```
+
 
 {% hint style="info" %}
 The first installation of `kup` will take sometime. Check out the [kup-cheatsheet.md](../../cheatsheets/kup-cheatsheet.md "mention") for some additional information!
