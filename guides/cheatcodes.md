@@ -91,7 +91,7 @@ Used for mocking contract calls:
 - `randomAddress()`: Generate random address
 
 ### Gas Manipulation
-- `infiniteGas()`: Set infinite gas for next call
+- `infiniteGas()`: Set infinite gas
 - `setGas(uint256)`: Set specific gas amount
 
 ### Mock Calls
