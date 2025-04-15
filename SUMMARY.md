@@ -26,7 +26,6 @@
 * [Kontrol Cheatsheet](cheatsheets/kontrol-cheatsheet.md)
 
 ## Tips
-* [Tips for using Kontrol](tips/tips-for-using-kontrol.md)
 * [Debugging Failing Proofs](tips/debugging-failing-proofs.md)
 
 ## Glossary

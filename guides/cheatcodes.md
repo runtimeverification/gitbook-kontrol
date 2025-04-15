@@ -8,54 +8,6 @@ Kontrol implements a subset of Foundry's cheatcodes, focusing on those most rele
 
 For a comprehensive technical reference of all cheatcodes and their implementations, see the [Kontrol cheatcodes source](https://github.com/runtimeverification/kontrol/blob/master/src/kontrol/kdist/cheatcodes.md).
 
-## Configuration Overview
-
-Kontrol's cheatcodes are organized into several key configurations:
-
-### Prank Configuration
-Used for simulating calls from different addresses:
-- `<prevCaller>`: Current address of the contract initiating the prank
-- `<prevOrigin>`: Current `tx.origin` value
-- `<newCaller>` and `<newOrigin>`: Addresses to assign to `msg.sender` and `tx.origin`
-- `<active>`: Indicates if a prank is currently active
-- `<depth>`: Current call depth at which the prank was invoked
-- `<singleCall>`: Determines if the prank stops after next call or requires `stopPrank`
-
-### Expected Revert Configuration
-Used for testing expected reverts:
-- `<isRevertExpected>`: Flags if the next call should revert
-- `<expectedDepth>`: Depth at which the call should revert
-- `<expectedReason>`: Expected revert message as Bytes
-
-### Expected Opcode Configuration
-Used for verifying specific opcode calls:
-- `<isOpcodeExpected>`: Flags if a call opcode is expected
-- `<expectedAddress>`: Expected caller address
-- `<expectedValue>`: Expected `msg.value`
-- `<expectedData>`: Expected `calldata`
-- `<opcodeType>`: Type of `CALL*` opcode expected
-
-### Expected Emit Configuration
-Used for event verification:
-- `<recordEvent>`: Flags if next event should be recorded
-- `<isEventExpected>`: Flags if an event should match previously recorded
-- `<checkedTopics>`: List of bools indicating which topics to check
-- `<checkedData>`: Flag for checking data field
-- `<expectedEventAddress>`: Address of expected event emitter
-
-### Whitelist Configuration
-Used for controlling function calls and storage access during execution:
-- `<isCallWhitelistActive>`: Enables whitelist mode for calls
-- `<isStorageWhitelistActive>`: Enables whitelist mode for storage
-- `<addressList>`: List of whitelisted addresses that are allowed to be called
-- `<storageSlotList>`: List of whitelisted storage slots that are allowed to be modified
-
-### Mock Calls Configuration
-Used for mocking contract calls:
-- `<mockCall>`: Collection of active mock calls per address
-  - `<mockAddress>`: Address with active mock calls
-  - `<mockValues>`: Map of calldata to returndata
-
 ## Available Cheatcodes
 
 ### Address Manipulation
@@ -71,28 +23,22 @@ Used for mocking contract calls:
 - `copyStorage(address,address)`: Copy storage between contracts
 
 ### Symbolic Values
-- `freshUInt(uint8)`: Generate fresh symbolic uint
+- `randomUint()`: Generate fresh symbolic uint
+- `freshUInt(uint8)` or `randomUint(uint256)`: Generate fresh symbolic uint of a given size
 - `freshUInt(uint8,string)`: Generate fresh symbolic uint with custom name
-- `freshBool()`: Generate fresh symbolic bool
+- `randomUint(uint256,uint256)`: Generate fresh symbolic uint in range
+- `freshBool()` or `randomBool()`: Generate fresh symbolic bool
 - `freshBool(string)`: Generate fresh symbolic bool with custom name
-- `freshBytes(uint256)`: Generate fresh symbolic bytes
+- `freshBytes(uint256)` or `randomBytes(uint256)`: Generate fresh symbolic bytes
 - `freshBytes(uint256,string)`: Generate fresh symbolic bytes with custom name
-- `freshAddress()`: Generate fresh symbolic address
+- `freshAddress()` or `randomAddress()`: Generate fresh symbolic address
 - `freshAddress(string)`: Generate fresh symbolic address with custom name
-
-### Random Values
-- `randomUint()`: Generate random uint
-- `randomUint(uint256)`: Generate random uint of a given size
-- `randomUint(uint256,uint256)`: Generate random uint in range
-- `randomBool()`: Generate random bool
-- `randomBytes(uint256)`: Generate random bytes
-- `randomBytes4()`: Generate random bytes4
-- `randomBytes8()`: Generate random bytes8
-- `randomAddress()`: Generate random address
+- `randomBytes4()`: Generate fresh symbolic bytes4
+- `randomBytes8()`: Generate fresh symbolic bytes8
 
 ### Gas Manipulation
-- `infiniteGas()`: Set infinite gas
-- `setGas(uint256)`: Set specific gas amount
+- `infiniteGas()`: Assume the execution has infinite gas supplied
+- `setGas(uint256)`: Set specific gas amount for the execution
 
 ### Mock Calls
 - `mockCall(address,bytes,bytes)`: Mock a call with specific calldata by retuning specified returndata
@@ -195,3 +141,51 @@ Some Foundry cheatcodes are not yet implemented in Kontrol, including:
 - Fork management (`createFork`, `selectFork`, etc.)
 - FFI operations
 - String conversion utilities 
+
+## Configuration Overview
+
+In the KEVM configuration, Kontrol's cheatcodes are organized into several key cells:
+
+### Prank Configuration
+Used for simulating calls from different addresses:
+- `<prevCaller>`: Current address of the contract initiating the prank
+- `<prevOrigin>`: Current `tx.origin` value
+- `<newCaller>` and `<newOrigin>`: Addresses to assign to `msg.sender` and `tx.origin`
+- `<active>`: Indicates if a prank is currently active
+- `<depth>`: Current call depth at which the prank was invoked
+- `<singleCall>`: Determines if the prank stops after next call or requires `stopPrank`
+
+### Expected Revert Configuration
+Used for testing expected reverts:
+- `<isRevertExpected>`: Flags if the next call should revert
+- `<expectedDepth>`: Depth at which the call should revert
+- `<expectedReason>`: Expected revert message as Bytes
+
+### Expected Opcode Configuration
+Used for verifying specific opcode calls:
+- `<isOpcodeExpected>`: Flags if a call opcode is expected
+- `<expectedAddress>`: Expected caller address
+- `<expectedValue>`: Expected `msg.value`
+- `<expectedData>`: Expected `calldata`
+- `<opcodeType>`: Type of `CALL*` opcode expected
+
+### Expected Emit Configuration
+Used for event verification:
+- `<recordEvent>`: Flags if next event should be recorded
+- `<isEventExpected>`: Flags if an event should match previously recorded
+- `<checkedTopics>`: List of bools indicating which topics to check
+- `<checkedData>`: Flag for checking data field
+- `<expectedEventAddress>`: Address of expected event emitter
+
+### Whitelist Configuration
+Used for controlling function calls and storage access during execution:
+- `<isCallWhitelistActive>`: Enables whitelist mode for calls
+- `<isStorageWhitelistActive>`: Enables whitelist mode for storage
+- `<addressList>`: List of whitelisted addresses that are allowed to be called
+- `<storageSlotList>`: List of whitelisted storage slots that are allowed to be modified
+
+### Mock Calls Configuration
+Used for mocking contract calls:
+- `<mockCall>`: Collection of active mock calls per address
+  - `<mockAddress>`: Address with active mock calls
+  - `<mockValues>`: Map of calldata to returndata

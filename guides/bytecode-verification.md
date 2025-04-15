@@ -90,10 +90,6 @@ If the contract source code is available locally, you can obtain the bytecode by
    - Use consistent addresses across tests
    - Consider using `vm.createSelectFork` for mainnet simulations
 
-4. **Gas Considerations**:
-   - Bytecode verification can be more gas-intensive
-   - Consider using `--use-gas` flag for more accurate gas analysis
-
 
 ## Additional Resources
 
