@@ -61,6 +61,9 @@ Used for mocking contract calls:
 ### Address Manipulation
 - `prank(address)`: Change `msg.sender` for next call
 - `prank(address,address)`: Change both `msg.sender` and `tx.origin`
+- `startPrank(address)`: Change `msg.sender` for all subsequent calls until `stopPrank` is called
+-  `startPrank(address, address)`: Change both `msg.sender` and `tx.origin` for all subsequent calls until `stopPrank` is called
+- `stopPrank()`: Stop impersonating `msg.sender` and `tx.origin`
 
 ### Storage and State
 - `symbolicStorage(address)`: Make storage symbolic
