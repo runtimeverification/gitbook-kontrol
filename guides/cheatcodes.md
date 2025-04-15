@@ -66,7 +66,7 @@ Used for mocking contract calls:
 - `stopPrank()`: Stop impersonating `msg.sender` and `tx.origin`
 
 ### Storage and State
-- `symbolicStorage(address)`: Make storage symbolic
+- `symbolicStorage(address)` or `setArbitraryStorage(address)`: Make storage of the specified contract symbolic
 - `symbolicStorage(address,string)`: Make storage symbolic with custom name
 - `copyStorage(address,address)`: Copy storage between contracts
 
