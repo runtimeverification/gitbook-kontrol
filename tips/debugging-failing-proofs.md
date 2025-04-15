@@ -100,11 +100,7 @@ function testWithOverflow() public {
 ### Using K Lemmas
 For more complex cases, you can explore defining K lemmas as described in [Advancing Proofs](..guides/advancing-proofs/kevm-lemmas.md).
 
-## Other Debugging Tips
-
-### Other Proving and Debugging Tips
-
-
+### Other Debugging Tips
 
 1. **Simplify the Proof**
 
