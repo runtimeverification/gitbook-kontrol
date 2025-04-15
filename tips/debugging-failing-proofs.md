@@ -63,14 +63,8 @@ function testWithOverflow() public {
 }
 ```
 
-### Using K Framework Assumptions
-For more complex cases, you can use K Framework assumptions directly:
-
-```k
-rule <k> ... </k>
-     <storage> STORAGE </storage>
-     requires { true #Equals notBool #lookup(STORAGE, 2) <=Int chop(#lookup(STORAGE, 2) +Int 1) }
-```
+### Using K Lemmas
+For more complex cases, you can explore defining K lemmas as described in [Advancing Proofs](..guides/advancing-proofs/kevm-lemmas.md).
 
 ## Other Debugging Tips
 
