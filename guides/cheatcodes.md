@@ -82,7 +82,7 @@ Used for mocking contract calls:
 
 ### Random Values
 - `randomUint()`: Generate random uint
-- `randomUint(uint256)`: Generate random uint with bound
+- `randomUint(uint256)`: Generate random uint of a given size
 - `randomUint(uint256,uint256)`: Generate random uint in range
 - `randomBool()`: Generate random bool
 - `randomBytes(uint256)`: Generate random bytes
