@@ -65,7 +65,6 @@ Used for mocking contract calls:
 ### Storage and State
 - `symbolicStorage(address)`: Make storage symbolic
 - `symbolicStorage(address,string)`: Make storage symbolic with custom name
-- `setArbitraryStorage(address)`: Allow arbitrary storage modifications
 - `copyStorage(address,address)`: Copy storage between contracts
 
 ### Symbolic Values
