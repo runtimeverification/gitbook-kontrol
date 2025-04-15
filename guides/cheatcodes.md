@@ -44,7 +44,7 @@ Used for event verification:
 - `<expectedEventAddress>`: Address of expected event emitter
 
 ### Whitelist Configuration
-Used for controlling access during execution:
+Used for controlling function calls and storage access during execution:
 - `<isCallWhitelistActive>`: Enables whitelist mode for calls
 - `<isStorageWhitelistActive>`: Enables whitelist mode for storage
 - `<addressList>`: List of whitelisted addresses
