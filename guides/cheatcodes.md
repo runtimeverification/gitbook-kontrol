@@ -96,7 +96,7 @@ Used for mocking contract calls:
 
 ### Mock Calls
 - `mockCall(address,bytes,bytes)`: Mock a call with specific calldata and returndata
-- `mockFunction(address,address,bytes)`: Mock a specific function call
+- `mockFunction(address,address,bytes)`: Mock a specific function call by calling a mock address function
 
 ### Branch Management
 - `forgetBranch(uint256,uint8,uint256)`: Forget a specific branch in the proof
