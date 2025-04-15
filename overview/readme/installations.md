@@ -47,7 +47,7 @@ The simplest way to install **Kontrol** is with the `kup`[ ](https://github.com/
 bash <(curl https://kframework.org/install)
 ```
 
-After installing `kup`, install **Kontrol** using `kup` with the following command:
+After installing `kup`, open a new terminal session or reload your PATH and install **Kontrol** using `kup` with the following command:
 
 ```
 kup install kontrol
