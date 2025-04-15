@@ -84,7 +84,7 @@ For more complex cases, you can explore defining K lemmas as described in [Advan
    - Add more constraints to reduce the search space
 
 4. **Use Lemmas**
-   - Create and prove lemmas for complex properties
+   - Create and prove lemmas for complex properties and arithmetic expressions
    - Use lemmas to break down the proof into smaller steps
 
 5. **Check Storage Layout**
