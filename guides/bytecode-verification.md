@@ -4,7 +4,7 @@
 
 Kontrol supports verifying contracts using only their bytecode through the `vm.etch` cheatcode. This is particularly useful when:
 - You want to verify interactions with contracts that only have bytecode available on-chain
-- You need to verify contracts where the source code is not available
+- You need to verify contracts where the Solidity source code is not available
 - You want to simulate mainnet forking scenarios
 
 ## Basic Setup
