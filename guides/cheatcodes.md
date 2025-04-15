@@ -95,7 +95,7 @@ Used for mocking contract calls:
 - `setGas(uint256)`: Set specific gas amount
 
 ### Mock Calls
-- `mockCall(address,bytes,bytes)`: Mock a call with specific calldata and returndata
+- `mockCall(address,bytes,bytes)`: Mock a call with specific calldata by retuning specified returndata
 - `mockFunction(address,address,bytes)`: Mock a specific function call by calling a mock address function
 
 ### Branch Management
