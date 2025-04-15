@@ -57,7 +57,7 @@ contract BytecodeVerificationTest is Test, KontrolCheats {
 
 ## Getting Bytecode
 
-There are several ways to get contract bytecode:
+There are several ways to get contract bytecode from the blockchain:
 
 1. **From Etherscan**:
    - Navigate to the contract's page
