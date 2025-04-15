@@ -179,13 +179,11 @@ function testComplexMock() public {
 ## Best Practices
 
 1. Use symbolic values for inputs that should be explored exhaustively
-2. Use random values for inputs where specific values don't matter
-3. Mock external calls to control their behavior during verification
-4. Use prank to test access control and permission checks
-5. Leverage symbolic storage for comprehensive storage testing
-6. Name your symbolic variables meaningfully for better debugging
-7. Use mock calls to isolate the contract under test
-8. Combine symbolic and concrete values when appropriate
+2. Mock external calls to control their behavior during verification and isolate the contract under test
+3. Use `prank` to test access control and permission checks
+4. Leverage symbolic storage for comprehensive storage and contract behavior analysis
+5. Name your symbolic variables meaningfully for better debugging
+6. Combine symbolic and concrete values when appropriate
 
 ## Limitations
 
