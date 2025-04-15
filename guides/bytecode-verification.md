@@ -97,6 +97,6 @@ If the contract source code is available locally, you can obtain the bytecode by
 
 ## Additional Resources
 
-- [Foundry's vm.etch documentation](https://book.getfoundry.sh/cheatcodes/etch)
+- [Foundry's `vm.etch` documentation](https://book.getfoundry.sh/cheatcodes/etch)
 - [Kontrol Cheatcodes Guide](../guides/cheatcodes.md)
 - [Debugging Failing Proofs](../tips/debugging-failing-proofs.md) 
