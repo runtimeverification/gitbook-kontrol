@@ -85,8 +85,6 @@ kontrol build
 The process should take a minute and may emit some warnings, so don't worry. Also, remember that during the development, you may need to rebuild the definition in various ways.
 {% endhint %}
 
-If you change the Solidity code, you must re-run the `kontrol build` command. For more information about `kontrol build`, you can refer to [#kontrol-build](../../cheatsheets/kontrol-cheatsheet.md#kontrol-build "mention"), [kontrol-build-options.md](../../glossary/kontrol-build-options.md "mention"), or run:
-
 ```bash
 kontrol build --help
 ```
@@ -119,11 +117,11 @@ In the output, you will see two proofs: one for the `setUp` function and one for
 
 <figure><img src="../../.gitbook/assets/Screenshot 2024-03-05 at 7.13.46 PM.png" alt=""><figcaption><p>List of Proofs</p></figcaption></figure>
 
-## Using a Kontrol Cheatcode
+## Using a Cheatcode
 
 Now, let's make the proof more general using cheatcodes. Since the `Counter` contract is deployed in the `setUp` function, its storage will be empty when the `testFuzz_SetNumber` function executes. We can use the `vm.setArbitraryStorage(address)` cheatcode to make the storage of an address symbolic. This allows us to abstract the storage and assume that any storage variable in the contract can have any possible value, not just the ones assigned during initialization.
 
-To add the cheatcode, we need to include the `kontrol-cheatcode` library and inherit the contract. Your `Counter.t.sol` should look like this:
+The cheatcode is supported both by Foundry and Kontrol, so you can use it without importing the include the `kontrol-cheatcode` library. However, for illustration purposes, we will do it here. Your `Counter.t.sol` will then look like this:
 
 ```solidity
 // SPDX-License-Identifier: UNLICENSED
@@ -153,6 +151,11 @@ contract CounterTest is Test, KontrolCheats {
     }
 }
 ```
+
+{% hint style="info" %}
+Cheatcodes that are only supported by Kontrol need to be called from the `kevm` (not `vm`) contract. One example of that is `kevm.setSymbolicStorage(address)`—a Kontrol-specific analog of `vm.setArbitraryStorage(address)`.
+The list of supported cheatcodes is available on the [Cheatcodes](../cheatcodes.md) page.
+{% endhint %}
 
 To rerun the proof with these changes, you need to run the following:
 
