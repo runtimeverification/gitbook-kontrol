@@ -86,7 +86,6 @@ For more complex cases, you can explore defining K lemmas as described in [Advan
 4. **Use Lemmas**
    - Create and prove lemmas for complex properties
    - Use lemmas to break down the proof into smaller steps
-   - Leverage existing lemmas from the KEVM library
 
 5. **Check Storage Layout**
    - Verify that storage slots are being accessed correctly
