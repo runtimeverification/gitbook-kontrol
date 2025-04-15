@@ -47,7 +47,7 @@ Used for event verification:
 Used for controlling function calls and storage access during execution:
 - `<isCallWhitelistActive>`: Enables whitelist mode for calls
 - `<isStorageWhitelistActive>`: Enables whitelist mode for storage
-- `<addressList>`: List of whitelisted addresses
+- `<addressList>`: List of whitelisted addresses that are allowed to be called
 - `<storageSlotList>`: List of whitelisted storage slots
 
 ### Mock Calls Configuration
