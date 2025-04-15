@@ -74,6 +74,8 @@ There are several ways to get contract bytecode from the blockchain:
    const bytecode = await provider.getCode(address);
    ```
 
+If the contract source code is available locally, you can obtain the bytecode by compiling it with the appropriate compiler such as `solc` for Solidity or `vyper` for Vyper.
+
 ## Best Practices
 
 1. **Storage Handling**:
