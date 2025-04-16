@@ -10,7 +10,6 @@ For a comprehensive technical reference of all cheatcodes and their implementati
 
 If you notice a missing cheatcode, feel free to open an [issue](https://github.com/runtimeverification/kontrol/issues) or [contribute](https://github.com/runtimeverification/kontrol/blob/master/CONTRIBUTING.md) directly to the project.
 
-
 ## Available Cheatcodes
 
 ### Foundry-Compatible Cheatcodes
@@ -67,6 +66,79 @@ If you notice a missing cheatcode, feel free to open an [issue](https://github.c
 - `mockCall(address,bytes,bytes)`: Mock call with calldata and returndata
 - `mockFunction(address,address,bytes)`: Mock function by redirecting a call to a mock contract
 
+### Usage Examples
+
+#### Symbolic Storage Testing
+```solidity
+function testSymbolicStorage(address to) public {
+    // Make storage of `token` symbolic
+    vm.setArbitraryStorage(address(token));
+    // Retrieve an arbitrary storage value 
+    uint256 balance = token.balanceOf(address(this));
+    // Assume it is is positive
+    vm.assume(balance > 0);
+    // Perform some operations
+    token.transfer(address(to), balance);
+    // Check the result
+    assert(token.balanceOf(address(this)) == 0);
+}
+```
+
+#### Access Control Testing
+```solidity
+function test_ccessControl(address caller) public {
+    // Assume a symbolic caller is 
+    // Call
+    vm.prank(caller);
+    // Attempt restricted operation
+    vm.expectRevert(bytes4(keccak256("Unauthorized")));
+    restrictedContract.restrictedFunction();
+}
+```
+
+#### Symbolic Testing
+```solidity
+function testSymbolicValues() public {
+    // Generate symbolic values
+    uint256 x = vm.randomUint();
+    bool b = vm.randomBool();
+    address a = vm.randomAddress();
+    // Your test logic here
+}
+```
+
+#### Mock Calls
+```solidity
+function testMockCalls() public {
+    bytes memory mockCalldata = abi.encodeWithSignature("balanceOf(address)", address(this));
+    bytes memory mockReturndata = abi.encode(1000);
+    vm.mockCall(tokenAddress, mockCalldata, mockReturndata);
+    // Your test logic here
+}
+```
+
+#### Complex Mock Setup
+```solidity
+function testComplexMock() public {
+    // Setup symbolic values
+    address user = vm.randomAddress();
+    uint256 amount = vm.randomUint();
+    
+    // Mock token transfer
+    bytes memory transferCalldata = abi.encodeWithSignature(
+        "transfer(address,uint256)", 
+        user, 
+        amount
+    );
+    bytes memory transferResult = abi.encode(true);
+    vm.mockCall(tokenAddress, transferCalldata, transferResult);
+    
+    // Test the interaction
+    bool success = token.transfer(user, amount);
+    assert(success);
+}
+```
+
 ### Kontrol-Specific Cheatcodes
 
 {% hint style="info" %}
@@ -105,79 +177,6 @@ Using Kontrol-specific cheatcodes will break compatibility with `forge test`, as
 - `expectRegularCall(address, uint256, bytes)`: Expect `CALL` to an address, with the given `msg.value` and calldata
 - `expectCreate(address, uint256, bytes)`: Expect `CREATE` initiated by the specified address, with given `msg.value` and bytecode
 - `expectCreate2(address, uint256, bytes)`: Expects `CREATE2` from the given address, sending specified `msg.value` and bytecode
-
-## Usage Examples
-
-### Symbolic Storage Testing
-```solidity
-function testSymbolicStorage(address to) public {
-    // Make storage of `token` symbolic
-    vm.setArbitraryStorage(address(token));
-    // Retrieve an arbitrary storage value 
-    uint256 balance = token.balanceOf(address(this));
-    // Assume it is is positive
-    vm.assume(balance > 0);
-    // Perform some operations
-    token.transfer(address(to), balance);
-    // Check the result
-    assert(token.balanceOf(address(this)) == 0);
-}
-```
-
-### Access Control Testing
-```solidity
-function test_ccessControl(address caller) public {
-    // Assume a symbolic caller is 
-    // Call
-    vm.prank(caller);
-    // Attempt restricted operation
-    vm.expectRevert(bytes4(keccak256("Unauthorized")));
-    restrictedContract.restrictedFunction();
-}
-```
-
-### Symbolic Testing
-```solidity
-function testSymbolicValues() public {
-    // Generate symbolic values
-    uint256 x = vm.randomUint();
-    bool b = vm.randomBool();
-    address a = vm.randomAddress();
-    // Your test logic here
-}
-```
-
-### Mock Calls
-```solidity
-function testMockCalls() public {
-    bytes memory mockCalldata = abi.encodeWithSignature("balanceOf(address)", address(this));
-    bytes memory mockReturndata = abi.encode(1000);
-    vm.mockCall(tokenAddress, mockCalldata, mockReturndata);
-    // Your test logic here
-}
-```
-
-### Complex Mock Setup
-```solidity
-function testComplexMock() public {
-    // Setup symbolic values
-    address user = vm.randomAddress();
-    uint256 amount = vm.randomUint();
-    
-    // Mock token transfer
-    bytes memory transferCalldata = abi.encodeWithSignature(
-        "transfer(address,uint256)", 
-        user, 
-        amount
-    );
-    bytes memory transferResult = abi.encode(true);
-    vm.mockCall(tokenAddress, transferCalldata, transferResult);
-    
-    // Test the interaction
-    bool success = token.transfer(user, amount);
-    assert(success);
-}
-```
 
 ## Best Practices
 
