@@ -48,9 +48,8 @@ For a comprehensive technical reference of all cheatcodes and their implementati
 - `forgetBranch(uint256,uint8,uint256)`: Forget a specific branch in the proof
 
 {% hint style="info" %}
-Adding custom Kontrol cheatcodes will prevent us from running the tests with `forge test`, as `forge` will not recognize these cheatcodes. We recommend using Foundry-compatible cheatcodes such as `vm.setArbiraryStorage(address)` where possible.
+Adding custom Kontrol cheatcodes will prevent you from running the tests with `forge test`, as `forge` will not recognize these cheatcodes. We recommend using Foundry-compatible cheatcodes such as `vm.setArbiraryStorage(address)` where possible.
 {% endhint %}
-
 
 ## Usage Examples
 

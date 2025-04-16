@@ -72,7 +72,7 @@ contract CounterTest is Test, KontrolCheats {
 }
 ```
 
-Once these changes have been made, you will need to re-compile the project running:
+Once these changes have been made, you will need to recompile the project running:
 
 ```bash
 kontrol build
