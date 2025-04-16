@@ -12,7 +12,7 @@ In this episode of Proofcast, Paul (BD person) is guided by two Kontrol verifica
 - Detailed explanations of what's happening during verification
 - Best practices and tips from verification engineers
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/iOz8zv_89Bs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://www.youtube.com/embed/iOz8zv_89Bs
 
 ## Why Watch This Episode?
 
