@@ -15,11 +15,13 @@ When a proof fails in Kontrol, there are several strategies you can use to debug
    * Remove the branching node from the `kcfg` using `kontrol remove-node`
    * Rerun Kontrol and repeat from step 1.
 
+{% hint style="info" %}
 When writing a claim using the `runLemma-doneLemma` pattern to check if an expression simplifies, it's important to remember that running the claim includes an `implication check`. This means that if your claim is in the form of `runLemma(A) => doneLemma(B)` and it passes, it doesn't guarantee that `A` fully simplifies to `B`. Instead, it might simplify to an expression `B'` that implies `B`.
+{% endhint %}
 
 ### Decoding KEVM expressions
 
-The following tips might be useful when inspecting branching conditions or nodes in the `kcfg`. If you don't know where an expression comes from, this might help figuring out what they mean and what part of the Solidity code they correspond to:
+The following tips might be useful when inspecting branching conditions or nodes in the KCFG. If you don't know where an expression comes from, this might help figuring out what they mean and what part of the Solidity code they correspond to:
 
 * Solidity uses bitwise expressions, such as `maxUInt160 &Int X`, to extract a variable with a specific number of bits from a larger word. The number of bits can often provide a clue about the type of the variable. For example, `maxUInt160` typically represents an address, while `maxUInt8` represents a `boolean` value.
 * When using the `symbolicStorage` cheatcode, you may encounter expressions like `#lookup(?STORAGE0:Map, 6)`. This expression accesses storage slot 6 of the symbolic storage represented by the `STORAGE0` variable. If you want to determine which storage variable this expression corresponds to, you can follow these steps:&#x20;
