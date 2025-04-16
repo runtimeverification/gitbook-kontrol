@@ -165,7 +165,7 @@ config-profile = 'default' # Config profile to be used.
 
 ## Use case from real world project
 
-The following is a kontrol.toml file from a real world project, including options that were found to be useful in practice.
+The following is a kontrol.toml file from a real world project, including options useful in practice.
 
 ```toml
 [build.default]
