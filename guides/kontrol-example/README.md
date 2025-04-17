@@ -25,7 +25,7 @@ These cheatcodes enable us to generalize the storage of an Ethereum account by m
 {% hint style="info" %}
 A similar effect can be achieved by running `kontrol init` instead of `forge init`. This command initializes a new Foundry project with the **Kontrol** cheatcodes already installed and a `kontrol.toml` configuration file automatically created.
 
-You can add `kontrol.toml` file and Kontrol cheatcodes to an existing project by running `kontrol init --skip-forge`.
+You can add a `kontrol.toml` file and Kontrol cheatcodes to an existing project by running `kontrol init --skip-forge`.
 {% endhint %}
 
 With the project created and the **Kontrol** cheatcodes installed we can begin editing the code.
