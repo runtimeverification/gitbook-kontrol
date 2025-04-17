@@ -12,7 +12,6 @@
     * [K Control Flow Graph (KCFG)](guides/kontrol-example/k-control-flow-graph-kcfg.md)
     * [Proof Management](guides/kontrol-example/proof-management.md)
     * [Debugging a Proof](guides/kontrol-example/linked-library-example.md)
-* [Cheatcodes](guides/cheatcodes.md)
 * [Node Refutation](guides/node-refutation.md)
 * [Bytecode Verification](guides/bytecode-verification.md)
 * [Advancing Proofs](guides/advancing-proofs/README.md)
@@ -24,6 +23,7 @@
 ## Cheatsheets
 * [Kup Cheatsheet](cheatsheets/kup-cheatsheet.md)
 * [Kontrol Cheatsheet](cheatsheets/kontrol-cheatsheet.md)
+* [Cheatcodes](cheatsheets/cheatcodes.md)
 
 ## Tips
 * [Debugging Failing Proofs](tips/debugging-failing-proofs.md)

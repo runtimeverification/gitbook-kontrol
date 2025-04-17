@@ -72,10 +72,10 @@ contract CounterTest is Test, KontrolCheats {
 }
 ```
 
-Once these changes have been made, you will need to rebuild the proof by running:
+Once these changes have been made, you will need to recompile the project running:
 
 ```bash
-kontrol build --regen --rekompile
+kontrol build
 ```
 
 Following that, you need to rerun `prove` with the following command:

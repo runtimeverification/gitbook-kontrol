@@ -154,7 +154,7 @@ contract CounterTest is Test, KontrolCheats {
 
 {% hint style="info" %}
 Cheatcodes that are only supported by Kontrol need to be called from the `kevm` (not `vm`) contract. One example of that is `kevm.setSymbolicStorage(address)`—a Kontrol-specific analog of `vm.setArbitraryStorage(address)`.
-The list of supported cheatcodes is available on the [Cheatcodes](../cheatcodes.md) page.
+The list of supported cheatcodes is available on the [Cheatcodes](../../cheatsheets/cheatcodes.md) page.
 {% endhint %}
 
 To rerun the proof with these changes, you need to run the following:
