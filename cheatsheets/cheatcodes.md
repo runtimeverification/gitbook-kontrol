@@ -10,6 +10,10 @@ For a comprehensive technical reference of all cheatcodes and their implementati
 
 If you notice a missing cheatcode, feel free to open an [issue](https://github.com/runtimeverification/kontrol/issues) or [contribute](https://github.com/runtimeverification/kontrol/blob/master/CONTRIBUTING.md) directly to the project.
 
+{% hint style="info" %}
+**Foundry Compatibility**: Kontrol also supports `console.log` statements for debugging, just like Foundry. You can use `console.log` to output debug information during verification runs, which is particularly useful when working with symbolic values and complex verification scenarios.
+{% endhint %}
+
 ## Available Cheatcodes
 
 ### Foundry-Compatible Cheatcodes
@@ -139,6 +143,28 @@ function testComplexMock() public {
 }
 ```
 
+#### Call Whitelisting
+```solidity
+function testCallWhitelisting() public {
+    address token = address(0x123);
+    address user = vm.randomAddress();
+    uint256 amount = vm.randomUint();
+    
+    // Allow only specific function calls to the token contract
+    bytes memory transferCalldata = abi.encodeWithSignature("transfer(address,uint256)", user, amount);
+    bytes memory balanceCalldata = abi.encodeWithSignature("balanceOf(address)", user);
+    
+    vm.allowCalls(token, transferCalldata);
+    vm.allowCalls(token, balanceCalldata);
+    
+    // These calls will be allowed during verification
+    token.transfer(user, amount);
+    uint256 balance = token.balanceOf(user);
+    
+    // Other calls to the token contract will be blocked
+    // token.approve(user, amount); // This would be blocked
+}
+```
 ### Kontrol-Specific Cheatcodes
 
 {% hint style="info" %}
@@ -186,6 +212,7 @@ Using Kontrol-specific cheatcodes will break compatibility with `forge test`, as
 4. Name your symbolic variables meaningfully when debugging
 5. Mock external calls to control their behavior during verification and isolate the contract under test
 6. Combine symbolic and concrete values strategically when appropriate
+7. Use `allowCalls*` cheatcodes for fine-grained control over external calls during verification, especially when you need to restrict which specific functions can be called on external contracts
 
 ## Limitations
 
@@ -235,7 +262,7 @@ Used for event verification:
 Used for controlling function calls and storage access during execution:
 - `<isCallWhitelistActive>`: Enables whitelist mode for calls
 - `<isStorageWhitelistActive>`: Enables whitelist mode for storage
-- `<addressList>`: List of whitelisted addresses that are allowed to be called
+- `<allowedCallsList>`: List of whitelisted `{address, calldata}` pairs that are allowed to be called
 - `<storageSlotList>`: List of whitelisted storage slots that are allowed to be modified
 
 ### Mock Calls Configuration
