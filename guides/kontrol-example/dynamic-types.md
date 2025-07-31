@@ -83,26 +83,6 @@ This example demonstrates:
 - Each `content` field within the structs is exactly 10,000 bytes long
 - Verification that the 9th element (index 8) has the correct content length
 
-## Usage Patterns
-
-### Multiple Arrays
-
-You can constrain multiple arrays in the same function:
-
-```solidity
-/// @custom:kontrol-array-length-equals addresses: 3,
-/// @custom:kontrol-array-length-equals amounts: 3,
-/// @custom:kontrol-bytes-length-equals addresses: 20,
-function test_batch_transfer(
-    address[] calldata addresses,
-    uint256[] calldata amounts
-) public {
-    require(addresses.length == 3, "Must have 3 addresses");
-    require(amounts.length == 3, "Must have 3 amounts");
-    // Test logic here
-}
-```
-
 ## Best Practices
 
 1. **Choose appropriate sizes**: Select sizes that are realistic for your use case but small enough for efficient verification
