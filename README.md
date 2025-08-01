@@ -31,6 +31,10 @@ layout:
 
 To begin using Kontrol, check out our [installation guide](overview/readme/installations.md) and explore our [example projects](guides/kontrol-example/README.md) to see Kontrol in action.
 
+### Explore the Codebase with AI
+
+If you want to dive deeper into Kontrol's architecture and implementation, check out [**Kontrol on DeepWiki**](https://deepwiki.com/runtimeverification/kontrol)—an AI-powered interactive documentation that lets you ask questions about the codebase.
+
 ## Community
 
 Join our growing community on [Discord](https://discord.gg/CurfmXNtbN) to connect with other developers, share experiences, and get support.
