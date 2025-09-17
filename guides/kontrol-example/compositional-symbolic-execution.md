@@ -410,7 +410,6 @@ We plan to automatically apply node merging during CSE summary generation in fut
 - **Better resource utilization**: Less memory and CPU usage for complex verification tasks
 
 ### Benefits of NatSpec Preconditions
-
 1. **Declarative constraints**: Express preconditions directly in the code where they're most relevant, especially on functions being summarized
 2. **Automatic application**: An alternative to manually adding `vm.assume()` calls in tests, which are not available during CSE
 3. **Better documentation**: Preconditions serve as executable documentation
