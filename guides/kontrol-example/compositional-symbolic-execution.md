@@ -231,7 +231,7 @@ kontrol show ArithmeticTest.testAddWithAssumptions
 
 ### Reducing Branching with NatSpec Preconditions
 
-Alternatively, we Kontrol supports NatSpec preconditions directly in Solidity code on the function being CSE'd using the `@custom:kontrol-precondition` annotation, as cheatcodes such as `vm.assume()` are not available outside of `Test` contracts during CSE:
+Alternatively, Kontrol supports NatSpec preconditions directly in Solidity code on the function being CSE'd using the `@custom:kontrol-precondition` annotation, as cheatcodes such as `vm.assume()` are not available outside of `Test` contracts during CSE:
 
 ```solidity
 contract Arithmetic {
