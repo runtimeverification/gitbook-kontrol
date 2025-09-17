@@ -13,6 +13,7 @@
     * [Proof Management](guides/kontrol-example/proof-management.md)
     * [Debugging a Proof](guides/kontrol-example/linked-library-example.md)
     * [Handling Dynamically Sized Inputs](guides/kontrol-example/dynamic-types.md)
+    * [Compositional Symbolic Execution (CSE) and Node Merging](guides/kontrol-example/compositional-symbolic-execution.md)
 * [Node Refutation](guides/node-refutation.md)
 * [Bytecode Verification](guides/bytecode-verification.md)
 * [Advancing Proofs](guides/advancing-proofs/README.md)

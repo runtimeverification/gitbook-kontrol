@@ -82,7 +82,7 @@ kontrol build
 ```
 
 {% hint style="warning" %}
-The process should take a minute and may emit some warnings, so don't worry. Also, remember that during the development, you may need to rebuild the definition in various ways.
+When ran for the first time, this process should take a minute, so don't worry. Also, remember that during the development, you may need to rebuild the definition in various ways.
 {% endhint %}
 
 ```bash
@@ -160,10 +160,10 @@ The list of supported cheatcodes is available on the [Cheatcodes](../../cheatshe
 To rerun the proof with these changes, you need to run the following:
 
 ```bash
-kontrol build --regen --rekompile
+kontrol build
 ```
 
-This will regenerate and rekompile `foundry.k`. Next you will need to run `prove` again. This time with the `--reinit` flag.
+This will re-run `forge build`, recompiling the updated files. Next you will need to run `prove` again. This time with the `--reinit` flag to ensure that you are verifying the latest version of the code.
 
 ```bash
 kontrol prove --match-test CounterTest.testFuzz_SetNumber --reinit
