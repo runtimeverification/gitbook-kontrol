@@ -244,7 +244,7 @@ contract Arithmetic {
 ```
 
 {% hint style="warning" %}
-**Experimental Feature**: NatSpec preconditions are currently experimental and will be available in the next release of Kontrol (v1.0.188). While most popular Solidity terms and variable types are supported, some advanced features may not be available. If you need support for specific Solidity constructs, please reach out to the community or consider contributing to the project. Note that NatSpec preconditions with unsupported constructs will be ignored.
+**Experimental Feature**: NatSpec preconditions are currently experimental. While most popular Solidity terms and variable types are supported, some advanced features may not be available. If you need support for specific Solidity constructs, please reach out to the community or consider contributing to the project. Note that NatSpec preconditions with unsupported constructs will be ignored.
 {% endhint %}
 
 
@@ -308,7 +308,7 @@ Some Solidity constructs are not yet supported, including array/mapping access, 
 ## Node Merging
 
 {% hint style="warning" %}
-**Experimental Feature**: Node merging is currently experimental, will be available in the next release of Kontrol (v1.0.188), and the merging heuristic we are using may not cover all scenarios. Performance improvements and behavior may vary depending on the specific code structure and branching patterns.
+**Experimental Feature**: Node merging is currently experimental, and the merging heuristic we are using may not cover all scenarios. Performance improvements and behavior may vary depending on the specific code structure and branching patterns.
 {% endhint %}
 
 Node merging is another optimization technique that reduces proof complexity by combining similar execution paths. This is particularly useful when multiple branches converge to the same final state.
