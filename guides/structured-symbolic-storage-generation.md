@@ -1,0 +1,308 @@
+---
+description: Automated generation of structured symbolic storage
+---
+
+# Structured Symbolic Storage Generation
+
+## Overview
+
+Structured symbolic storage generation is a new feature in Kontrol that automatically creates symbolic storage constants for your contracts based on their storage layout. This eliminates the need to manually specify storage slots, offsets, and widths, making symbolic testing more reliable and less error-prone.
+
+This feature automates the manual approach described in the [Symbolic Storage](./advancing-proofs/symbolic-storage.md) guide, providing a streamlined way to set up symbolic storage for your contracts without the complexity of manual slot management.
+
+This approach has been successfully used in real-world formal verification engagements, including the [Lido Dual Governance](https://github.com/lidofinance/dual-governance/tree/tests/kontrol-formal-verification/test/kontrol) project, demonstrating its effectiveness in production environments.
+
+## How It Works
+
+The structured symbolic storage generation feature:
+
+1. **Analyzes storage layout**: Uses the Solidity compiler's storage layout information from the contract's JSON artifacts
+2. **Generates constants**: Creates symbolic constants for each storage variable, including its type, offset, and width
+3. **Automates setup**: Provides helper functions to initialize storage with symbolic values
+4. **Ensures correctness**: Automatically handles slot calculations, offsets, and data widths
+
+## Prerequisites
+
+To use structured symbolic storage generation, you need:
+
+- A Foundry project with contracts compiled with storage layout information (using `extra_output = ['storageLayout']` in the `foundry.toml` file)
+- The auxiliary `KontrolTest` contract that is automatically inserted in the Foundry project by `kontrol init`
+
+## Basic Usage
+
+### Step 1: Initialize the project with KontrolTest
+
+When you run `kontrol init`, it automatically generates a `KontrolTest.sol` contract that includes the necessary infrastructure, unless the `--skip-kontrol-test` option is provided. Additionally, when run in an existing Foundry project, you should provide the `--skip-forge` option:
+
+```bash
+kontrol init --skip-forge
+```
+
+This adds several auxiliary files, including the `KontrolTest.sol` file with helper functions like `_loadData` and `_storeData` for symbolic storage manipulation.
+
+### Step 2: Generate Storage Constants
+
+Then, use the `kontrol setup-storage` command to automatically generate symbolic storage constants:
+
+```bash
+kontrol setup-storage src/SimpleStorage
+```
+
+This command:
+- Analyzes the `src/SimpleStorage` contract's storage layout
+- Generates symbolic constants for each storage variable and outputs them to the `test/kontrol/storage/SimpleStorageStorageConstants.sol` file
+
+Additionally, the output file path can be customized using the `--output` option, and the version of Solidity used in the generated file can be customized using the `--solidity-version` option.
+
+The generated files will contain symbolic constants and helper functions. Here's an example of what gets generated:
+
+**Example Contract: `SimpleStorage.sol`**
+```solidity
+pragma solidity 0.8.26;
+
+contract SimpleStorage {
+    uint256 public totalSupply;
+    address public owner;
+    
+    struct User {
+        uint256 id;
+        address wallet;
+        bool isActive;
+    }
+    
+    User public currentUser;
+    uint256[] public balances;
+}
+```
+
+**Generated Storage Constants: `SimpleStorageStorageConstants.sol`**
+```solidity
+pragma solidity 0.8.26;
+
+contract SimpleStorageStorageConstants {
+    // Storage slot constants
+    uint256 internal constant STORAGE_TOTALSUPPLY_SLOT = 0;
+    uint256 internal constant STORAGE_TOTALSUPPLY_OFFSET = 0;
+    uint256 internal constant STORAGE_TOTALSUPPLY_SIZE = 32;
+    
+    uint256 internal constant STORAGE_OWNER_SLOT = 1;
+    uint256 internal constant STORAGE_OWNER_OFFSET = 0;
+    uint256 internal constant STORAGE_OWNER_SIZE = 20;
+    
+    // Struct fields (currentUser is stored starting at slot 3)
+    uint256 internal constant STORAGE_CURRENTUSER_ID_SLOT = 3;
+    uint256 internal constant STORAGE_CURRENTUSER_ID_OFFSET = 0;
+    uint256 internal constant STORAGE_CURRENTUSER_ID_SIZE = 32;
+    
+    uint256 internal constant STORAGE_CURRENTUSER_WALLET_SLOT = 4;
+    uint256 internal constant STORAGE_CURRENTUSER_WALLET_OFFSET = 0;
+    uint256 internal constant STORAGE_CURRENTUSER_WALLET_SIZE = 20;
+    
+    uint256 internal constant STORAGE_CURRENTUSER_ISACTIVE_SLOT = 4;
+    uint256 internal constant STORAGE_CURRENTUSER_ISACTIVE_OFFSET = 20;
+    uint256 internal constant STORAGE_CURRENTUSER_ISACTIVE_SIZE = 1;
+}
+```
+
+**Generated Setup Contract: `SimpleStorageStorageSetup.sol`**
+```solidity
+pragma solidity 0.8.26;
+
+import {SimpleStorage} from "src/SimpleStorage.sol";
+import {KontrolTest} from "test/kontrol/KontrolTest.sol";
+import {SimpleStorageStorageConstants} from "test/kontrol/storage/SimpleStorageStorageConstants.sol";
+
+contract SimpleStorageStorageSetup is KontrolTest {
+    function simpleStorageStorageSetup(
+        address _contractAddress,
+        uint256 _totalSupply,
+        address _owner,
+        uint256 _currentUser_id,
+        address _currentUser_wallet,
+        bool _currentUser_isActive
+    ) public {
+        vm.setArbitraryStorage(_contractAddress);
+
+        // Clear and set totalSupply
+        _clearSlot(_contractAddress, SimpleStorageStorageConstants.STORAGE_TOTALSUPPLY_SLOT);
+        _storeData(
+            _contractAddress,
+            SimpleStorageStorageConstants.STORAGE_TOTALSUPPLY_SLOT,
+            SimpleStorageStorageConstants.STORAGE_TOTALSUPPLY_OFFSET,
+            SimpleStorageStorageConstants.STORAGE_TOTALSUPPLY_SIZE,
+            _totalSupply
+        );
+
+        // Clear and set owner
+        _clearSlot(_contractAddress, SimpleStorageStorageConstants.STORAGE_OWNER_SLOT);
+        _storeData(
+            _contractAddress,
+            SimpleStorageStorageConstants.STORAGE_OWNER_SLOT,
+            SimpleStorageStorageConstants.STORAGE_OWNER_OFFSET,
+            SimpleStorageStorageConstants.STORAGE_OWNER_SIZE,
+            uint160(_owner)
+        );
+
+        // Clear and set currentUser.id
+        _clearSlot(_contractAddress, SimpleStorageStorageConstants.STORAGE_CURRENTUSER_ID_SLOT);
+        _storeData(
+            _contractAddress,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_ID_SLOT,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_ID_OFFSET,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_ID_SIZE,
+            _currentUser_id
+        );
+
+        // Set currentUser.wallet and isActive (packed in same slot)
+        _clearSlot(_contractAddress, SimpleStorageStorageConstants.STORAGE_CURRENTUSER_WALLET_SLOT);
+        _storeData(
+            _contractAddress,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_WALLET_SLOT,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_WALLET_OFFSET,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_WALLET_SIZE,
+            uint160(_currentUser_wallet)
+        );
+        
+        _storeData(
+            _contractAddress,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_ISACTIVE_SLOT,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_ISACTIVE_OFFSET,
+            SimpleStorageStorageConstants.STORAGE_CURRENTUSER_ISACTIVE_SIZE,
+            boolToUint256(_currentUser_isActive)
+        );
+
+        // TODO: Add support for the following types:
+        // - uint256[] balances
+    }
+}
+```
+
+**Key Features of the Generated Setup Contract:**
+
+1. **Slot Clearing**: Uses `_clearSlot()` to ensure clean symbolic execution states for each slot
+2. **Struct Support**: Automatically decomposes structs into individual field parameters  
+3. **Storage Packing**: Properly handles packed storage slots (`wallet` and `isActive` from the example contract are stored in the same slot)
+4. **Type Conversions**: Includes proper type conversions in the data loading functions (e.g., `uint160(_owner)`, `boolToUint256()`)
+5. **TODO Comments**: Introduces comments to indicate unsupported types like dynamic arrays
+
+Additionally, the user can introduce additional constraints to the generated setup contract, for example, to ensure that the `totalSupply` is always less than the `maxSupply`, using the `vm.assume` cheatcode.
+
+### Step 4: Use Generated Storage Setup in Tests
+
+The generated setup contract can be used directly in your tests, for example, as follows:
+
+```solidity
+import {Test, console} from "forge-std/Test.sol";
+import {SimpleStorage} from "../src/SimpleStorage.sol";
+import {SimpleStorageStorageSetup} from "test/kontrol/setup/SimpleStorageStorageSetup.sol";
+
+contract SimpleStorageTest is Test, SimpleStorageStorageSetup {
+    SimpleStorage public simpleStorage;
+
+    function setUp() public {
+        simpleStorage = new SimpleStorage();
+    }
+
+    function test_storage_setup(
+        uint256 _totalSupply, 
+        address _owner, 
+        uint256 _currentUser_id, 
+        address _currentUser_wallet, 
+        bool _currentUser_isActive, 
+        uint256 _anotherTotalSupply
+    ) public {
+        simpleStorageStorageSetup(
+            address(simpleStorage), 
+            _totalSupply, 
+            _owner, 
+            _currentUser_id, 
+            _currentUser_wallet, 
+            _currentUser_isActive
+        );
+
+        assert(simpleStorage.totalSupply() == _anotherTotalSupply);
+    }
+}
+```
+
+For `test_storage_setup`, `kontrol prove` will output the counterexample with the following path condition:
+```
+Path condition:
+    #Not ( { totalSupply == anotherTotalSupply } )
+```
+indicating that the test failed because the symbolic value read from the storage slot corresponding to the `totalSupply` variable is not equal to the `_anotherTotalSupply` parameter.
+
+The storage of the `SimpleStorage` contract looks like the following:
+```
+<storage>
+    ?STORAGE:Map [ 0 <- KV1_totalSupply:Int ] [ 1 <- KV2_owner:Int ] [ 3 <- KV3_currentUser_id:Int ] [ 4 <- #asWord ( #buf ( 12 , KV5_currentUser_isActive:Int ) +Bytes #buf ( 20 , KV4_currentUser_wallet:Int ) ) ]
+</storage>
+```
+
+## Command Line Options
+
+The `kontrol setup-storage` command supports several options:
+
+```bash
+# Basic usage
+kontrol setup-storage --contract MyContract
+
+# Specify output file
+kontrol setup-storage --contract MyContract --output MyStorage.sol
+
+# Include specific contracts only
+kontrol setup-storage --contract MyContract --include MyContract,HelperContract
+
+# Generate with custom constraints
+kontrol setup-storage --contract MyContract --constraints custom_constraints.json
+
+# Verbose output
+kontrol setup-storage --contract MyContract --verbose
+```
+
+## Best Practices
+
+### 1. Use Meaningful Variable Names
+
+The generator uses the actual variable names from your contract, so use descriptive names:
+
+```solidity
+contract GoodExample {
+    uint256 public userBalance; // Good: descriptive name
+    mapping(address => uint256) public userStakes; // Good: clear purpose
+}
+
+contract BadExample {
+    uint256 public x; // Bad: unclear purpose
+    mapping(address => uint256) public m; // Bad: generic name
+}
+```
+
+### 2. Add Appropriate Constraints
+
+Always add constraints that reflect your contract's invariants:
+
+```solidity
+function setupWithInvariants(address contractAddr) internal {
+    setupSymbolicStorage(contractAddr);
+    
+    uint256 totalSupply = _loadData(contractAddr, 0, 0, 32);
+    uint256 maxSupply = _loadData(contractAddr, 1, 0, 32);
+    
+    // Invariant: total supply cannot exceed max supply
+    vm.assume(totalSupply <= maxSupply);
+    
+    // Invariant: max supply must be positive
+    vm.assume(maxSupply > 0);
+}
+```
+
+## Related Features
+
+- [Symbolic Storage](./advancing-proofs/symbolic-storage.md) - Manual symbolic storage management
+- [Counterexample Generation](./counterexample-generation.md) - Finding failing test cases
+
+## References
+
+- [Solidity Storage Layout Documentation](https://docs.soliditylang.org/en/v0.8.24/internals/layout_in_storage.html)
+- [Kontrol Cheatcodes Reference](../cheatsheets/kontrol-cheatsheet.md)
