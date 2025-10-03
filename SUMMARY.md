@@ -21,6 +21,8 @@
     * [Writing Simplifications](guides/advancing-proofs/simplifications-guide.md)
     * [Rule Application](guides/advancing-proofs/rule-application.md)
     * [Symbolic Storage](guides/advancing-proofs/symbolic-storage.md)
+* [Structured Symbolic Storage Generation](guides/structured-symbolic-storage-generation.md)
+* [Counterexample Generation](guides/counterexample-generation.md)
 
 ## Cheatsheets
 * [Kup Cheatsheet](cheatsheets/kup-cheatsheet.md)
